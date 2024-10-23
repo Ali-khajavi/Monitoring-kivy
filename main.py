@@ -5,7 +5,11 @@ from excel_handler import ExcelHandler
 from screens import FirstMenuScreen, SettingsScreen, MonitoringScreen, CustomerSetupScreen
 
 # Load the kv file
-Builder.load_file('kv/main.kv')
+#Builder.load_file('kv/main.kv')
+Builder.load_file('kv/first_menu.kv')
+Builder.load_file('kv/settings.kv')
+Builder.load_file('kv/monitoring.kv')
+Builder.load_file('kv/customer_setup.kv')
 
 class MyScreenManager(ScreenManager):
     pass
@@ -23,11 +27,7 @@ class MyApp(App):
         sm.add_widget(SettingsScreen(name='settings'))
         sm.add_widget(MonitoringScreen(name='monitoring'))
         sm.add_widget(CustomerSetupScreen(name='customer_setup'))
-
-        # Now you can access the customer_setup screen and load customers
-        sm.get_screen('customer_setup').load_customers()  # No need to pass excel_handler here
-
-
+        sm.get_screen('customer_setup').load_customers()
 
         return sm
 

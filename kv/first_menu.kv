@@ -1,0 +1,15 @@
+<FirstMenuScreen>:
+    name: 'first_menu'
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'First Menu Page'
+        Button:
+            text: 'Go to Monitoring'
+            on_press: root.manager.current = 'monitoring'
+        Button:
+            text: 'Go to Customer Setup'
+            on_press: root.manager.current = 'customer_setup'
+        Button:
+            text: 'Go to Settings'
+            on_press: root.manager.current = 'settings'
