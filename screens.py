@@ -35,7 +35,7 @@ class CustomerSetupScreen(Screen):
     city_input = ObjectProperty(None)
     address_input = ObjectProperty(None)
     description_input = ObjectProperty(None)
-    customer_list = ObjectProperty(None)
+    customer_list = ObjectProperty(None)  # The layout inside ScrollView
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -67,6 +67,26 @@ class CustomerSetupScreen(Screen):
             self.save_customers()
             self.clear_form()
 
+    def update_customer_list(self):
+        """Refresh the customer list display."""
+        self.customer_list.clear_widgets()  # Clear the existing list first
+
+        # Adjust the height of the customer_list dynamically to fit all children
+        self.customer_list.height = len(self.customers) * 40  # 40 is the height for each item, adjust as necessary
+
+        for customer in self.customers:
+            customer_str = f"{customer['first_name']} {customer['last_name']} ({customer['email']})"
+            customer_widget = CustomerListItem(text=customer_str, customer=customer)
+            
+            # Set the size hint and height for each customer widget
+            customer_widget.size_hint_y = None
+            customer_widget.height = 40  # Set a fixed height for each customer widget
+            
+            # Add the widget to the customer list
+            self.customer_list.add_widget(customer_widget)
+
+        print("Customer list updated:", self.customers)
+
     def clear_form(self):
         """Clear the registration form."""
         self.first_name_input.text = ""
@@ -77,48 +97,11 @@ class CustomerSetupScreen(Screen):
         self.address_input.text = ""
         self.description_input.text = ""
 
-
-    def update_customer_list(self):
-        """Refresh the customer list display."""
-        self.customer_list.clear_widgets()  # Clear the existing list first
-
-        # Ensure the customer_list height adjusts to the content
-        self.customer_list.height = 0
-
-        for customer in self.customers:
-            customer_str = f"{customer['first_name']} {customer['last_name']} ({customer['email']})"
-            customer_widget = CustomerListItem(text=customer_str, customer=customer)
-            
-            # Set the size hint and height for each customer widget
-            customer_widget.size_hint_y = None
-            customer_widget.height = 40  # Set a fixed height (adjust as needed)
-            
-            self.customer_list.add_widget(customer_widget)
-        
-        # Adjust the customer_list height to fit all children
-        self.customer_list.height = self.customer_list.minimum_height
-
-        print(self.customers)
-
-
-    def show_customer_info(self, customer):
-        """Show customer information in a popup window."""
-        info = (
-            f"Name: {customer['first_name']} {customer['last_name']}\n"
-            f"Email: {customer['email']}\n"
-            f"Phone: {customer['phone']}\n"
-            f"City: {customer['city']}\n"
-            f"Address: {customer['address']}\n"
-            f"Description: {customer['description']}"
-        )
-        popup = Popup(title="Customer Information", content=Label(text=info), size_hint=(0.6, 0.6))
-        popup.open()
-
     def save_customers(self):
         """Save customer data to Excel."""
         App.get_running_app().excel_handler.save_customers(self.customers)
 
     def load_customers(self):
-        """Load customer data from Excel."""
+        """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
-        self.update_customer_list()
+        self.update_customer_list()  # Refresh the customer list view

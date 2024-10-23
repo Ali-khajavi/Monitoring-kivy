@@ -182,17 +182,17 @@ ScreenManager:
 
             Label:
                 id: sensor_label
-                text: "Please first select the Customer which you want to setup the sensor for"
-                font_size: '16sp'
+                text: "Please first select the Customer \nwhich you want to setup \nthe sensor for"
+                font_size: '14sp'
                 size_hint_y: None
-                height: 40
+                height: 80
 
             Label:
                 id: sensor_code_label
-                text: "Enter the sensor code. IMPORTANT (the sensor code is unique within the real sensor that is physically set up!)"
+                text: "Enter the sensor code.\nIMPORTANT!!!  \n(the sensor code is unique \nwithin the real sensor \nthat is physically set up!)"
                 font_size: '14sp'
                 size_hint_y: None
-                height: 30
+                height: 80
 
             TextInput:
                 id: sensor_code_input
@@ -201,10 +201,10 @@ ScreenManager:
                 multiline: False
 
             Label:
-                text: "Please describe the sensor (location, type, and more details):"
+                text: "Please describe the sensor \n(location, type, and more details):"
                 font_size: '14sp'
                 size_hint_y: None
-                height: 30
+                height: 40
 
             TextInput:
                 id: sensor_description_input
