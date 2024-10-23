@@ -33,6 +33,7 @@ class CustomerSetupScreen(Screen):
     email_input = ObjectProperty(None)
     phone_input = ObjectProperty(None)
     city_input = ObjectProperty(None)
+    address_input = ObjectProperty(None)
     description_input = ObjectProperty(None)
     customer_list = ObjectProperty(None)
 
@@ -48,6 +49,7 @@ class CustomerSetupScreen(Screen):
         phone = self.phone_input.text
         city = self.city_input.text
         description = self.description_input.text
+        address = self.address_input.text
 
         if first_name and last_name and email:
             new_customer = {
@@ -57,10 +59,12 @@ class CustomerSetupScreen(Screen):
                 "phone": phone,
                 "city": city,
                 "description": description,
+                "address": address,
                 "sensors": []  # Empty sensors list for now
             }
             self.customers.append(new_customer)
             self.update_customer_list()
+            self.save_customers()
             self.clear_form()
 
     def clear_form(self):
@@ -70,14 +74,32 @@ class CustomerSetupScreen(Screen):
         self.email_input.text = ""
         self.phone_input.text = ""
         self.city_input.text = ""
+        self.address_input.text = ""
         self.description_input.text = ""
+
 
     def update_customer_list(self):
         """Refresh the customer list display."""
-        self.customer_list.clear_widgets()
+        self.customer_list.clear_widgets()  # Clear the existing list first
+
+        # Ensure the customer_list height adjusts to the content
+        self.customer_list.height = 0
+
         for customer in self.customers:
             customer_str = f"{customer['first_name']} {customer['last_name']} ({customer['email']})"
-            self.customer_list.add_widget(CustomerListItem(text=customer_str, customer=customer))
+            customer_widget = CustomerListItem(text=customer_str, customer=customer)
+            
+            # Set the size hint and height for each customer widget
+            customer_widget.size_hint_y = None
+            customer_widget.height = 40  # Set a fixed height (adjust as needed)
+            
+            self.customer_list.add_widget(customer_widget)
+        
+        # Adjust the customer_list height to fit all children
+        self.customer_list.height = self.customer_list.minimum_height
+
+        print(self.customers)
+
 
     def show_customer_info(self, customer):
         """Show customer information in a popup window."""
@@ -86,6 +108,7 @@ class CustomerSetupScreen(Screen):
             f"Email: {customer['email']}\n"
             f"Phone: {customer['phone']}\n"
             f"City: {customer['city']}\n"
+            f"Address: {customer['address']}\n"
             f"Description: {customer['description']}"
         )
         popup = Popup(title="Customer Information", content=Label(text=info), size_hint=(0.6, 0.6))

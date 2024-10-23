@@ -9,13 +9,14 @@ class ExcelHandler:
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Customers"
-        ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Sensors (Code, Description)"])  # Header
+        ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Description)"])  # Header
 
         for customer in customers:
             sensors = "; ".join([f"{s['code']} - {s['description']}" for s in customer['sensors']])
-            ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'], customer['city'], customer['description'], sensors])
+            ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'], customer['city'], customer['description'], customer['address'], sensors])
         
         wb.save(self.filepath)
+        wb.close()
 
     def load_customers(self):
         """Load customer data from Excel."""
@@ -24,7 +25,7 @@ class ExcelHandler:
         customers = []
 
         for row in ws.iter_rows(min_row=2, values_only=True):
-            first_name, last_name, email, phone, city, description, sensors_data = row
+            first_name, last_name, email, phone, city, description, address, sensors_data = row
             sensors = []
             if sensors_data:
                 for sensor_info in sensors_data.split("; "):
@@ -37,6 +38,7 @@ class ExcelHandler:
                 "phone": phone,
                 "city": city,
                 "description": description,
+                "address": address,
                 "sensors": sensors
             })
 
