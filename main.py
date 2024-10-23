@@ -25,11 +25,11 @@ class MyApp(App):
         sm.add_widget(CustomerSetupScreen(name='customer_setup'))
 
         # Now you can access the customer_setup screen and load customers
-        sm.get_screen('customer_setup').load_customers()
+        sm.get_screen('customer_setup').load_customers()  # No need to pass excel_handler here
+
+
 
         return sm
-
-
 
 if __name__ == '__main__':
     MyApp().run()
