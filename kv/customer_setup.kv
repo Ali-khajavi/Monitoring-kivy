@@ -25,8 +25,6 @@
             size_hint: (1, 1)  # Cover the entire screen
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-        
-
         # Foreground content over the background image
         BoxLayout: 
             orientation: 'horizontal'
@@ -42,13 +40,15 @@
                 BoxLayout:
                     orientation: 'vertical'
                     size_hint_x: 0.6
-                    Label:
-                        size_hint_y: 0.05
-                        text: 'Customer Registration Form'
-                        halign: 'left'
+                    pos_hint: {'center_x': 0.29, 'top': .995}  # Position the form at the top
 
-                        Image:
-                            source:
+                    # Top Image (Form Label)
+                    Image:
+                        source: 'assets/Form-Label.png'
+                        size_hint: None, None  # Disable size hint to set explicit size
+                        size: 280, 90   # Adjust size as needed (width, height)
+                        allow_stretch: True  # Allow stretching to fit the specified size
+                        pos_hint: {'center_x': .515}  # Keep image at the top
 
                     GridLayout:
                         cols: 2
