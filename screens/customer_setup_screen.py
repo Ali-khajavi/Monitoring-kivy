@@ -46,13 +46,13 @@ class CustomerSetupScreen(Screen):
 
     def update_customer_list(self):
         """Refresh the customer list display."""
-        self.customer_list.clear_widgets()
+        self.customer_list.clear_widgets()   #  remove all children from a widget (Customers)
         for customer in self.customers:
             customer_widget = App.get_running_app().customer_list_item_class(customer=customer)
-            customer_widget.size_hint_y = None
-            customer_widget.height = 40
+            #customer_widget.size_hint_y = None
+            #customer_widget.height = 40
             self.customer_list.add_widget(customer_widget)
-        self.customer_list.height = self.customer_list.minimum_height
+        #self.customer_list.height = self.customer_list.minimum_height
 
     def clear_form(self):
         """Clear the registration form."""
