@@ -1,11 +1,10 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
-from excel_handler import ExcelHandler
+from utils.excel_handler import ExcelHandler
 from screens import FirstMenuScreen, SettingsScreen, MonitoringScreen, CustomerSetupScreen
 
 # Load the kv file
-#Builder.load_file('kv/main.kv')
 Builder.load_file('kv/first_menu.kv')
 Builder.load_file('kv/settings.kv')
 Builder.load_file('kv/monitoring.kv')
