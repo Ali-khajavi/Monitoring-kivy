@@ -132,7 +132,7 @@
                     height: self.minimum_height
 
         # Sensor Setup Form
-        BoxLayout:
+        BoxLayout:     
             orientation: 'vertical'
             size_hint_x: 0.6
             padding: 10
@@ -140,29 +140,29 @@
 
             Label:
                 id: sensor_label
-                text: "Please first select the Customer \nwhich you want to setup \nthe sensor for"
-                font_size: '14sp'
+                text: "Please first select the Customer!"
+                text_size: self.size
                 size_hint_y: None
-                height: 80
+                height: 60
 
             Label:
                 id: sensor_code_label
-                text: "Enter the sensor code.\nIMPORTANT!!!  \n(the sensor code is unique \nwithin the real sensor \nthat is physically set up!)"
-                font_size: '14sp'
+                text: "Enter the sensor code.IMPORTANT!!!  \n(the sensor code is unique \nwithin the real sensor \nthat is physically set up!)"
+                text_size: self.size
                 size_hint_y: None
-                height: 80
+                height: 100
 
             TextInput:
                 id: sensor_code_input
                 size_hint_y: None
-                height: 40
+                height: 60
                 multiline: False
 
             Label:
                 text: "Please describe the sensor \n(location, type, and more details):"
-                font_size: '14sp'
+                text_size: self.size
                 size_hint_y: None
-                height: 40
+                height: 60
 
             TextInput:
                 id: sensor_description_input
@@ -172,47 +172,43 @@
 
             Label:
                 text: "Please select the sensor type:"
-                font_size: '14sp'
+                text_size: self.size
                 size_hint_y: None
                 height: 30
 
-            BoxLayout:
+            BoxLayout:      #----------------------------sensors Images----------------------------------#
                 orientation: 'horizontal'
                 spacing: 10
-
+                cols: 2
                 BoxLayout:
                     orientation: 'vertical'
                     Image:
-                        source: 'sensor1.png'
-                        size_hint_y: None
-                        height: 100
+                        source: 'assets/sensor1.png'
+                        #height: 100
                     CheckBox:
                         group: 'sensor'
 
                 BoxLayout:
                     orientation: 'vertical'
                     Image:
-                        source: 'sensor2.png'
-                        size_hint_y: None
-                        height: 100
+                        source: 'assets/sensor2.png'
+                        #height: 100
                     CheckBox:
                         group: 'sensor'
 
                 BoxLayout:
                     orientation: 'vertical'
                     Image:
-                        source: 'sensor3.png'
-                        size_hint_y: None
-                        height: 100
+                        source: 'assets/sensor3.png'
+                        #height: 100
                     CheckBox:
                         group: 'sensor'
 
                 BoxLayout:
                     orientation: 'vertical'
                     Image:
-                        source: 'sensor4.png'
-                        size_hint_y: None
-                        height: 100
+                        source: 'assets/sensor4.png'
+                        #height: 100
                     CheckBox:
                         group: 'sensor'
 
