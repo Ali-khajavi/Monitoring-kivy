@@ -1,5 +1,5 @@
 from kivy.config import Config
-
+#import sys
 # Set the desired window size before importing other Kivy modules
 Config.set('graphics', 'width', '1200')  # Set the width to 1200
 Config.set('graphics', 'height', '700')  # Set the height to 700
@@ -7,8 +7,11 @@ Config.set('graphics', 'height', '700')  # Set the height to 700
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
-from utils.excel_handler import ExcelHandler
-from screens import FirstMenuScreen, SettingsScreen, MonitoringScreen, CustomerSetupScreen
+from excel_handler import ExcelHandler
+from customer_setup_screen import CustomerSetupScreen
+from first_menu_screen import FirstMenuScreen
+from monitoring_screen import MonitoringScreen 
+from settings_screen import SettingsScreen
 from kivy.core.window import Window
 
 # Load the kv files
@@ -24,9 +27,7 @@ class MyScreenManager(ScreenManager):
 class MyApp(App):
     def build(self):
         # Initialize ExcelHandler (creates new file if it doesn't exist)
-        self.excel_handler = ExcelHandler('customers.xlsx')  # Ensure the file name matches
-        
-        # Window.fullscreen = True  # Ensure this line is commented out or removed
+        self.excel_handler = ExcelHandler('customers_data.xlsx')  # Ensure the file name matches
 
         # Set up the screen manager
         sm = MyScreenManager()
