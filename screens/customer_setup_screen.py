@@ -3,6 +3,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
 
 class CustomerSetupScreen(Screen):
     first_name_input = ObjectProperty(None)
@@ -46,13 +47,16 @@ class CustomerSetupScreen(Screen):
 
     def update_customer_list(self):
         """Refresh the customer list display."""
-        self.customer_list.clear_widgets()   #  remove all children from a widget (Customers)
+        self.customer_list.clear_widgets()  # Remove all children from the customer list
         for customer in self.customers:
-            customer_widget = App.get_running_app().customer_list_item_class(customer=customer)
-            #customer_widget.size_hint_y = None
-            #customer_widget.height = 40
-            self.customer_list.add_widget(customer_widget)
-        #self.customer_list.height = self.customer_list.minimum_height
+            customer_label = Label(text=f"{customer['first_name']} {customer['last_name']}", size_hint_y=None, height=40)
+            customer_label.bind(on_touch_down=lambda instance, touch: self.on_customer_label_touch(instance, touch, customer))
+            self.customer_list.add_widget(customer_label)
+
+    def on_customer_label_touch(self, instance, touch, customer):
+        """Handle touch event on a customer label."""
+        if instance.collide_point(*touch.pos):
+            self.show_customer_info(customer)
 
     def clear_form(self):
         """Clear the registration form."""
@@ -73,13 +77,6 @@ class CustomerSetupScreen(Screen):
         self.customers = App.get_running_app().excel_handler.load_customers()
         print("Loaded customers:", self.customers)
         self.update_customer_list()
-
-    def on_customer_selected(self, customer):
-        """Update the sensor form when a customer is selected."""
-        self.ids.sensor_label.text = f"Implementing sensor for {customer['first_name']} {customer['last_name']}"
-        self.selected_customer = customer
-        self.ids.sensor_code_input.text = ""
-        self.ids.sensor_description_input.text = ""
 
     def show_customer_info(self, customer):
         """Show customer information in a popup."""
