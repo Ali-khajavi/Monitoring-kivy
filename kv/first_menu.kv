@@ -1,15 +1,53 @@
+# first_menu.kv
+
 <FirstMenuScreen>:
     name: 'first_menu'
-    BoxLayout:
-        orientation: 'vertical'
+
+    FloatLayout:
+        # Background image (optional)
+        Image:
+            source: 'assets/Backgroundimage.png'
+            allow_stretch: True
+            keep_ratio: False
+            size_hint: (1, 1)
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        
+        # Centered menu container
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (0.4, 0.6)  # Size of the menu box
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            padding: 10
+            spacing: 10
+            canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 0.9  # Slight transparency for a professional look
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15]  # Rounded corners for a modern look
+
+            # Menu Buttons
+            Button:
+                text: 'Go to Customer Setup'
+                font_size: 18
+                on_release: app.root.current = 'customer_setup'  # Navigate to Customer Setup
+
+            Button:
+                text: 'Go to Settings'
+                font_size: 18
+                on_release: app.root.current = 'settings'  # Navigate to Settings
+
+            Button:
+                text: 'Go to Monitoring'
+                font_size: 18
+                on_release: app.root.current = 'monitoring'  # Navigate to Monitoring
+
+        # Link to Registration page
         Label:
-            text: 'First Menu Page'
-        Button:
-            text: 'Go to Monitoring'
-            on_press: root.manager.current = 'monitoring'
-        Button:
-            text: 'Go to Customer Setup'
-            on_press: root.manager.current = 'customer_setup'
-        Button:
-            text: 'Go to Settings'
-            on_press: root.manager.current = 'settings'
+            text: '[ref=register]Register a New Account[/ref]'
+            markup: True
+            font_size: 16
+            color: 0, 0, 1, 1  # Blue color to resemble a hyperlink
+            pos_hint: {'center_x': 0.5, 'y': 0.05}
+            on_ref_press: app.root.current = 'register_screen'  # Navigate to registration screen
