@@ -1,24 +1,14 @@
 import openpyxl
-import os, sys
+import os
 
 class ExcelHandler:
     def __init__(self, file_name):
         self.file_name = file_name
 
-        if not os.path.exists(self.file_name):
-            self.create_excel_file()
-        else:
+        if os.path.exists(self.file_name):
             self.load_excel_file()
-
-    def create_excel_file(self):
-        """Creates a new Excel file with necessary headers."""
-        workbook = openpyxl.Workbook()
-        sheet = workbook.active
-        sheet.title = "Customers"
-        # Add headers for customer data
-        sheet.append(["First Name", "Last Name", "Email", "Phone Number", "City", "Description"])
-        workbook.save(self.file_name)
-        print(f"New Excel file '{self.file_name}' created.")
+        else:
+            print(f"Excel file '{self.file_name}' does not exist.")
 
     def load_excel_file(self):
         """Loads the existing Excel file."""
@@ -27,13 +17,29 @@ class ExcelHandler:
         print(f"Excel file '{self.file_name}' loaded.")
 
     def save_customers(self, customers):
-        """Save customer data to Excel."""
+        """Save customer data to Excel, appending new customers to existing data."""
+        if not os.path.exists(self.file_name):
+            # If the file doesn't exist, create it with the headers
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = "Customers"
+            ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Description)"])  # Header
+            wb.save(self.file_name)
+            wb.close()
+        
+        # Load existing customers from the Excel file
+        existing_customers = self.load_customers()
+        
+        # Append new customers to the existing list
+        existing_customers.extend(customers)
+
+        # Write back all customers to the Excel file
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Customers"
         ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Description)"])  # Header
 
-        for customer in customers:
+        for customer in existing_customers:
             sensors = "; ".join([f"{s['code']} - {s['description']}" for s in customer['sensors']])
             ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'], customer['city'], customer['description'], customer['address'], sensors])
         
