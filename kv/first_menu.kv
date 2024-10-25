@@ -1,16 +1,13 @@
-# first_menu.kv
-
 <FirstMenuScreen>:
     name: 'first_menu'
 
     FloatLayout:
-        # Background image (optional)
-        Image:
-            source: 'assets/Backgroundimage.png'
-            allow_stretch: True
-            keep_ratio: False
-            size_hint: (1, 1)
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        canvas.before:
+            # Load and scale the background image to fit the screen
+            Rectangle:
+                source: 'assets/Backgroundimage.png'  # Update this to your image path
+                pos: self.pos
+                size: self.size
 
         # Top-right positioned menu container
         BoxLayout:
