@@ -11,12 +11,12 @@
             keep_ratio: False
             size_hint: (1, 1)
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-        
-        # Centered menu container
+
+        # Top-right positioned menu container
         BoxLayout:
             orientation: 'vertical'
-            size_hint: (0.4, 0.6)  # Size of the menu box
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+            size_hint: (0.3, 0.5)  # Adjusted size of the menu box
+            pos_hint: {'x': .05, 'top': 0.95}  # Position at the top-left corner
             padding: 10
             spacing: 10
             canvas.before:
@@ -27,21 +27,27 @@
                     size: self.size
                     radius: [15]  # Rounded corners for a modern look
 
-            # Menu Buttons
+            # Menu Buttons with custom backgrounds
+            Button:
+                text: 'Go to Monitoring'
+                font_size: 18
+                background_normal: 'assets/PNG/Button_1/b3.png'
+                background_down: 'assets/PNG/Button_1/b3.png'
+                on_release: app.root.current = 'monitoring'  # Navigate to Monitoring
+
             Button:
                 text: 'Go to Customer Setup'
                 font_size: 18
+                background_normal: 'assets/PNG/Button_1/b1.png'
+                background_down: 'assets/PNG/Button_1/b1.png'
                 on_release: app.root.current = 'customer_setup'  # Navigate to Customer Setup
 
             Button:
                 text: 'Go to Settings'
                 font_size: 18
+                background_normal: 'assets/PNG/Button_1/b2.png'
+                background_down: 'assets/PNG/Button_1/b2.png'
                 on_release: app.root.current = 'settings'  # Navigate to Settings
-
-            Button:
-                text: 'Go to Monitoring'
-                font_size: 18
-                on_release: app.root.current = 'monitoring'  # Navigate to Monitoring
 
         # Link to Registration page
         Label:
@@ -49,5 +55,5 @@
             markup: True
             font_size: 16
             color: 0, 0, 1, 1  # Blue color to resemble a hyperlink
-            pos_hint: {'center_x': 0.5, 'y': 0.05}
+            pos_hint: {'center_x': 0.15, 'center_y': 0.43}
             on_ref_press: app.root.current = 'register_screen'  # Navigate to registration screen
