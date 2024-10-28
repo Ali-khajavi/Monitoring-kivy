@@ -26,31 +26,42 @@
 
             # Menu Buttons with custom backgrounds
             Button:
-                text: 'Go to Monitoring'
-                font_size: 18
+                text: 'Monitoring'
+                font_size: self.width/12
                 background_normal: 'assets/PNG/Button_1/b3.png'
                 background_down: 'assets/PNG/Button_1/b3.png'
                 on_release: app.root.current = 'monitoring'  # Navigate to Monitoring
 
             Button:
-                text: 'Go to Customer Setup'
-                font_size: 18
+                text: 'Add/Edit a Customer'
+                font_size: self.width/12
                 background_normal: 'assets/PNG/Button_1/b1.png'
                 background_down: 'assets/PNG/Button_1/b1.png'
                 on_release: app.root.current = 'customer_setup'  # Navigate to Customer Setup
 
             Button:
-                text: 'Go to Settings'
-                font_size: 18
+                text: 'Settings'
+                font_size: self.width/12
                 background_normal: 'assets/PNG/Button_1/b2.png'
                 background_down: 'assets/PNG/Button_1/b2.png'
                 on_release: app.root.current = 'settings'  # Navigate to Settings
+
+            Button:
+                text: 'Exit'
+                font_size: self.width/12
+                background_normal: 'assets/PNG/Button_1/b2.png'
+                background_down: 'assets/PNG/Button_1/b2.png'
+                on_release: app.root.current = 'settings'  # Navigate to Settings
+            
+            Label:
+                text:''
+                size_hint_y: .1
 
         # Link to Registration page
         Label:
             text: '[ref=register]Register a New Account[/ref]'
             markup: True
-            font_size: 16
+            font_size: self.width/85
             color: 0, 0, 1, 1  # Blue color to resemble a hyperlink
-            pos_hint: {'center_x': 0.1, 'center_y': 0.43}
+            pos_hint: {'center_x': 0.12, 'center_y': 0.473}
             on_ref_press: app.root.current = 'register_screen'  # Navigate to registration screen

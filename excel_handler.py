@@ -12,9 +12,12 @@ class ExcelHandler:
 
     def load_excel_file(self):
         """Loads the existing Excel file."""
-        self.workbook = openpyxl.load_workbook(self.file_name)
-        self.sheet = self.workbook.active
-        print(f"Excel file '{self.file_name}' loaded.")
+        try:
+            self.workbook = openpyxl.load_workbook(self.file_name)
+            self.sheet = self.workbook.active
+            print(f"Excel file '{self.file_name}' loaded.")
+        except Exception as e:
+            print(f"Error loading Excel file: {e}")
 
     def save_customers(self, customers):
         """Save customer data to Excel, appending new customers to existing data."""

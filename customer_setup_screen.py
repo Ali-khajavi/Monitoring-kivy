@@ -3,6 +3,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.app import App
+from excel_handler import ExcelHandler
 
 class CustomerSetupScreen(Screen):
     first_name_input = ObjectProperty(None)
@@ -17,6 +18,8 @@ class CustomerSetupScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.customers = []  # Will hold customer data
+        self.excel_handler = ExcelHandler("customers_data.xlsx")  # Initialize ExcelHandler
+        self.load_customers()
 
     def on_enter(self):
         """Load customer data from Excel when the screen is opened."""
@@ -56,7 +59,7 @@ class CustomerSetupScreen(Screen):
 
         # Sort customers by last name and print them to verify sorting
         sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
-        print("Sorted customers:", sorted_customers)  # Debugging line
+        #print("Sorted customers:", sorted_customers)  # Debugging line
 
         for customer in sorted_customers:
             customer_label = Label(text=f"{customer['first_name']} {customer['last_name']}", size_hint_y=None, height=40)
@@ -91,7 +94,7 @@ class CustomerSetupScreen(Screen):
         """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
 
-        print("Loaded customers:", self.customers)
+        #print("Loaded customers:", self.customers)
         self.update_customer_list()
 
     def show_customer_info(self, customer):

@@ -1,8 +1,6 @@
 from kivy.config import Config
-#import sys
-# Set the desired window size before importing other Kivy modules
-Config.set('graphics', 'width', '1200')  # Set the width to 1200
-Config.set('graphics', 'height', '700')  # Set the height to 700
+Config.set('graphics', 'width', '1200')
+Config.set('graphics', 'height', '700')
 
 from kivy.app import App
 from kivy.lang import Builder
@@ -26,8 +24,12 @@ class MyScreenManager(ScreenManager):
 
 class MyApp(App):
     def build(self):
-        # Initialize ExcelHandler (creates new file if it doesn't exist)
-        self.excel_handler = ExcelHandler('customers_data.xlsx')  # Ensure the file name matches
+        # Initialize ExcelHandler with error handling
+        try:
+            self.excel_handler = ExcelHandler('customers_data.xlsx')
+        except Exception as e:
+            print(f"Error initializing ExcelHandler: {e}")
+            return None
 
         # Set up the screen manager
         sm = MyScreenManager()
@@ -36,10 +38,16 @@ class MyApp(App):
         
         # Initialize MonitoringScreen with the excel_handler instance
         monitoring_screen = MonitoringScreen(name='monitoring')
-        monitoring_screen.excel_handler = self.excel_handler  # Pass the excel handler to the screen
+        monitoring_screen.excel_handler = self.excel_handler
         sm.add_widget(monitoring_screen)
 
-        sm.add_widget(CustomerSetupScreen(name='customer_setup'))
+        # Initialize CustomerSetupScreen with the excel_handler if needed
+        customer_setup_screen = CustomerSetupScreen(name='customer_setup')
+        customer_setup_screen.excel_handler = self.excel_handler
+        sm.add_widget(customer_setup_screen)
+
+        # Optional: set default screen
+        sm.current = 'first_menu'
 
         return sm
 
