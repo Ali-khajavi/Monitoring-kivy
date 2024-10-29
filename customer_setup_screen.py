@@ -4,6 +4,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.app import App
 from excel_handler import ExcelHandler
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.togglebutton import ToggleButton
 
 class CustomerSetupScreen(Screen):
     first_name_input = ObjectProperty(None)
@@ -57,20 +59,62 @@ class CustomerSetupScreen(Screen):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()  # Remove all children from the customer list
 
-        # Sort customers by last name and print them to verify sorting
+        # Sort customers by last name
         sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
-        #print("Sorted customers:", sorted_customers)  # Debugging line
+        self.selected_customer = None
 
         for customer in sorted_customers:
-            customer_label = Label(text=f"{customer['first_name']} {customer['last_name']}", size_hint_y=None, height=40)
-
-            # Adjust lambda function to capture customer correctly
-            customer_label.bind(on_touch_down=lambda instance, touch, cust=customer: self.on_customer_label_touch(instance, touch, cust))
+            # Create a layout to hold the toggle button and label
+            layout = BoxLayout(
+                orientation='horizontal',
+                size_hint_y=None,
+                height=40,
+                padding=(10, 0, 60, 0)  # Add padding (left, top, right, bottom)
+            )
+            # Create a label for the customer's name
+            customer_label = Label(
+                text=f"{customer['last_name']}",
+                color=(0, 0, 0),
+                size_hint_y=None,
+                height=40,
+                halign="left",
+                font_size=16,
+            )
             
-            self.customer_list.add_widget(customer_label)
+            # Create a ToggleButton for selection
+            toggle_button = ToggleButton(
+                group='customer_selection',  # Group name to ensure only one can be selected
+                size_hint_x=None,
+                width=40,  # Width of the toggle button
+                on_state=lambda instance, state, cust=customer: self.on_customer_selected(cust, state)
+            )
+
+            # Add the toggle button and label to the layout
+            layout.add_widget(customer_label)
+            layout.add_widget(toggle_button)
 
 
+            # Dynamically update padding based on the label width
+            def update_padding(instance, value):
+                padding = instance.width * 0.4  # Set padding to 5% of the label width
+                instance.text_size = (instance.width - padding, None)
+            
+            # Bind the width change to the padding adjustment
+            customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
 
+            self.customer_list.add_widget(layout)
+
+
+    def on_customer_selected(self, customer, state):
+        """Handle customer selection."""
+        if state == 'down':  # The button is pressed
+            self.selected_customer = customer['last_name']  # Update the selected customer
+            self.selected_customer_function(customer['last_name'])  # Call the function with the selected customer name
+
+    def selected_customer_function(self, customer_name):
+        """Function to handle the selected customer."""
+        print(f"Selected Customer: {customer_name}")
+        # Add further logic here
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""
         if instance.collide_point(*touch.pos):

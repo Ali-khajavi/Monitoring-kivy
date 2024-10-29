@@ -123,13 +123,22 @@
                             pos_hint: {'top': 0.47}
         #---------------------------------------------- # Customer List # ----------------------------------------
         BoxLayout:
+            canvas.before:
+                Rectangle:
+                    size: (self.width * .9, self.height * 0.72)  # Make the frame 10% larger than the BoxLayout in both directions
+                    pos: (self.x + self.width * 0.03, self.y + self.height * 0.25)  # Center the frame padding around the BoxLayout
+                    source: 'assets/Customer-List2-open.png'  # Frame image
             orientation: 'vertical'
             size_hint_x: .6
             size_hint_y: 1
             Label:
+                size_hint_y: .09
+                text:""
+            Label:
                 size_hint_x: .5
                 size_hint_y: .05
                 text: 'Customer List'
+                color: 0, 0, 0
                 pos_hint: {"x":.25}
             ScrollView:
                 size_hint: (1, 1)
@@ -143,23 +152,23 @@
         #------------------------------------------------# Sensor Setup Form #----------------------------------------
         BoxLayout:     
             orientation: 'vertical'
-            size_hint_x: 0.6
+            size_hint_x: 0.7
             padding: 10
             spacing: 3
             
             Image:
                 source: 'assets/Labels/Label-sensor.png'
-                pos_hint: {"x": - .18}
+                pos_hint: {"x": - .25}
 
             Image:
                 size_hint_y: 4
                 source: 'assets/Labels/Label-sensor-lisens.png'
-                pos_hint: {"x": - .18}
+                pos_hint: {"x": - .28}
 
             Image:
                 size_hint_y: .7
                 source: 'assets/Labels/Sensor-Code.png'
-                pos_hint: {"x": - .32}
+                pos_hint: {"x": - .38}
 
             TextInput:
                 id: sensor_code_input
@@ -169,7 +178,7 @@
             Image:
                 size_hint_y: .7
                 source: 'assets/Labels/B7-Description.png'
-                pos_hint: {"x": - .32}
+                pos_hint: {"x": - .38}
 
 
             TextInput:
@@ -180,7 +189,7 @@
             Image:
                 size_hint_y: .7
                 source: 'assets/Labels/Sensor-type.png'
-                pos_hint: {"x": - .32}
+                pos_hint: {"x": - .38}
 
             BoxLayout: 
                 size_hint_y: 2.5      #----------------------------sensors Images----------------------------------#
