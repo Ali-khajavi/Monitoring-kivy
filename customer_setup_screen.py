@@ -104,7 +104,6 @@ class CustomerSetupScreen(Screen):
 
             self.customer_list.add_widget(layout)
 
-
     def on_customer_selected(self, customer, state):
         """Handle customer selection."""
         if state == 'down':  # The button is pressed
@@ -115,6 +114,7 @@ class CustomerSetupScreen(Screen):
         """Function to handle the selected customer."""
         print(f"Selected Customer: {customer_name}")
         # Add further logic here
+    
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""
         if instance.collide_point(*touch.pos):

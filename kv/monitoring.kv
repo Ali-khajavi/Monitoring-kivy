@@ -1,59 +1,231 @@
-# kv/monitoring.kv
-
 <MonitoringScreen>:
-    BoxLayout:
-        orientation: 'horizontal'
-        padding: 10
-        spacing: 10
+    customer_list: customer_list
 
-        # Customer List and Selection Column
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_x: 0.3
+    FloatLayout:
+        canvas.before:
+            Rectangle:
+                source: 'assets/BG1.jpg'  # Place the background image here
+                size: self.size
+                pos: self.pos
 
-            Label:
-                text: "Customers"
-                font_size: 18
+        # Public section with 2 columns and 2 rows
+        GridLayout:
+            cols: 2
+            rows: 2
+            spacing: 10
+            padding: 20
+            size_hint: 1, 1
 
-            ScrollView:
-                BoxLayout:
-                    id: customer_list
-                    orientation: 'vertical'
+            # Column 1, Row 1 - Scrollable customer list
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 0.25, 1  # Adjusted height to 1 to take full space
+
+                Label:
+                    text: "Customer List"
                     size_hint_y: None
-                    height: self.minimum_height
+                    height: 40
 
-            Label:
-                text: "Select Sensor and Time"
-                font_size: 18
+                ScrollView:
+                    BoxLayout:
+                        id: customer_list
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        spacing: 10
 
+            # Column 2, Row 1 - Parent of All Charts
+            GridLayout:
+                cols: 2
+                rows: 2
+                spacing: 10
+                padding: 10
+                size_hint: 1, 1
+
+                # Column 1, Row 1 Sensor Channel 1
+                BoxLayout:
+                    BoxLayout:
+                        size_hint_x: 0.3
+                        orientation: 'vertical'
+                        BoxLayout:
+                            padding: 5
+                            spacing: 5
+                            orientation: 'vertical'
+                            size_hint_y : 0.8
+
+                            Label:          # Replace with Image Label (Select-Sensor)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Sensor'
+                            Button:
+                                text: 'sss'
+
+                            Label:          # Replace with Image Label (Select-time)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Time'
+                            Button:
+                                text: 'sss'
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Label: 
+                                text:''
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Button:
+                                text:'GG'
+                    
+                    AnchorLayout:
+                        id: sensor_channel_1
+                        anchor_x: 'right'
+                        anchor_y: 'top'
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1  # White background for the graph
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        
+                # Column 2, Row 1 Sensor Channel 2
+                BoxLayout:
+                    BoxLayout:
+                        size_hint_x: 0.3
+                        orientation: 'vertical'
+                        BoxLayout:
+                            padding: 5
+                            spacing: 5
+                            orientation: 'vertical'
+                            size_hint_y : 0.8
+
+                            Label:          # Replace with Image Label (Select-Sensor)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Sensor'
+                            Button:
+                                text: 'sss'
+
+                            Label:          # Replace with Image Label (Select-time)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Time'
+                            Button:
+                                text: 'sss'
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Label: 
+                                text:''
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Button:
+                                text:'GG'
+                                            
+                    AnchorLayout:
+                        id: sensor_channel_2
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1  # White background for the graph
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                # Column 1, Row 2 Sensor Channel 3
+                BoxLayout:
+                    BoxLayout:
+                        size_hint_x: 0.3
+                        orientation: 'vertical'
+                        BoxLayout:
+                            padding: 5
+                            spacing: 5
+                            orientation: 'vertical'
+                            size_hint_y : 0.8
+
+                            Label:          # Replace with Image Label (Select-Sensor)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Sensor'
+                            Button:
+                                text: 'sss'
+
+                            Label:          # Replace with Image Label (Select-time)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Time'
+                            Button:
+                                text: 'sss'
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Label: 
+                                text:''
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Button:
+                                text:'GG'
+                    
+                    AnchorLayout:
+                        id: sensor_channel_3
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1  # White background for the graph
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+
+                # Column 2, Row 2 Sensor Channel 4
+                BoxLayout:
+                    BoxLayout:
+                        size_hint_x: 0.3
+                        orientation: 'vertical'
+                        BoxLayout:
+                            padding: 5
+                            spacing: 5
+                            orientation: 'vertical'
+                            size_hint_y : 0.8
+
+                            Label:          # Replace with Image Label (Select-Sensor)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Sensor'
+                            Button:
+                                text: 'sss'
+
+                            Label:          # Replace with Image Label (Select-time)
+                                color: 0,0,0
+                                font_size: (self.width/4 + self.height/3)/2
+                                text:'Select Time'
+                            Button:
+                                text: 'sss'
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Label: 
+                                text:''
+                        BoxLayout:
+                            size_hint_y: 0.3
+                            Button:
+                                text:'GG'
+                    
+                    AnchorLayout:
+                        anchor_y: 'top'
+                        id: sensor_channel_4
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1  # White background for the graph
+                            Rectangle:
+                                size: self.size
+                                pos: self.pos
+                        
+
+            # Column 1, Row 2 - Back to main menu button
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
+                size_hint: 0.25, 0.1  # Back to main menu button
 
-                Spinner:
-                    id: sensor_spinner
-                    text: "Select Sensor"
-                    values: []
-                    on_text: root.on_sensor_selected(self.text)
+                Button:
+                    text: "Back to Main Menu"
+                    size_hint_y: None
+                    height: 40
+                    on_release: app.root.current = 'first_menu'  # Change this to your actual screen name
 
-                Spinner:
-                    id: time_spinner
-                    text: "Time Period"
-                    values: ["Last Hour", "Last Day", "Last Week"]
-                    on_text: root.on_time_selected(self.text)
-
-            Button:
-                text: "Plot Data"
-                on_press: root.plot_data()
-
-        # Plot Display Area
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_x: 0.7
-
-            Label:
-                text: "Sensor Data Over Time"
-                font_size: 18
-
+            # Column 2, Row 2 - Empty
             BoxLayout:
-                id: graph_area
-                size_hint_y: 0.9
+                size_hint: 1, 0.1
+                # You can add any additional widgets here
