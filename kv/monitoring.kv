@@ -1,25 +1,59 @@
-<MonitoringScreen>:
-    name: 'monitoring'
+# kv/monitoring.kv
 
+<MonitoringScreen>:
     BoxLayout:
         orientation: 'horizontal'
+        padding: 10
+        spacing: 10
 
-        # Column 1: Scrollable Customer List
+        # Customer List and Selection Column
         BoxLayout:
             orientation: 'vertical'
-            size_hint_x: 0.3  # Adjust size as needed
+            size_hint_x: 0.3
 
             Label:
-                text: 'Customer List'
-                size_hint_y: None
-                height: 40
+                text: "Customers"
+                font_size: 18
 
             ScrollView:
-                size_hint: (1, 1)
                 BoxLayout:
                     id: customer_list
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
 
-                    # Customer items will be added here dynamically
+            Label:
+                text: "Select Sensor and Time"
+                font_size: 18
+
+            BoxLayout:
+                orientation: 'horizontal'
+
+                Spinner:
+                    id: sensor_spinner
+                    text: "Select Sensor"
+                    values: []
+                    on_text: root.on_sensor_selected(self.text)
+
+                Spinner:
+                    id: time_spinner
+                    text: "Time Period"
+                    values: ["Last Hour", "Last Day", "Last Week"]
+                    on_text: root.on_time_selected(self.text)
+
+            Button:
+                text: "Plot Data"
+                on_press: root.plot_data()
+
+        # Plot Display Area
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint_x: 0.7
+
+            Label:
+                text: "Sensor Data Over Time"
+                font_size: 18
+
+            BoxLayout:
+                id: graph_area
+                size_hint_y: 0.9
