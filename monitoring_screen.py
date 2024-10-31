@@ -59,15 +59,26 @@ class MonitoringScreen(Screen):
             elif spinner.sensor == 'sensor_channe_4':
                 self.sensor_ch4 = spinner.text
         else:
-            self.Flag_Sensor = False
-            print('Select the Customer!')
+            print('Select sensor!')
 
+    def time_selected(self, spinner):
+        if spinner.text != 'Time!':
+            if spinner.time == 'range_channel_1':
+                self.range_ch1 = spinner.text
+            elif spinner.time == 'range_channel_2':
+                self.range_ch2 = spinner.text
+            elif spinner.time == 'range_channel_3':
+                self.range_ch3 = spinner.text
+            elif spinner.time == 'range_channel_4':
+                self.range_ch4 = spinner.text
+        else:
+            print('Select time!')
+        
     def check_quary(self, chart):
         print('Hoooooo!')
         print(chart.channel)
         print(self.sensor_ch1)
         print(self.range_ch1)
-        self.range_ch1 = '-7d'
         #channel_id = "sensor_channel_1"  # or the channel ID based on the button or selection
 
         if chart.channel == 'ch_1':
@@ -150,14 +161,6 @@ class MonitoringScreen(Screen):
             sensor_channel.clear_widgets()
             sensor_canvas = FigureCanvasKivyAgg(fig)
             sensor_channel.add_widget(sensor_canvas)
-
-    def on_sensor_selected(self, sensor_name):
-        """Called when a sensor is selected from the dropdown."""
-        self.selected_sensor = sensor_name
-
-    def on_time_selected(self, time_period):
-        """Called when a time period is selected from the dropdown."""
-        self.selected_time = time_period
 
     def load_customers(self):
         """Load customer data from Excel and update the customer list."""

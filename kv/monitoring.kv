@@ -59,9 +59,9 @@
                                 text:'Select Sensor'
                             Spinner:
                                 id: Sp_select_sensor_channe_1
-                                sensor: 'sensor_channe_1'
+                                sensor: 'sensor_channel_1'
                                 text: 'Sensor!'
-                                values: ['Sensor!', '0001']  # Add some sensor options
+                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
                                 on_text: root.sensor_selected(Sp_select_sensor_channe_1)
                             
                             Label:          # Replace with Image Label (Select-time)
@@ -70,9 +70,11 @@
                                 text:'Select Time'
                             Spinner:
                                 id: Sp_select_range_channel_1
-                                range: 'range_channe_1'
+                                time: 'range_channel_1'
+                                range: 'range_channel_1'
                                 text: 'Range!'
-                                values: ['Time!','-7d']
+                                values: ['Time!','Time!']
+                                on_text: root.time_selected(Sp_select_range_channel_1)
 
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
@@ -102,7 +104,7 @@
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:
+                        BoxLayout:      # Sensor Selection & Time Selection
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
@@ -112,24 +114,37 @@
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
-                            Button:
-                                text: 'sss'
-
+                            Spinner:
+                                id: Sp_select_sensor_channel_2
+                                sensor: 'sensor_channel_2'
+                                text: 'Sensor!'
+                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
+                                on_text: root.sensor_selected(Sp_select_sensor_channel_2)
+                            
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
-                            Button:
-                                text: 'sss'
-                        BoxLayout:
+                            Spinner:
+                                id: Sp_select_range_channel_2
+                                time: 'range_channel_2'
+                                range: 'range_channel_2'
+                                text: 'Range!'
+                                values: ['Time!','Time!']
+                                on_text: root.time_selected(Sp_select_range_channel_2)
+
+                        BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
                             Label: 
                                 text:''
-                        BoxLayout:
+                        BoxLayout:      # Update Chart Channel
                             size_hint_y: 0.3
                             Button:
-                                text:'GG'
-                                            
+                                id: btn_update_channel_2
+                                channel: 'ch_2'
+                                text:'Update'
+                                on_release: root.check_quary(btn_update_channel_2)
+                               
                     AnchorLayout:
                         id: sensor_channel_2
                         canvas.before:
@@ -144,7 +159,7 @@
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:
+                        BoxLayout:      # Sensor Selection & Time Selection
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
@@ -154,23 +169,36 @@
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
-                            Button:
-                                text: 'sss'
-
+                            Spinner:
+                                id: Sp_select_sensor_channel_3
+                                sensor: 'sensor_channel_3'
+                                text: 'Sensor!'
+                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
+                                on_text: root.sensor_selected(Sp_select_sensor_channel_3)
+                            
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
-                            Button:
-                                text: 'sss'
-                        BoxLayout:
+                            Spinner:
+                                id: Sp_select_range_channel_3
+                                time: 'range_channel_3'
+                                range: 'range_channel_3'
+                                text: 'Range!'
+                                values: ['Time!','Time!']
+                                on_text: root.time_selected(Sp_select_range_channel_3)
+
+                        BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
                             Label: 
                                 text:''
-                        BoxLayout:
+                        BoxLayout:      # Update Chart Channel
                             size_hint_y: 0.3
                             Button:
-                                text:'GG'
+                                id: btn_update_channel_3
+                                channel: 'ch_3'
+                                text:'Update'
+                                on_release: root.check_quary(btn_update_channel_3)
                     
                     AnchorLayout:
                         id: sensor_channel_3
@@ -186,7 +214,7 @@
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:
+                        BoxLayout:      # Sensor Selection & Time Selection
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
@@ -196,23 +224,36 @@
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
-                            Button:
-                                text: 'sss'
-
+                            Spinner:
+                                id: Sp_select_sensor_channe_4
+                                sensor: 'sensor_channel_4'
+                                text: 'Sensor!'
+                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
+                                on_text: root.sensor_selected(Sp_select_sensor_channel_4)
+                            
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
-                            Button:
-                                text: 'sss'
-                        BoxLayout:
+                            Spinner:
+                                id: Sp_select_range_channel_4
+                                time: 'range_channel_4'
+                                range: 'range_channel_4'
+                                text: 'Range!'
+                                values: ['Time!','Time!']
+                                on_text: root.time_selected(Sp_select_range_channel_4)
+
+                        BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
                             Label: 
                                 text:''
-                        BoxLayout:
+                        BoxLayout:      # Update Chart Channel
                             size_hint_y: 0.3
                             Button:
-                                text:'GG'
+                                id: btn_update_channel_4
+                                channel: 'ch_4'
+                                text:'Update'
+                                on_release: root.check_quary(btn_update_channel_4)
                     
                     AnchorLayout:
                         anchor_y: 'top'
