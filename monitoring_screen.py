@@ -21,14 +21,35 @@ write_api = write_client.write_api(write_options=influxdb_client.client.write_ap
 
 class MonitoringScreen(Screen):
     customer_list = ObjectProperty(None)
+
     
+
     def __init__(self, **kwargs):
+
         super().__init__(**kwargs)
+        self.Flag_Sensor = False
+        self.Flag_Time = False
+        self.Flag_Quary= False
         self.customers = []
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
 
-        self.create_empty_graphs()  # Create empty graphs
+        #self.create_empty_graphs()  # Create empty graphs
+
+    def ready_quary(self, Sensor):
+        pass
+
+    def sensor_selected(self, Spinner_id):
+        # Take Spinner ID and Selected Sensor
+        _spinner = self.ids.Spinner_id
+        _spinner_sensor = _spinner.text
+        # Check if the Sensor is Correct
+        if _spinner_sensor != 'Sensor!':
+            self.Flag_Sensor = True
+        else:
+            self.Flag_Sensor = False
+        
+        ready_quary(_spinner_sensor)
 
     def update_customer_list(self):
         """Refresh the customer list display."""

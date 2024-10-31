@@ -60,10 +60,9 @@
                             Spinner:
                                 id: 'Sp_select_sensor_channe_1'
                                 text: 'Sensor!'
-                                values:
-                                on_text: 
+                                values: ['Sensor!']
+                                on_text: root.sensor_selected(Sp_select_sensor_channe_1.id)
                             
-
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
