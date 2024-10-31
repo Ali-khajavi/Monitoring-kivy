@@ -40,7 +40,7 @@ class MonitoringScreen(Screen):
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
 
-        #self.create_empty_graphs()  # Create empty graphs
+        self.create_empty_graphs()  # Create empty graphs
 
     def sensor_selected(self, spinner):
         # add solution in stack overflow! to return kivy object id 
@@ -67,19 +67,26 @@ class MonitoringScreen(Screen):
         print(chart.channel)
         print(self.sensor_ch1)
         print(self.range_ch1)
-        self.range_ch1 = '5555'
+        self.range_ch1 = '-7d'
+        #channel_id = "sensor_channel_1"  # or the channel ID based on the button or selection
+
         if chart.channel == 'ch_1':
+            channel_id = 'sensor_channel_1'
             if self.sensor_ch1 != 'None' and self.range_ch1 != 'None':
-                self.plot_data(self.sensor_ch1, self.range_ch1)
+                self.plot_data(self.sensor_ch1, self.range_ch1, channel_id)
         elif chart.channel == 'ch_2':
+            channel_id = 'sensor_channel_2'
             if self.sensor_ch2 != 'None' and self.range_ch2 != 'None':
-                pass
+                self.plot_data(self.sensor_ch2, self.range_ch2, channel_id)
+
         elif chart.channel == 'ch_3':
+            channel_id = 'sensor_channel_3'
             if self.sensor_ch3 != 'None' and self.range_ch3 != 'None':
-                pass
+                self.plot_data(self.sensor_ch3, self.range_ch3, channel_id)
         elif chart.channel == 'ch_4':
+            channel_id = 'sensor_channel_4'
             if self.sensor_ch4 != 'None' and self.range_ch4 != 'None':
-                pass
+                self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
         
     def update_customer_list(self):
         """Refresh the customer list display."""
@@ -134,7 +141,7 @@ class MonitoringScreen(Screen):
     def create_empty_graphs(self):
         """Creates empty Matplotlib graphs for sensor channels."""
         for i in range(1, 5):  # Loop through channels 1 to 4
-            fig = Figure(figsize=(5, 4))  # Create a figure
+            fig = Figure(figsize=(1, 1))  # Create a figure
             ax = fig.add_subplot(111)  # Add a subplot
             ax.set_title(f"Channel {i}")  # Set title
 
@@ -159,7 +166,7 @@ class MonitoringScreen(Screen):
         #print("Loaded customers:", self.customers)
         self.update_customer_list()
 
-    def plot_data(self, sensor, time):
+    def plot_data(self, sensor, time, channel_id):
         """Fetches data from InfluxDB for the selected sensor and time, then plots it."""
         if sensor and time : 
             # Query data from InfluxDB using the selected sensor and time
@@ -172,18 +179,20 @@ class MonitoringScreen(Screen):
         values = data["value"]
         print(data)
 
-        # Clear previous plot and create a new one
-        self.graph_area.clear_widgets()
+        sensor_channel = self.ids[channel_id]
+        sensor_channel.clear_widgets()
+        
+        # Create a new plot
         fig = Figure(figsize=(5, 4))
         ax = fig.add_subplot(111)
-        ax.plot(times, values, label=f"{self.selected_sensor} Data")
+        ax.plot(times, values, label=f"{sensor} Data")
         ax.set_xlabel("Time")
         ax.set_ylabel("Value")
-        ax.set_title(f"{self.selected_sensor} Sensor Data")
+        ax.set_title(f"{sensor} Sensor Data")
         ax.legend()
 
-        # Add the plot to the graph area
-        self.graph_area.add_widget(FigureCanvasKivyAgg(fig))
+        # Add the new plot to the specified channel
+        sensor_channel.add_widget(FigureCanvasKivyAgg(fig))
 
     def query_data(self, sensor, time):
         """Queries data from InfluxDB for the specified sensor and time."""
