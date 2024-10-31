@@ -58,18 +58,22 @@
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
                             Spinner:
-                                id: 'Sp_select_sensor_channe_1'
+                                id: Sp_select_sensor_channe_1
+                                sensor: 'sensor_channe_1'
                                 text: 'Sensor!'
-                                values: ['Sensor!']
-                                on_text: root.sensor_selected(Sp_select_sensor_channe_1.id)
+                                values: ['Sensor!1', 'Sensor!2']  # Add some sensor options
+                                on_text: root.sensor_selected(Sp_select_sensor_channe_1)
                             
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
-                            Button:
-                                id: 'btn_select_time_channel_1'
-                                text: 'sss'
+                            Spinner:
+                                id: Sp_select_range_channel_1
+                                range: 'range_channe_1'
+                                text: 'Range!'
+                                values: ['Time!3','Time!4']
+
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
                             Label: 
@@ -77,8 +81,10 @@
                         BoxLayout:      # Update Chart Channel
                             size_hint_y: 0.3
                             Button:
-                                id: 'btn_update_channel_1'
-                                text:'GG'
+                                id: btn_update_channel_1
+                                channel: 'ch_1'
+                                text:'Update'
+                                on_release: root.check_quary(btn_update_channel_1)
                     
                     AnchorLayout:
                         id: sensor_channel_1

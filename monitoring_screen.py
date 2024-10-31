@@ -27,30 +27,60 @@ class MonitoringScreen(Screen):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        self.Flag_Sensor = False
-        self.Flag_Time = False
-        self.Flag_Quary= False
+        self.sensor_ch1 = 'None'
+        self.sensor_ch2 = 'None'
+        self.sensor_ch3 = 'None'
+        self.sensor_ch4 = 'None'
+        self.range_ch1 = 'None'
+        self.range_ch2 = 'None'
+        self.range_ch3 = 'None'
+        self.range_ch4 = 'None'
+
         self.customers = []
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
 
         #self.create_empty_graphs()  # Create empty graphs
 
-    def ready_quary(self, Sensor):
-        pass
-
-    def sensor_selected(self, Spinner_id):
+    def sensor_selected(self, spinner):
+        # add solution in stack overflow! to return kivy object id 
+        #print("Hello")
+        #print(spinner.sensor) # it is posible to retun object id by this way!
+        #print (spinner)
         # Take Spinner ID and Selected Sensor
-        _spinner = self.ids.Spinner_id
-        _spinner_sensor = _spinner.text
         # Check if the Sensor is Correct
-        if _spinner_sensor != 'Sensor!':
-            self.Flag_Sensor = True
+        if spinner.text != 'Sensor!':
+            if spinner.sensor == 'sensor_channe_1':
+                self.sensor_ch1 = spinner.text
+            elif spinner.sensor == 'sensor_channe_2':
+                self.sensor_ch2 = spinner.text
+            elif spinner.sensor == 'sensor_channe_3':
+                self.sensor_ch3 = spinner.text
+            elif spinner.sensor == 'sensor_channe_4':
+                self.sensor_ch4 = spinner.text
         else:
             self.Flag_Sensor = False
-        
-        ready_quary(_spinner_sensor)
+            print('Select the Customer!')
 
+    def check_quary(self, chart):
+        print('Hoooooo!')
+        print(chart.channel)
+        print(self.sensor_ch1)
+        print(self.range_ch1)
+        self.range_ch1 = '5555'
+        if chart.channel == 'ch_1':
+            if self.sensor_ch1 != 'None' and self.range_ch1 != 'None':
+                self.plot_data(self.sensor_ch1, self.range_ch1)
+        elif chart.channel == 'ch_2':
+            if self.sensor_ch2 != 'None' and self.range_ch2 != 'None':
+                pass
+        elif chart.channel == 'ch_3':
+            if self.sensor_ch3 != 'None' and self.range_ch3 != 'None':
+                pass
+        elif chart.channel == 'ch_4':
+            if self.sensor_ch4 != 'None' and self.range_ch4 != 'None':
+                pass
+        
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()  # Remove all children from the customer list
@@ -74,7 +104,7 @@ class MonitoringScreen(Screen):
                 size_hint_y= None,
                 height= 40,
                 halign= "left",
-                font_size= 16,
+                font_size= 14.5,
                 pos_hint= {"x":.25}
             )
             
@@ -129,20 +159,21 @@ class MonitoringScreen(Screen):
         #print("Loaded customers:", self.customers)
         self.update_customer_list()
 
-    def plot_data(self):
-        """Fetches data for the selected sensor and plots it."""
-        if not self.selected_sensor:
-            print("Please select a sensor.")
-            return
-        if not self.selected_time:
-            print("Please select a time period.")
-            return
+    def plot_data(self, sensor, time):
+        """Fetches data from InfluxDB for the selected sensor and time, then plots it."""
+        if sensor and time : 
+            # Query data from InfluxDB using the selected sensor and time
+            data = self.query_data(sensor, time)
+            if data.empty:
+                print("No data found for the selected sensor and time.")
+                return
 
-        data = self.excel_handler.get_sensor_data(self.selected_sensor, self.selected_time)
-        times = [entry['time'] for entry in data]
-        values = [entry['value'] for entry in data]
+        times = data["time"]
+        values = data["value"]
+        print(data)
 
-        self.graph_area.clear_widgets()  # Clear previous plot
+        # Clear previous plot and create a new one
+        self.graph_area.clear_widgets()
         fig = Figure(figsize=(5, 4))
         ax = fig.add_subplot(111)
         ax.plot(times, values, label=f"{self.selected_sensor} Data")
@@ -151,14 +182,23 @@ class MonitoringScreen(Screen):
         ax.set_title(f"{self.selected_sensor} Sensor Data")
         ax.legend()
 
+        # Add the plot to the graph area
         self.graph_area.add_widget(FigureCanvasKivyAgg(fig))
 
-    def query_data(self, customer, sensor, time):
+    def query_data(self, sensor, time):
+        """Queries data from InfluxDB for the specified sensor and time."""
         query_api = write_client.query_api()
-        print(sensor)
-        query =  f"""from(bucket: "Sensors")
+        print(f"Querying data for sensor: {sensor}, time range: {time}")
+        query = f"""
+        from(bucket: "{bucket}")
         |> range(start: {time})
-        |> filter(fn: (r) => r._measurement == "{customer}" and r.DEVICE == "{sensor}")"""
-        tables = query_api.query(query, org="Pillipp_1")
-        print(tables)
-        return pd.DataFrame([(r.get_time(), r.get_value()) for t in tables for r in t.records], columns=["time", "value"])
+        |> filter(fn: (r) => r.DEVICE == "{sensor}")
+        """
+        
+        tables = query_api.query(query, org=org)
+        
+        # Convert results to a DataFrame
+        return pd.DataFrame(
+            [(record.get_time(), record.get_value()) for table in tables for record in table.records],
+            columns=["time", "value"]
+        )
