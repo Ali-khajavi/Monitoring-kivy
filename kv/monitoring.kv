@@ -47,7 +47,7 @@
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:
+                        BoxLayout:      # Sensor Selection & Time Selection
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
@@ -57,22 +57,28 @@
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
-                            Button:
-                                text: 'sss'
+                            Spinner:
+                                id: 'Sp_select_sensor_channe_1'
+                                text: 'Sensor!'
+                                values:
+                                on_text: 
+                            
 
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
                             Button:
+                                id: 'btn_select_time_channel_1'
                                 text: 'sss'
-                        BoxLayout:
+                        BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
                             Label: 
                                 text:''
-                        BoxLayout:
+                        BoxLayout:      # Update Chart Channel
                             size_hint_y: 0.3
                             Button:
+                                id: 'btn_update_channel_1'
                                 text:'GG'
                     
                     AnchorLayout:
