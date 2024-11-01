@@ -18,7 +18,6 @@ Builder.load_file('kv/monitoring.kv')
 Builder.load_file('kv/customer_setup.kv')
 
 
-
 class MyScreenManager(ScreenManager):
     pass
 
