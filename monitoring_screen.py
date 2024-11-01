@@ -22,8 +22,6 @@ write_api = write_client.write_api(write_options=influxdb_client.client.write_ap
 class MonitoringScreen(Screen):
     customer_list = ObjectProperty(None)
 
-    
-
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
@@ -35,7 +33,7 @@ class MonitoringScreen(Screen):
         self.range_ch2 = 'None'
         self.range_ch3 = 'None'
         self.range_ch4 = 'None'
-
+        
         self.customers = []
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
@@ -60,6 +58,9 @@ class MonitoringScreen(Screen):
                 self.sensor_ch4 = spinner.text
         else:
             print('Select sensor!')
+
+        
+
 
     def time_selected(self, spinner):
         if spinner.text != 'Time!':
