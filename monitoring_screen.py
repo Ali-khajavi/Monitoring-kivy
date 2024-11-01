@@ -6,7 +6,8 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from matplotlib.figure import Figure
-from excel_handler import ExcelHandler  # Assuming excel_handler.py has a class named ExcelHandler for data access
+# Assuming excel_handler.py has a class named ExcelHandler for data access
+from excel_handler import ExcelHandler
 from secrets_server import INFLUXDB_TOKEN, ORGANIZATION, BUCKET, SERVER_ADDRESS
 import influxdb_client
 import pandas as pd
@@ -16,13 +17,12 @@ org = ORGANIZATION
 url = SERVER_ADDRESS
 bucket = BUCKET
 write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
-write_api = write_client.write_api(write_options=influxdb_client.client.write_api.SYNCHRONOUS)
+write_api = write_client.write_api(
+    write_options=influxdb_client.client.write_api.SYNCHRONOUS)
 
 
 class MonitoringScreen(Screen):
     customer_list = ObjectProperty(None)
-
-    
 
     def __init__(self, **kwargs):
 
@@ -37,16 +37,17 @@ class MonitoringScreen(Screen):
         self.range_ch4 = 'None'
 
         self.customers = []
-        self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
+        self.excel_handler = ExcelHandler(
+            'customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
 
         self.create_empty_graphs()  # Create empty graphs
 
     def sensor_selected(self, spinner):
-        # add solution in stack overflow! to return kivy object id 
-        #print("Hello")
-        #print(spinner.sensor) # it is posible to retun object id by this way!
-        #print (spinner)
+        # add solution in stack overflow! to return kivy object id
+        # print("Hello")
+        # print(spinner.sensor) # it is posible to retun object id by this way!
+        # print (spinner)
         # Take Spinner ID and Selected Sensor
         # Check if the Sensor is Correct
         if spinner.text != 'Sensor!':
@@ -73,13 +74,13 @@ class MonitoringScreen(Screen):
                 self.range_ch4 = spinner.text
         else:
             print('Select time!')
-        
+
     def check_quary(self, chart):
         print('Hoooooo!')
         print(chart.channel)
         print(self.sensor_ch1)
         print(self.range_ch1)
-        #channel_id = "sensor_channel_1"  # or the channel ID based on the button or selection
+        # channel_id = "sensor_channel_1"  # or the channel ID based on the button or selection
 
         if chart.channel == 'ch_1':
             channel_id = 'sensor_channel_1'
@@ -98,13 +99,14 @@ class MonitoringScreen(Screen):
             channel_id = 'sensor_channel_4'
             if self.sensor_ch4 != 'None' and self.range_ch4 != 'None':
                 self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
-        
+
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()  # Remove all children from the customer list
 
         # Sort customers by last name
-        sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
+        sorted_customers = sorted(
+            self.customers, key=lambda customer: customer['last_name'].lower())
         self.selected_customer = None
 
         for customer in sorted_customers:
@@ -117,35 +119,37 @@ class MonitoringScreen(Screen):
             )
             # Create a label for the customer's name
             customer_label = Label(
-                text= f"{customer['first_name']} {customer['last_name']}",
-                color= (0, 0, 0),
-                size_hint_y= None,
-                height= 40,
-                halign= "left",
-                font_size= 14.5,
-                pos_hint= {"x":.25}
+                text=f"{customer['first_name']} {customer['last_name']}",
+                color=(0, 0, 0),
+                size_hint_y=None,
+                height=40,
+                halign="left",
+                font_size=14.5,
+                pos_hint={"x": .25}
             )
-            
+
             # Create a ToggleButton for selection
             toggle_button = ToggleButton(
                 group='customer_selection',  # Group name to ensure only one can be selected
                 size_hint_x=None,
                 width=40,  # Width of the toggle button
-                on_state=lambda instance, state, cust=customer: self.on_customer_selected(cust, state)
+                on_state=lambda instance, state, cust=customer: self.on_customer_selected(
+                    cust, state)
             )
 
             # Add the toggle button and label to the layout
             layout.add_widget(customer_label)
             layout.add_widget(toggle_button)
 
-
             # Dynamically update padding based on the label width
+
             def update_padding(instance, value):
                 padding = instance.width * 0.4  # Set padding to 5% of the label width
                 instance.text_size = (instance.width - padding, None)
-            
+
             # Bind the width change to the padding adjustment
-            customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
+            # Use 'size' instead of 'width' for binding
+            customer_label.bind(size=update_padding)
 
             self.customer_list.add_widget(layout)
 
@@ -166,12 +170,12 @@ class MonitoringScreen(Screen):
         """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
 
-        #print("Loaded customers:", self.customers)
+        # print("Loaded customers:", self.customers)
         self.update_customer_list()
 
     def plot_data(self, sensor, time, channel_id):
         """Fetches data from InfluxDB for the selected sensor and time, then plots it."""
-        if sensor and time : 
+        if sensor and time:
             # Query data from InfluxDB using the selected sensor and time
             data = self.query_data(sensor, time)
             if data.empty:
@@ -184,7 +188,7 @@ class MonitoringScreen(Screen):
 
         sensor_channel = self.ids[channel_id]
         sensor_channel.clear_widgets()
-        
+
         # Create a new plot
         fig = Figure(figsize=(5, 4))
         ax = fig.add_subplot(111)
@@ -206,11 +210,12 @@ class MonitoringScreen(Screen):
         |> range(start: {time})
         |> filter(fn: (r) => r.DEVICE == "{sensor}")
         """
-        
+
         tables = query_api.query(query, org=org)
-        
+
         # Convert results to a DataFrame
         return pd.DataFrame(
-            [(record.get_time(), record.get_value()) for table in tables for record in table.records],
+            [(record.get_time(), record.get_value())
+             for table in tables for record in table.records],
             columns=["time", "value"]
         )

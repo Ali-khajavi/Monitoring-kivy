@@ -1,7 +1,7 @@
-from kivy.garden.matplotlib.backend_kivy import FigureCanvasKivy,\
-                                FigureManagerKivy, RendererKivy,\
-                                GraphicsContextKivy, NavigationToolbar2Kivy,\
-                                MPLKivyApp
+from kivy.garden.matplotlib.backend_kivy import FigureCanvasKivy, \
+    FigureManagerKivy, RendererKivy, \
+    GraphicsContextKivy, NavigationToolbar2Kivy, \
+    MPLKivyApp
 from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
 
 __all__ = (FigureCanvasKivy.__name__, FigureManagerKivy.__name__,

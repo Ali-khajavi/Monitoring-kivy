@@ -73,7 +73,7 @@ import six
 
 import matplotlib
 from matplotlib._pylab_helpers import Gcf
-from matplotlib.backend_bases import RendererBase, GraphicsContextBase,\
+from matplotlib.backend_bases import RendererBase, GraphicsContextBase, \
     FigureManagerBase, FigureCanvasBase
 from matplotlib.figure import Figure
 from matplotlib.transforms import Bbox
@@ -93,9 +93,9 @@ from kivy.properties import ObjectProperty
 from kivy.base import EventLoop
 from kivy.uix.floatlayout import FloatLayout
 from kivy.core.image import Image
-from kivy.garden.matplotlib.backend_kivy import FigureCanvasKivy,\
-                            FigureManagerKivy, show, new_figure_manager,\
-                            NavigationToolbar2Kivy
+from kivy.garden.matplotlib.backend_kivy import FigureCanvasKivy, \
+    FigureManagerKivy, show, new_figure_manager, \
+    NavigationToolbar2Kivy
 
 register_backend('png', 'backend_kivyagg', 'PNG File Format')
 
@@ -152,6 +152,7 @@ class Show(ShowBase):
     '''mainloop needs to be overwritten to define the show() behavior for kivy
        framework.
     '''
+
     def mainloop(self):
         global my_canvas
         global toolbar
@@ -159,6 +160,7 @@ class Show(ShowBase):
         if app is None:
             app = MPLKivyApp(figure=my_canvas, toolbar=toolbar)
             app.run()
+
 
 show = Show()
 
@@ -203,7 +205,8 @@ class FigureCanvasKivyAgg(FigureCanvasKivy, FigureCanvasAgg):
             Color(1.0, 1.0, 1.0, 1.0)
             self.img_rect = Rectangle(texture=texture, pos=self.pos,
                                       size=(w, h))
-        texture.blit_buffer(bytes(buf_rgba), colorfmt='rgba', bufferfmt='ubyte')
+        texture.blit_buffer(
+            bytes(buf_rgba), colorfmt='rgba', bufferfmt='ubyte')
         self.img_texture = texture
 
     filetypes = FigureCanvasKivy.filetypes.copy()
@@ -227,6 +230,7 @@ class FigureCanvasKivyAgg(FigureCanvasKivy, FigureCanvasAgg):
         else:
             img = Image(self.img_texture)
         img.save(filename)
+
 
 ''' Standard names that backend.__init__ is expecting '''
 FigureCanvas = FigureCanvasKivyAgg

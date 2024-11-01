@@ -1,6 +1,7 @@
 import openpyxl
 import os
 
+
 class ExcelHandler:
     def __init__(self, file_name):
         self.file_name = file_name
@@ -26,13 +27,14 @@ class ExcelHandler:
             wb = openpyxl.Workbook()
             ws = wb.active
             ws.title = "Customers"
-            ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Description)"])  # Header
+            ws.append(["First Name", "Last Name", "Email", "Phone", "City",
+                      "Description", "Address", "Sensors (Code, Description)"])  # Header
             wb.save(self.file_name)
             wb.close()
-        
+
         # Load existing customers from the Excel file
         existing_customers = self.load_customers()
-        
+
         # Append new customers to the existing list
         existing_customers.extend(customers)
 
@@ -40,12 +42,15 @@ class ExcelHandler:
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Customers"
-        ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Description)"])  # Header
+        ws.append(["First Name", "Last Name", "Email", "Phone", "City",
+                  "Description", "Address", "Sensors (Code, Description)"])  # Header
 
         for customer in existing_customers:
-            sensors = "; ".join([f"{s['code']} - {s['description']}" for s in customer['sensors']])
-            ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'], customer['city'], customer['description'], customer['address'], sensors])
-        
+            sensors = "; ".join(
+                [f"{s['code']} - {s['description']}" for s in customer['sensors']])
+            ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'],
+                      customer['city'], customer['description'], customer['address'], sensors])
+
         wb.save(self.file_name)
         wb.close()
 

@@ -7,6 +7,7 @@ from excel_handler import ExcelHandler
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 
+
 class CustomerSetupScreen(Screen):
     first_name_input = ObjectProperty(None)
     last_name_input = ObjectProperty(None)
@@ -20,7 +21,8 @@ class CustomerSetupScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.customers = []  # Will hold customer data
-        self.excel_handler = ExcelHandler("customers_data.xlsx")  # Initialize ExcelHandler
+        self.excel_handler = ExcelHandler(
+            "customers_data.xlsx")  # Initialize ExcelHandler
         self.load_customers()
 
     def on_enter(self):
@@ -60,7 +62,8 @@ class CustomerSetupScreen(Screen):
         self.customer_list.clear_widgets()  # Remove all children from the customer list
 
         # Sort customers by last name
-        sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
+        sorted_customers = sorted(
+            self.customers, key=lambda customer: customer['last_name'].lower())
         self.selected_customer = None
 
         for customer in sorted_customers:
@@ -69,7 +72,8 @@ class CustomerSetupScreen(Screen):
                 orientation='horizontal',
                 size_hint_y=None,
                 height=40,
-                padding=(10, 0, 60, 0)  # Add padding (left, top, right, bottom)
+                # Add padding (left, top, right, bottom)
+                padding=(10, 0, 60, 0)
             )
             # Create a label for the customer's name
             customer_label = Label(
@@ -80,41 +84,45 @@ class CustomerSetupScreen(Screen):
                 halign="left",
                 font_size=16,
             )
-            
+
             # Create a ToggleButton for selection
             toggle_button = ToggleButton(
                 group='customer_selection',  # Group name to ensure only one can be selected
                 size_hint_x=None,
                 width=40,  # Width of the toggle button
-                on_state=lambda instance, state, cust=customer: self.on_customer_selected(cust, state)
+                on_state=lambda instance, state, cust=customer: self.on_customer_selected(
+                    cust, state)
             )
 
             # Add the toggle button and label to the layout
             layout.add_widget(customer_label)
             layout.add_widget(toggle_button)
 
-
             # Dynamically update padding based on the label width
+
             def update_padding(instance, value):
                 padding = instance.width * 0.4  # Set padding to 5% of the label width
                 instance.text_size = (instance.width - padding, None)
-            
+
             # Bind the width change to the padding adjustment
-            customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
+            # Use 'size' instead of 'width' for binding
+            customer_label.bind(size=update_padding)
 
             self.customer_list.add_widget(layout)
 
     def on_customer_selected(self, customer, state):
         """Handle customer selection."""
         if state == 'down':  # The button is pressed
-            self.selected_customer = customer['last_name']  # Update the selected customer
-            self.selected_customer_function(customer['last_name'])  # Call the function with the selected customer name
+            # Update the selected customer
+            self.selected_customer = customer['last_name']
+            # Call the function with the selected customer name
+            self.selected_customer_function(customer['last_name'])
 
     def selected_customer_function(self, customer_name):
         """Function to handle the selected customer."""
         print(f"Selected Customer: {customer_name}")
         # Add further logic here
-    
+
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""
         if instance.collide_point(*touch.pos):
@@ -138,7 +146,7 @@ class CustomerSetupScreen(Screen):
         """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
 
-        #print("Loaded customers:", self.customers)
+        # print("Loaded customers:", self.customers)
         self.update_customer_list()
 
     def show_customer_info(self, customer):
@@ -151,5 +159,6 @@ class CustomerSetupScreen(Screen):
             f"Address: {customer['address']}\n"
             f"Description: {customer['description']}"
         )
-        popup = Popup(title="Customer Information", content=Label(text=info), size_hint=(0.6, 0.6))
+        popup = Popup(title="Customer Information",
+                      content=Label(text=info), size_hint=(0.6, 0.6))
         popup.open()
