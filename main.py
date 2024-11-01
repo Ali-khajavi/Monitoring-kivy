@@ -9,7 +9,7 @@ from customer_setup_screen import CustomerSetupScreen
 from first_menu_screen import FirstMenuScreen
 from monitoring_screen import MonitoringScreen 
 from settings_screen import SettingsScreen
-from kivy.core.window import Window
+#from kivy.core.window import Window
 
 # Load the kv files
 Builder.load_file('kv/first_menu.kv')
