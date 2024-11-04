@@ -1,4 +1,5 @@
 tree
 kivy_venv/
 kivy_env/
+.venv/
 __pycache__/

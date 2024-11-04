@@ -22,15 +22,15 @@
         BoxLayout:
             orientation: 'horizontal'
             size_hint_x: 0.7  # Occupy 1/3 of the screen width
-            pos_hint: {'x': 0}  # Anchor to the left side
+            pos_hint: {'x': 0}
             padding: 10
             canvas.before:
                 Rectangle:
-                    size: (self.width * 1, self.height * 0.72)  # Make the frame 10% larger than the BoxLayout in both directions
-                    pos: (self.x - self.width * 0.01, self.y + self.height * 0.3)  # Center the frame padding around the BoxLayout
+                    size: (self.width * 1, self.height * 0.72)  
+                    pos: (self.x - self.width * 0.01, self.y + self.height * 0.3) 
                     source: 'assets/F1.png'  # Frame image
             FloatLayout:
-                # Background for the top image
+                # Background Label for the top image
                 canvas.before:
                     Rectangle:
                         source: 'assets/Labels/Form-Label.png'
@@ -125,8 +125,8 @@
         BoxLayout:
             canvas.before:
                 Rectangle:
-                    size: (self.width * .9, self.height * 0.72)  # Make the frame 10% larger than the BoxLayout in both directions
-                    pos: (self.x + self.width * 0.03, self.y + self.height * 0.25)  # Center the frame padding around the BoxLayout
+                    size: (self.width * .9, self.height * 0.72) 
+                    pos: (self.x + self.width * 0.03, self.y + self.height * 0.27)  
                     source: 'assets/Customer-List2-open.png'  # Frame image
             orientation: 'vertical'
             size_hint_x: .6
@@ -151,26 +151,28 @@
 
         #------------------------------------------------# Sensor Setup Form #----------------------------------------
         BoxLayout:
+            # Wrapper for the Sensor Setup Form with background image
             size_hint_x: 0.7
-            padding: 10
-            background_color: [0.9, 0.9, 0.9, 1]  # Set the background color (RGBA)
+            padding: 5
             canvas.before:
+                Color:
+                    rgba: 1, 1, 1, 1 
                 Rectangle:
+                    size: (self.width * 1.038, self.height * 0.75)
+                    pos: (self.x - self.width * 0.06, self.y + self.height * 0.258)  
                     source: 'assets/F1.png'  # Frame image
-                    pos: self.pos
-                    size: self.size
 
             BoxLayout:     
                 orientation: 'vertical'
-                padding: 10
-                spacing: 3
+                padding: 1
+                spacing: 1
 
                 Image:
                     source: 'assets/Labels/Label-sensor.png'
                     pos_hint: {"x": -0.25}
 
                 Image:
-                    size_hint_y: 4
+                    size_hint_y: 3.5
                     source: 'assets/Labels/Label-sensor-lisens.png'
                     pos_hint: {"x": -0.28}
 
@@ -182,6 +184,7 @@
                 TextInput:
                     id: sensor_code_input
                     size_hint_y: 0.7
+                    size_hint_x: 0.9
                     multiline: False
 
                 Image:
@@ -192,6 +195,7 @@
                 TextInput:
                     id: sensor_description_input
                     size_hint_y: 2
+                    size_hint_x: 0.9
                     multiline: True
 
                 Image:
@@ -202,7 +206,8 @@
                 BoxLayout: 
                     size_hint_y: 2.5  # Sensors images
                     orientation: 'horizontal'
-                    spacing: 10
+                    spacing: 5
+                    padding: 5
 
                     BoxLayout:
                         orientation: 'vertical'
@@ -234,9 +239,13 @@
 
                 BoxLayout:
                     size_hint_y: 1.4
+                    padding: [130 - self.width * 0.05, 0, 0, 0]  
                     Button:
+                        size_hint_x: 0.2
                         text: "Save Sensor"
-                        font_size: self.width / 16
+                        font_size: self.width / 14
                         background_normal: 'assets/PNG/Button_1/b2.png'
                         background_down: 'assets/PNG/Button_1/b4.png'
                         on_release: root.save_sensor()
+
+
