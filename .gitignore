@@ -3,3 +3,4 @@ kivy_venv/
 kivy_env/
 .venv/
 __pycache__/
+bower_components/
