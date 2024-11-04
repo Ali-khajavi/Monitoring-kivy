@@ -46,6 +46,11 @@ class CustomerSetupScreen(Screen):
         city = self.city_input.text
         description = self.description_input.text
         address = self.address_input.text
+        sensor_code = self.sensor_code_input.text
+        sensor_description = self.sensor_description_input.text
+
+
+        sensor = sensor_code + "-" + "type"
 
         if first_name and last_name and email:
             new_customer = {
@@ -56,7 +61,8 @@ class CustomerSetupScreen(Screen):
                 "city": city,
                 "description": description,
                 "address": address,
-                "sensors": []
+                "sensors": [sensor,'aaa - bbb'],
+                "sensor_description": sensor_description
             }
             self.customers.clear()
             self.customers.append(new_customer)
@@ -69,49 +75,59 @@ class CustomerSetupScreen(Screen):
         sensor_id = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
+        if self.selected_customer != None and len(sensor_id) > 3 :
+            print("Congraits")
+            return
+        elif len(sensor_id) <= 3 : 
+            print("Sensor ID is Wrong")
+            return
+        elif self.selected_customer == None:
+            print("frist select the customer!")
+            return
 
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()
-        # Sort customers by last name
-        sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
         self.selected_customer = None
-        for customer in sorted_customers:
-            # Create a layout to hold the toggle button and label
-            layout = BoxLayout(
-                orientation='horizontal',
-                size_hint_y=None,
-                height=40,
-                padding=(10, 0, 60, 0)
-            )
-            # Create a label for the customer's name
-            customer_label = Label(
-                text=f"{customer['last_name']}",
-                color=(0, 0, 0),
-                size_hint_y=None,
-                height=40,
-                halign="left",
-                font_size=16,
-            )
-            # Create a ToggleButton for selection
-            toggle_button = ToggleButton(
-            group='customer_selection',
-            size_hint_x=None,
-            width=40,  
-            # Use a lambda function to capture the current customer and state
-            on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
-            )
-            # Add the toggle button and label to the layout
-            layout.add_widget(customer_label)
-            layout.add_widget(toggle_button)
-            # Dynamically update padding based on the label width
-            def update_padding(instance, value):
-                padding = instance.width * 0.4
-                instance.text_size = (instance.width - padding, None)
+        # Sort customers by last name
+        if self.customers != None:
+            sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
+            for customer in sorted_customers:
+                # Create a layout to hold the toggle button and label
+                layout = BoxLayout(
+                    orientation='horizontal',
+                    size_hint_y=None,
+                    height=40,
+                    padding=(10, 0, 60, 0)
+                )
+                # Create a label for the customer's name
+                customer_label = Label(
+                    text=f"{customer['last_name']}",
+                    color=(0, 0, 0),
+                    size_hint_y=None,
+                    height=40,
+                    halign="left",
+                    font_size=16,
+                )
+                # Create a ToggleButton for selection
+                toggle_button = ToggleButton(
+                group='customer_selection',
+                size_hint_x=None,
+                width=40,  
+                # Use a lambda function to capture the current customer and state
+                on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
+                )
+                # Add the toggle button and label to the layout
+                layout.add_widget(customer_label)
+                layout.add_widget(toggle_button)
+                # Dynamically update padding based on the label width
+                def update_padding(instance, value):
+                    padding = instance.width * 0.4
+                    instance.text_size = (instance.width - padding, None)
 
-            # Bind the width change to the padding adjustment
-            customer_label.bind(size=update_padding)
-            self.customer_list.add_widget(layout)
+                # Bind the width change to the padding adjustment
+                customer_label.bind(size=update_padding)
+                self.customer_list.add_widget(layout)
 
     def on_customer_selected(self, customer):
         self.selected_customer = customer['last_name']

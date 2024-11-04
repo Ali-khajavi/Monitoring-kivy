@@ -103,52 +103,54 @@ class MonitoringScreen(Screen):
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()  # Remove all children from the customer list
-
-        # Sort customers by last name
-        sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
         self.selected_customer = None
+        # Sort customers by last name
+        #print(self.customers[0]['first_name'])
 
-        for customer in sorted_customers:
-            # Create a layout to hold the toggle button and label
-            layout = BoxLayout(
-                orientation='horizontal',
-                size_hint_y=None,
-                height=40,
-                padding=(0, 0, 10, 0)  # Add padding (left, top, right, bottom)
-            )
-            # Create a label for the customer's name
-            customer_label = Label(
-                text= f"{customer['first_name']} {customer['last_name']}",
-                color= (0, 0, 0),
-                size_hint_y= None,
-                height= 40,
-                halign= "left",
-                font_size= 14.5,
-                pos_hint= {"x":.25}
-            )
-            
-            # Create a ToggleButton for selection
-            toggle_button = ToggleButton(
-                group='customer_selection',  # Group name to ensure only one can be selected
-                size_hint_x=None,
-                width=40,  # Width of the toggle button
-                on_state=lambda instance, state, cust=customer: self.on_customer_selected(cust, state)
-            )
+        if self.customers != None:
+            sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
 
-            # Add the toggle button and label to the layout
-            layout.add_widget(customer_label)
-            layout.add_widget(toggle_button)
+            for customer in sorted_customers:
+                # Create a layout to hold the toggle button and label
+                layout = BoxLayout(
+                    orientation='horizontal',
+                    size_hint_y=None,
+                    height=40,
+                    padding=(0, 0, 10, 0)  # Add padding (left, top, right, bottom)
+                )
+                # Create a label for the customer's name
+                customer_label = Label(
+                    text= f"{customer['first_name']} {customer['last_name']}",
+                    color= (0, 0, 0),
+                    size_hint_y= None,
+                    height= 40,
+                    halign= "left",
+                    font_size= 14.5,
+                    pos_hint= {"x":.25}
+                )
+                
+                # Create a ToggleButton for selection
+                toggle_button = ToggleButton(
+                    group='customer_selection',  # Group name to ensure only one can be selected
+                    size_hint_x=None,
+                    width=40,  # Width of the toggle button
+                    on_state=lambda instance, state, cust=customer: self.on_customer_selected(cust, state)
+                )
+
+                # Add the toggle button and label to the layout
+                layout.add_widget(customer_label)
+                layout.add_widget(toggle_button)
 
 
-            # Dynamically update padding based on the label width
-            def update_padding(instance, value):
-                padding = instance.width * 0.4  # Set padding to 5% of the label width
-                instance.text_size = (instance.width - padding, None)
-            
-            # Bind the width change to the padding adjustment
-            customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
+                # Dynamically update padding based on the label width
+                def update_padding(instance, value):
+                    padding = instance.width * 0.4  # Set padding to 5% of the label width
+                    instance.text_size = (instance.width - padding, None)
+                
+                # Bind the width change to the padding adjustment
+                customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
 
-            self.customer_list.add_widget(layout)
+                self.customer_list.add_widget(layout)
 
     def create_empty_graphs(self):
         """Creates empty Matplotlib graphs for sensor channels."""
