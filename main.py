@@ -1,7 +1,6 @@
 from kivy.config import Config
 Config.set('graphics', 'width', '1200')
 Config.set('graphics', 'height', '700')
-
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
@@ -10,14 +9,13 @@ from customer_setup_screen import CustomerSetupScreen
 from first_menu_screen import FirstMenuScreen
 from monitoring_screen import MonitoringScreen 
 from settings_screen import SettingsScreen
-from kivy.core.window import Window
+#from kivy.core.window import Window
 
 # Load the kv files
 Builder.load_file('kv/first_menu.kv')
 Builder.load_file('kv/settings.kv')
 Builder.load_file('kv/monitoring.kv')
 Builder.load_file('kv/customer_setup.kv')
-
 
 
 class MyScreenManager(ScreenManager):
