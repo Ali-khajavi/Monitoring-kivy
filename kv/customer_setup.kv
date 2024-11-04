@@ -8,6 +8,12 @@
     address_input: address_input
     description_input: description_input
     customer_list: customer_list
+    sensor_code_input: sensor_code_input
+    sensor_description_input: sensor_description_input
+    voltage_sensor: voltage_sensor
+    flowmeter_sensor: flowmeter_sensor
+    temperature_sensor: temperature_sensor
+    ampermeter_sensor: ampermeter_sensor
 
     GridLayout:
         cols:3
@@ -131,23 +137,30 @@
             orientation: 'vertical'
             size_hint_x: .6
             size_hint_y: 1
+
             Label:
                 size_hint_y: .09
-                text:""
+                text: ""
+
             Label:
                 size_hint_x: .5
                 size_hint_y: .05
                 text: 'Customer List'
                 color: 0, 0, 0
-                pos_hint: {"x":.25}
+                pos_hint: {"x": .25}
+
             ScrollView:
                 size_hint: (1, 1)
                 height: 300
+
                 BoxLayout:
                     id: customer_list
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
+
+                    # This will be populated with ToggleButtons dynamically from your Python code
+
 
         #------------------------------------------------# Sensor Setup Form #----------------------------------------
         BoxLayout:
@@ -214,6 +227,7 @@
                         Image:
                             source: 'assets/sensor1.png'
                         CheckBox:
+                            id: voltage_sensor
                             group: 'sensor'
 
                     BoxLayout:
@@ -221,6 +235,7 @@
                         Image:
                             source: 'assets/sensor2.png'
                         CheckBox:
+                            id: flowmeter_sensor
                             group: 'sensor'
 
                     BoxLayout:
@@ -228,6 +243,7 @@
                         Image:
                             source: 'assets/sensor3.png'
                         CheckBox:
+                            id: temperature_sensor
                             group: 'sensor'
 
                     BoxLayout:
@@ -235,6 +251,7 @@
                         Image:
                             source: 'assets/sensor4.png'
                         CheckBox:
+                            id: ampermeter_sensor
                             group: 'sensor'
 
                 BoxLayout:
