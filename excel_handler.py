@@ -121,10 +121,17 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
-    def load_sensors(self, customer):
-        self.return_customers_row(customer)
+    def load_sensors_type(self, customer):
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
+        # Take Customer Row from the Database
+        customer_row = self.return_customers_row(customer)
+        current_sensor_types = ws[f"I{customer_row}"].value
+        # create list of customers sensors 
+        current_sensor_types = current_sensor_types.split(';')
+        print(current_sensor_types)
+        return current_sensor_types
 
-    
     def return_customers_row(self, customer):
         wb = openpyxl.load_workbook("customers_data.xlsx")
         ws = wb["Customers"]
