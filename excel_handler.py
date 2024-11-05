@@ -26,7 +26,7 @@ class ExcelHandler:
             wb = openpyxl.Workbook()
             ws = wb.active
             ws.title = "Customers"
-            ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors (Code, Type)", "Sensor Description"])  # Header
+            ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors Code", "Sensors Type", "Sensor Description"])  # Header
             wb.save(self.file_name)
             wb.close()
         
@@ -48,33 +48,22 @@ class ExcelHandler:
                    "City", 
                    "Description",         
                    "Address", 
-                   "Sensors (Code, Type)", 
+                   "Sensors Code",
+                   "Sensors Type", 
                    "Sensor Description"]) 
 
         for customer in existing_customers:
-            #print(customer['sensors'])
-            if customer['sensors'] != ['','']:
-                try:
-                    sensors = "; ".join([f"{s['code']} - {s['type']}" for s in customer['sensors']])
-                    print(sensors)
-                except TypeError as e:
-                    print("Error:", e)
-                    sensors = "Invalid sensor data"
-            else: 
-                sensors = ''
-            if customer['sensor_description'] != ['']:
-                ws.append([customer['first_name'], customer['last_name'], customer['email'], customer['phone'], customer['city'], customer['description'], customer['address'], sensors, customer['sensor_description']])
-            else: 
-                customer['sensor_description'] = ''
-                ws.append([customer['first_name'], 
-                            customer['last_name'], 
-                            customer['email'], 
-                            customer['phone'], 
-                            customer['city'], 
-                            customer['description'], 
-                            customer['address'], 
-                            sensors, 
-                            customer['sensor_description']])
+            ws.append([customer['first_name'], 
+                        customer['last_name'], 
+                        customer['email'], 
+                        customer['phone'], 
+                        customer['city'], 
+                        customer['description'], 
+                        customer['address'], 
+                        customer['sensors_code'],
+                        customer['sensors_type'],
+                        customer['sensor_description']])
+            
         wb.save(self.file_name)
         wb.close()
 
@@ -85,13 +74,8 @@ class ExcelHandler:
         customers = []
 
         for row in ws.iter_rows(min_row=2, values_only=True):
-            first_name, last_name, email, phone, city, description, address, sensors_data, sensors_description = row
-            sensors = []
-            print(sensors_data)
-            if sensors_data != "Invalid sensor data" or None:
-                for sensor_info in sensors_data.split("; "):
-                    code, type = sensor_info.split(" - ")
-                    sensors.append({"code": code, "type": type})
+            first_name, last_name, email, phone, city, description, address, sensors_code, sensors_type, sensors_description = row
+
             customers.append({
                 "first_name": first_name,
                 "last_name": last_name,
@@ -100,7 +84,8 @@ class ExcelHandler:
                 "city": city,
                 "description": description,
                 "address": address,
-                "sensors": sensors,
+                "sensors_code": sensors_code,
+                "sensors_type": sensors_type,
                 "sensor_description": sensors_description
             })
 

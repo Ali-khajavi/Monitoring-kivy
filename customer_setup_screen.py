@@ -21,12 +21,9 @@ class CustomerSetupScreen(Screen):
     #Sensor side Objects
     sensor_code_input = ObjectProperty(None)
     sensor_description_input = ObjectProperty(None)
-    voltage_sensor = ObjectProperty(None)
-    flowmeter_sensor = ObjectProperty(None)
-    temperature_sensor = ObjectProperty(None)
-    Ampermeter_Sensor = ObjectProperty(None)
+    
 
-
+#----------------------------------------Screen Entery Functions --------------------------#
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.customers = []  # Will hold customer data
@@ -37,6 +34,7 @@ class CustomerSetupScreen(Screen):
         """Load customer data from Excel when the screen is opened."""
         self.load_customers()
 
+#----------------------------------------- Register a new Customer ------------------------#
     def register_customer(self):
         """Register a new customer."""
         first_name = self.first_name_input.text
@@ -46,12 +44,7 @@ class CustomerSetupScreen(Screen):
         city = self.city_input.text
         description = self.description_input.text
         address = self.address_input.text
-        sensor_code = self.sensor_code_input.text
-        sensor_description = self.sensor_description_input.text
-
-
-        sensor = sensor_code + "-" + "type"
-
+        
         if first_name and last_name and email:
             new_customer = {
                 "first_name": first_name,
@@ -61,8 +54,6 @@ class CustomerSetupScreen(Screen):
                 "city": city,
                 "description": description,
                 "address": address,
-                "sensors": [sensor,'aaa - bbb'],
-                "sensor_description": sensor_description
             }
             self.customers.clear()
             self.customers.append(new_customer)
@@ -71,20 +62,31 @@ class CustomerSetupScreen(Screen):
             self.clear_form()
             self.load_customers()
 
+#------------------------------------------Sensors Operations------------------------------#
     def save_sensor(self):
         sensor_id = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
-        if self.selected_customer != None and len(sensor_id) > 3 :
-            print("Congraits")
-            return
-        elif len(sensor_id) <= 3 : 
-            print("Sensor ID is Wrong")
-            return
-        elif self.selected_customer == None:
-            print("frist select the customer!")
-            return
+        if len(sensor_id) >= 3 :
+            pass
 
+    def sensors_type(self, instance, value, sensor):
+        self.sensor_type = sensor
+        return self.sensor_type
+    
+#------------------------------------------Excel Operations--------------------------------#
+    def save_to_excel(self):
+        """Save customer data to Excel."""
+        App.get_running_app().excel_handler.save_customers(self.customers)
+
+    def load_customers(self):
+        """Load customer data from Excel and update the customer list."""
+        self.customers = App.get_running_app().excel_handler.load_customers()
+
+        #print("Loaded customers:", self.customers)
+        self.update_customer_list()
+
+#----------------------------------------- Tools Functions --------------------------------#
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()
@@ -147,17 +149,6 @@ class CustomerSetupScreen(Screen):
         self.city_input.text = ""
         self.address_input.text = ""
         self.description_input.text = ""
-
-    def save_to_excel(self):
-        """Save customer data to Excel."""
-        App.get_running_app().excel_handler.save_customers(self.customers)
-
-    def load_customers(self):
-        """Load customer data from Excel and update the customer list."""
-        self.customers = App.get_running_app().excel_handler.load_customers()
-
-        #print("Loaded customers:", self.customers)
-        self.update_customer_list()
 
     def show_customer_info(self, customer):
         """Show customer information in a popup."""

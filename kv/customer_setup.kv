@@ -236,6 +236,7 @@
                         Image:
                             source: 'assets/sensor1.png'
                         CheckBox:
+                            on_active: root.sensors_type(self,  self.active, "voltmeter")
                             id: voltage_sensor
                             group: 'sensor'
 
@@ -244,6 +245,7 @@
                         Image:
                             source: 'assets/sensor2.png'
                         CheckBox:
+                            on_active: root.sensors_type(self,  self.active, "flowmeter")
                             id: flowmeter_sensor
                             group: 'sensor'
 
@@ -252,6 +254,7 @@
                         Image:
                             source: 'assets/sensor3.png'
                         CheckBox:
+                            on_active: root.sensors_type(self,  self.active, "temperature")
                             id: temperature_sensor
                             group: 'sensor'
 
@@ -260,6 +263,7 @@
                         Image:
                             source: 'assets/sensor4.png'
                         CheckBox:
+                            on_active: root.sensors_type(self,  self.active, "ampermeter")
                             id: ampermeter_sensor
                             group: 'sensor'
 
