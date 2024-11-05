@@ -40,7 +40,6 @@ class ExcelHandler:
                 "sensors_type": sensors_type,
                 "sensor_description": sensors_description
             })
-
         return customers
 
     def save_customers(self, customers):
@@ -131,5 +130,3 @@ class ExcelHandler:
         if customer_row is None:
             print(f"Customer with the name {first_name} {last_name} is not registered in the list!")
                         
-
-

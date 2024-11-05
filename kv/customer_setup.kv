@@ -14,6 +14,7 @@
     flowmeter_sensor: flowmeter_sensor
     temperature_sensor: temperature_sensor
     ampermeter_sensor: ampermeter_sensor
+    sensor_chart: sensor_chart
 
     GridLayout:
         cols:3
@@ -136,16 +137,18 @@
                             pos_hint: {'top': 0.47}
         #---------------------------------------------- # Customer List # ----------------------------------------
         BoxLayout:
-            canvas.before:
-                Rectangle:
-                    size: (self.width * .9, self.height * 0.65) 
-                    pos: (self.x + self.width * 0.03, self.y + self.height * 0.37)  
-                    source: 'assets/Customer-List2-open.png'  # Frame image
+            
+            #canvas.before:
+                #Rectangle:
+                    #size: (self.width * .9, self.height * 0.65) 
+                    #pos: (self.x + self.width * 0.03, self.y + self.height * 0.37)  
+                    #source: 'assets/Customer-List2-open.png'  # Frame image
             canvas.before:
                 Rectangle:
                     source: 'assets/pngwing.com (2).png'
-                    size: (self.width, self.height)
-                    pos: self.pos
+                    size: (self.width * 1, self.height * 1.1) 
+                    pos: (self.x - self.width * 0.02, self.y - self.height * 0.05) 
+
             orientation: 'vertical'
             size_hint_x: .6
             size_hint_y: .6
@@ -169,18 +172,13 @@
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
-                    
-            BoxLayout:
-                size_hint_y: 0.7
-                canvas.before:
-                    Rectangle:
-                        source: 'assets/Customer-List2-open.png'
-                        size: (self.width, self.height)
-                        pos: self.pos
 
-                # You can add other widgets after the canvas block
-                Label:
-                    text: "Content goes here"
+                
+            BoxLayout:
+                id: sensor_chart 
+                padding: (0,10,0,0)    
+                size_hint_y : 0.7
+                
 
 
         #------------------------------------------------# Sensor Setup Form #----------------------------------------
