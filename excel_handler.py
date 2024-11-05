@@ -24,7 +24,7 @@ class ExcelHandler:
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
         customers = []
-
+        # take all hte 
         for row in ws.iter_rows(min_row=2, values_only=True):
             first_name, last_name, email, phone, city, description, address, sensors_code, sensors_type, sensors_description = row
 
@@ -42,7 +42,6 @@ class ExcelHandler:
             })
 
         return customers
-
 
     def save_customers(self, customers):
         """Save customer data to Excel, appending new customers to existing data."""
@@ -84,10 +83,8 @@ class ExcelHandler:
                         customer['phone'], 
                         customer['city'], 
                         customer['description'], 
-                        customer['address'], 
-                        customer['sensors_code'],
-                        customer['sensors_type'],
-                        customer['sensor_description']])
+                        customer['address'],
+                        ])
             
         wb.save(self.file_name)
         wb.close()

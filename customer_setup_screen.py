@@ -65,11 +65,11 @@ class CustomerSetupScreen(Screen):
 
 #------------------------------------------Sensors Operations------------------------------#
     def save_sensor(self):
-        sensor_id = self.sensor_code_input.text
+        sensor_code = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
-        if len(sensor_id) >= 3 and self.selected_customer != None:
-             App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_id, self.sensor_type, sensor_description)
+        if len(sensor_code) >= 3 and self.selected_customer != None:
+             App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
 
     def sensors_type(self, instance, value, sensor):
         self.sensor_type = sensor
