@@ -21,6 +21,7 @@ class CustomerSetupScreen(Screen):
     #Sensor side Objects
     sensor_code_input = ObjectProperty(None)
     sensor_description_input = ObjectProperty(None)
+    sensor_type=''
     
 
 #----------------------------------------Screen Entery Functions --------------------------#
@@ -58,7 +59,7 @@ class CustomerSetupScreen(Screen):
             self.customers.clear()
             self.customers.append(new_customer)
             self.update_customer_list()
-            self.save_to_excel()
+            self.save_customer_to_excel()
             self.clear_form()
             self.load_customers()
 
@@ -67,26 +68,25 @@ class CustomerSetupScreen(Screen):
         sensor_id = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
-        if len(sensor_id) >= 3 :
-            pass
+        if len(sensor_id) >= 3 and self.selected_customer != None:
+             App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_id, self.sensor_type, sensor_description)
 
     def sensors_type(self, instance, value, sensor):
         self.sensor_type = sensor
         return self.sensor_type
     
-#------------------------------------------Excel Operations--------------------------------#
-    def save_to_excel(self):
+#------------------------------------------Excel Operations---------------------------------#
+    def save_customer_to_excel(self):
         """Save customer data to Excel."""
         App.get_running_app().excel_handler.save_customers(self.customers)
 
     def load_customers(self):
         """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
-
         #print("Loaded customers:", self.customers)
         self.update_customer_list()
 
-#----------------------------------------- Tools Functions --------------------------------#
+#------------------------------------ Screen Tools Functions -------------------------------#
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()
@@ -132,8 +132,7 @@ class CustomerSetupScreen(Screen):
                 self.customer_list.add_widget(layout)
 
     def on_customer_selected(self, customer):
-        self.selected_customer = customer['last_name']
-        #print(f"selected customer: {customer['last_name']}")
+        self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
 
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""

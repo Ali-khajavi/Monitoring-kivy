@@ -19,6 +19,31 @@ class ExcelHandler:
         except Exception as e:
             print(f"Error loading Excel file: {e}")
 
+    def load_customers(self):
+        """Load customer data from Excel."""
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
+        customers = []
+
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            first_name, last_name, email, phone, city, description, address, sensors_code, sensors_type, sensors_description = row
+
+            customers.append({
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "phone": phone,
+                "city": city,
+                "description": description,
+                "address": address,
+                "sensors_code": sensors_code,
+                "sensors_type": sensors_type,
+                "sensor_description": sensors_description
+            })
+
+        return customers
+
+
     def save_customers(self, customers):
         """Save customer data to Excel, appending new customers to existing data."""
         if not os.path.exists(self.file_name):
@@ -67,26 +92,18 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
-    def load_customers(self):
-        """Load customer data from Excel."""
-        wb = openpyxl.load_workbook(self.file_name)
-        ws = wb['Customers']
-        customers = []
+    def save_sensor(self, customer, sensor_id, type, description):
+        # Write back all customers to the Excel file
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Customers"
 
-        for row in ws.iter_rows(min_row=2, values_only=True):
-            first_name, last_name, email, phone, city, description, address, sensors_code, sensors_type, sensors_description = row
+        last_name, first_name = customer.split(";")
+        print( last_name, first_name)
+        
+        existing_customers = self.load_customers()
+        for customer in existing_customers:
+            if customer['last_name'] == last_name and customer['first_name'] == first_name:
+                print("Winnnnnnnn")
 
-            customers.append({
-                "first_name": first_name,
-                "last_name": last_name,
-                "email": email,
-                "phone": phone,
-                "city": city,
-                "description": description,
-                "address": address,
-                "sensors_code": sensors_code,
-                "sensors_type": sensors_type,
-                "sensor_description": sensors_description
-            })
 
-        return customers
