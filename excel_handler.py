@@ -89,6 +89,10 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
+    def delete_customer(self, customer):
+        print(customer)
+        pass
+
     def save_sensor(self, customer, sensor_code, type, description):
         wb = openpyxl.load_workbook("customers_data.xlsx")
         ws = wb["Customers"]

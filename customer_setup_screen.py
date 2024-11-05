@@ -22,7 +22,6 @@ class CustomerSetupScreen(Screen):
     sensor_code_input = ObjectProperty(None)
     sensor_description_input = ObjectProperty(None)
     sensor_type=''
-    
 
 #----------------------------------------Screen Entery Functions --------------------------#
     def __init__(self, **kwargs):
@@ -35,7 +34,7 @@ class CustomerSetupScreen(Screen):
         """Load customer data from Excel when the screen is opened."""
         self.load_customers()
 
-#----------------------------------------- Register a new Customer ------------------------#
+#----------------------------------------- Register or Delete a new Customer ------------------------#
     def register_customer(self):
         """Register a new customer."""
         first_name = self.first_name_input.text
@@ -63,13 +62,22 @@ class CustomerSetupScreen(Screen):
             self.clear_form()
             self.load_customers()
 
+    def delete_customer(self):
+        if self.selected_customer is None:
+            print("No Customer Selected for the Operation!")
+            return
+        else:
+            App.get_running_app().excel_handler.delete_customer(self.selected_customer)
+
 #------------------------------------------Sensors Operations------------------------------#
     def save_sensor(self):
         sensor_code = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
+
         if len(sensor_code) >= 3 and self.selected_customer != None:
-             App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
+            self.clear_form()
+            App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
 
     def sensors_type(self, instance, value, sensor):
         self.sensor_type = sensor
@@ -148,6 +156,8 @@ class CustomerSetupScreen(Screen):
         self.city_input.text = ""
         self.address_input.text = ""
         self.description_input.text = ""
+        self.sensor_code_input.text= ''
+        self.sensor_description_input.text = ''
 
     def show_customer_info(self, customer):
         """Show customer information in a popup."""
