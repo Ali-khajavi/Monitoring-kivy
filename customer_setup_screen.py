@@ -2,10 +2,14 @@ from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.app import App
 from excel_handler import ExcelHandler
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.gridlayout import GridLayout
+from kivy.core.window import Window
+#from kivy.properties import NumericProperty
 
 class CustomerSetupScreen(Screen):
     #Registration Form Objects
@@ -143,8 +147,40 @@ class CustomerSetupScreen(Screen):
                 self.customer_list.add_widget(layout)
 
     def update_customer_sensors(self):
-        
-        self.sensor_chart.clear_widgets()
+        if self.selected_customer is not None:
+            customers_sensor_list = App.get_running_app().excel_handler.load_sensors_type(self.selected_customer)
+        else:
+            return
+        if customers_sensor_list is not None:
+            self.sensor_chart.clear_widgets()
+            for sensor in customers_sensor_list:
+                    # Create a layout to hold the toggle button and label
+                    layout = GridLayout(
+                        size_hint_y=None,
+                        height=50,  # Fixed height for the row
+                        cols = 2
+                    )
+                    # Create a label for the customer's name
+                    button = Button(
+                        text=f"{sensor}",
+                        color=(0, 0, 0),
+                        size_hint_y=None,
+                        height=40,  # Fixed height for the label
+                        font_size=16,
+                        text_size=(self.width * 0.7, None)  # Dynamic text size based on screen width
+                    )
+                    
+                    # Add the toggle button and label to the layout
+                    layout.add_widget(button)
+
+                    # Dynamically update padding based on the label width
+                    def update_padding(instance, value):
+                        padding = instance.width * 0.4
+                        instance.text_size = (instance.width - padding, None)
+
+                    # Bind the width change to the padding adjustment
+                    button.bind(size=update_padding)
+                    self.sensor_chart.add_widget(layout)
         
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
