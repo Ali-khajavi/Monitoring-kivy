@@ -18,6 +18,8 @@ class CustomerSetupScreen(Screen):
     description_input = ObjectProperty(None)
     #Customer List Objects
     customer_list = ObjectProperty(None)
+    #Customer Sensors Menu
+    sensor_chart = ObjectProperty(None)
     #Sensor side Objects
     sensor_code_input = ObjectProperty(None)
     sensor_description_input = ObjectProperty(None)
@@ -99,7 +101,6 @@ class CustomerSetupScreen(Screen):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()
         self.selected_customer = None
-
         # Sort customers by last name
         if self.customers is not None:
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
@@ -111,7 +112,6 @@ class CustomerSetupScreen(Screen):
                     height=40,  # Fixed height for the row
                     padding=(10, 0, 9 + self.width * .07 , 0)
                 )
-
                 # Create a label for the customer's name
                 customer_label = Label(
                     text=f"{customer['last_name']}",
@@ -122,7 +122,6 @@ class CustomerSetupScreen(Screen):
                     font_size=16,
                     text_size=(self.width * 0.7, None)  # Dynamic text size based on screen width
                 )
-
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
                     group='customer_selection',
@@ -130,7 +129,6 @@ class CustomerSetupScreen(Screen):
                     size_hint_x = self.width * 0.00007,  # Set the width relative to the screen width
                     on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
-
                 # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
                 layout.add_widget(toggle_button)
@@ -144,9 +142,14 @@ class CustomerSetupScreen(Screen):
                 customer_label.bind(size=update_padding)
                 self.customer_list.add_widget(layout)
 
-
+    def update_customer_sensors(self):
+        
+        self.sensor_chart.clear_widgets()
+        
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
+        self.update_customer_sensors()
+
 
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""
