@@ -24,7 +24,7 @@ class ExcelHandler:
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
         customers = []
-        # take all hte 
+        # take 
         for row in ws.iter_rows(min_row=2, values_only=True):
             first_name, last_name, email, phone, city, description, address, sensors_code, sensors_type, sensors_description = row
 
@@ -89,18 +89,43 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
-    def save_sensor(self, customer, sensor_id, type, description):
-        # Write back all customers to the Excel file
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = "Customers"
+    def save_sensor(self, customer, sensor_code, type, description):
+        wb = openpyxl.load_workbook("customers_data.xlsx")
+        ws = wb["Customers"]
 
         last_name, first_name = customer.split(";")
-        print( last_name, first_name)
+        customer_row = None
         
-        existing_customers = self.load_customers()
-        for customer in existing_customers:
-            if customer['last_name'] == last_name and customer['first_name'] == first_name:
-                print("Winnnnnnnn")
+        for index, row in enumerate(ws.iter_rows(min_row=2, values_only=True), start=2):  # Start index from 2
+            if row[0] == first_name and row[1] == last_name:  # Check columns 1 and 2
+                customer_row = index  # Get the row number
+                print(f"Customer {first_name} {last_name} found in row {customer_row}.")
+                #Take previos customers sensors data
+                current_sensor_codes = ws[f"H{customer_row}"].value 
+                current_sensor_types = ws[f"I{customer_row}"].value 
+                current_sensor_descriptions = ws[f"J{customer_row}"].value
+                # Write the new Value of Sensor Code and Sensor Type and Sensor Description
+                if current_sensor_codes is not None:
+                    ws[f"H{customer_row}"] = f"{current_sensor_codes};{sensor_code}"
+                else:
+                    ws[f"H{customer_row}"] = sensor_code 
+
+                if current_sensor_types is not None:
+                    ws[f"I{customer_row}"] = f"{current_sensor_types};{type}"
+                else:
+                    ws[f"I{customer_row}"] = type 
+
+                if current_sensor_descriptions is not None:
+                    ws[f"J{customer_row}"] = f"{current_sensor_descriptions};{description}"
+                else:
+                    ws[f"J{customer_row}"] = description 
+
+                break
+        wb.save(self.file_name)
+        wb.close()  
+        #In case Not Found Customer in the list!
+        if customer_row is None:
+            print(f"Customer with the name {first_name} {last_name} is not registered in the list!")
+                        
 
 
