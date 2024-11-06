@@ -54,7 +54,7 @@ class MonitoringScreen(Screen):
         #print("Hello")
         #print(spinner.sensor) # it is posible to retun object id by this way!
         #print (spinner)
-        # Take Spinner ID and Selected Sensor
+        # Take Spinner ID and Selected Sensor        
         print('Hallo')
         if self.selected_customer is not None:
             print(self.selected_customer)
@@ -140,7 +140,19 @@ class MonitoringScreen(Screen):
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
         print(self.selected_customer)
-        
+        sensors_code = customer['sensors_code']
+        sensors_type = customer['sensors_type']
+
+        if sensors_code is not None:
+            sensors_code = sensors_code.split(';')
+        if sensors_type is not None:
+            sensors_type = sensors_type.split(';')
+        sensors_name= list(zip(sensors_code, sensors_type))
+
+        spinner_list = []
+
+
+
 #---------------------------------------Monitoring Charts Operations----------------------#
     def create_empty_graphs(self):
         """Creates empty Matplotlib graphs for sensor channels."""
