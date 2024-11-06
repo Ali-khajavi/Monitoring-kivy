@@ -42,40 +42,7 @@ class CustomerSetupScreen(Screen):
         self.load_customers()
         self.create_back_delete_btn()
 
-    def create_back_delete_btn(self):
-        self.floatlayout.clear_widgets()
-        self.back_button = Button(
-            text="Back to Main Menu",
-            background_normal='assets/PNG/Button_1/b2.png',
-            background_down='assets/PNG/Button_1/b4.png',
-            size_hint=(0.6, 0.25),
-            pos_hint={'top': 0.47},  
-            on_release= self.back_to_main_menu
-        )
-        self.back_button.bind(size=self.update_font_size)
-        self.floatlayout.add_widget(self.back_button)
-        if self.selected_customer is not None:
-            self.delete_custome_btn = Button(
-                text = "Delete Customer",
-                background_normal='assets/PNG/Button_1/b1.png',
-                background_down='assets/PNG/Button_1/b4.png',
-                size_hint=(0.6, 0.25),
-                pos_hint = {'center_x': 0.8,'center_y': 0.85},
-                on_release= self.delete_a_customer
-            )
-            print('Helllooooo')
-            self.delete_custome_btn.bind(size=self.update_font_size)
-            self.floatlayout.add_widget(self.delete_custome_btn)
-
-    def update_font_size(self, instance, value):
-        """Update the font size dynamically based on the width of the button"""
-        instance.font_size = instance.width / 12
-
-    def back_to_main_menu(self, instance):
-        """Function to handle screen transition"""
-        self.manager.current = 'first_menu'
-
-#----------------------------------------- Register or Delete a new Customer ------------------------#
+#------------------------------------------Customer Operations-----------------------------#
     def register_customer(self):
         """Register a new customer."""
         first_name = self.first_name_input.text
@@ -114,33 +81,6 @@ class CustomerSetupScreen(Screen):
             App.get_running_app().excel_handler.delete_customer(self.selected_customer)
             self.load_customers()
 
-#------------------------------------------Sensors Operations------------------------------#
-    def save_sensor(self):
-        sensor_code = self.sensor_code_input.text
-        sensor_description = self.sensor_description_input.text
-        print(f"Selected Customer: {self.selected_customer}")
-        if len(sensor_code) >= 3 and self.selected_customer != None:
-            self.clear_form()
-            App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
-        self.load_customers()
-        self.update_customer_sensors()
-
-    def sensors_type(self, instance, value, sensor):
-        self.sensor_type = sensor
-        return self.sensor_type
-    
-#------------------------------------------Excel Operations---------------------------------#
-    def save_customer_to_excel(self, new_customer):
-        """Save customer data to Excel."""
-        App.get_running_app().excel_handler.save_customers(new_customer)
-
-    def load_customers(self):
-        """Load customer data from Excel and update the customer list."""
-        self.customers = App.get_running_app().excel_handler.load_customers()
-        #print("Loaded customers:", self.customers)
-        self.update_customer_list()
-
-#------------------------------------ Screen Tools Functions -------------------------------#
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()
@@ -164,8 +104,10 @@ class CustomerSetupScreen(Screen):
                     height=40,  # Fixed height for the label
                     halign="left",
                     font_size=16,
-                    text_size=(self.width * 0.7, None)  # Dynamic text size based on screen width
+                    text_size=(self.width * 0.7, None) # Dynamic text size based on screen width
                 )
+                customer_label.bind(on_touch_down=lambda instance, touch: self.on_customer_label_touch(instance, touch, customer))
+        
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
                     group='customer_selection',
@@ -186,6 +128,45 @@ class CustomerSetupScreen(Screen):
                 customer_label.bind(size=update_padding)
                 self.customer_list.add_widget(layout)
 
+    def on_customer_selected(self, customer):
+        self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
+        self.create_back_delete_btn()
+        self.update_customer_sensors()
+
+    def on_customer_label_touch(self, instance, touch, customer):
+        """Handle touch event on a customer label."""
+        if instance.collide_point(*touch.pos):
+            self.show_customer_info(customer)
+
+    def show_customer_info(self, customer):
+        """Show customer information in a popup."""
+        info = (
+            f"Name: {customer['first_name']} {customer['last_name']}\n"
+            f"Email: {customer['email']}\n"
+            f"Phone: {customer['phone']}\n"
+            f"City: {customer['city']}\n"
+            f"Address: {customer['address']}\n"
+            f"Description: {customer['description']}"
+        )
+        popup = Popup(title="Customer Information",title_size=28, content=Label(text=info), size_hint=(0.6, 0.6))
+
+        popup.open()
+
+#------------------------------------------Sensors Operations------------------------------#
+    def save_sensor(self):
+        sensor_code = self.sensor_code_input.text
+        sensor_description = self.sensor_description_input.text
+        print(f"Selected Customer: {self.selected_customer}")
+        if len(sensor_code) >= 3 and self.selected_customer != None:
+            self.clear_form()
+            App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
+        self.load_customers()
+        self.update_customer_sensors()
+
+    def sensors_type(self, instance, value, sensor):
+        self.sensor_type = sensor
+        return self.sensor_type
+    
     def update_customer_sensors(self):
         self.sensor_chart.clear_widgets()
         if self.selected_customer is not None:
@@ -223,18 +204,28 @@ class CustomerSetupScreen(Screen):
         # Bind to window resizing to dynamically adjust layout
         Window.bind(on_resize=self.on_window_resize)
 
+    def sensor_image_address(self, sensor):
+        add = {'voltmeter': 'assets/sensor1.png',
+               'flowmeter': 'assets/sensor2.png',
+               'temperature': 'assets/sensor3.png',
+               'ampermeter': 'assets/sensor4.png',
+               }
+        return add[sensor]
+    
+#------------------------------------------Excel Operations---------------------------------#
+    def save_customer_to_excel(self, new_customer):
+        """Save customer data to Excel."""
+        App.get_running_app().excel_handler.save_customers(new_customer)
+
+    def load_customers(self):
+        """Load customer data from Excel and update the customer list."""
+        self.customers = App.get_running_app().excel_handler.load_customers()
+        #print("Loaded customers:", self.customers)
+        self.update_customer_list()
+
+#------------------------------------------Tools Functions----------------------------------#
     def on_window_resize(self, *args):
         self.update_customer_sensors()  # Re-run the function to adjust button size
-
-    def on_customer_selected(self, customer):
-        self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
-        self.create_back_delete_btn()
-        self.update_customer_sensors()
-
-    def on_customer_label_touch(self, instance, touch, customer):
-        """Handle touch event on a customer label."""
-        if instance.collide_point(*touch.pos):
-            self.show_customer_info(customer)
 
     def clear_form(self):
         """Clear the registration form."""
@@ -248,23 +239,35 @@ class CustomerSetupScreen(Screen):
         self.sensor_code_input.text= ''
         self.sensor_description_input.text = ''
 
-    def show_customer_info(self, customer):
-        """Show customer information in a popup."""
-        info = (
-            f"Name: {customer['first_name']} {customer['last_name']}\n"
-            f"Email: {customer['email']}\n"
-            f"Phone: {customer['phone']}\n"
-            f"City: {customer['city']}\n"
-            f"Address: {customer['address']}\n"
-            f"Description: {customer['description']}"
-        )
-        popup = Popup(title="Customer Information", content=Label(text=info), size_hint=(0.6, 0.6))
-        popup.open()
+    def back_to_main_menu(self, instance):
+        """Function to handle screen transition"""
+        self.manager.current = 'first_menu'
 
-    def sensor_image_address(self, sensor):
-        add = {'voltmeter': 'assets/sensor1.png',
-               'flowmeter': 'assets/sensor2.png',
-               'temperature': 'assets/sensor3.png',
-               'ampermeter': 'assets/sensor4.png',
-               }
-        return add[sensor]
+    def update_font_size(self, instance, value):
+        """Update the font size dynamically based on the width of the button"""
+        instance.font_size = instance.width / 12
+
+    def create_back_delete_btn(self):
+        self.floatlayout.clear_widgets()
+        self.back_button = Button(
+            text="Back to Main Menu",
+            background_normal='assets/PNG/Button_1/b2.png',
+            background_down='assets/PNG/Button_1/b4.png',
+            size_hint=(0.6, 0.25),
+            pos_hint={'top': 0.47},  
+            on_release= self.back_to_main_menu
+        )
+        self.back_button.bind(size=self.update_font_size)
+        self.floatlayout.add_widget(self.back_button)
+        if self.selected_customer is not None:
+            self.delete_custome_btn = Button(
+                text = "Delete Customer",
+                background_normal='assets/PNG/Button_1/b1.png',
+                background_down='assets/PNG/Button_1/b4.png',
+                size_hint=(0.6, 0.25),
+                pos_hint = {'center_x': 0.8,'center_y': 0.85},
+                on_release= self.delete_a_customer
+            )
+            print('Helllooooo')
+            self.delete_custome_btn.bind(size=self.update_font_size)
+            self.floatlayout.add_widget(self.delete_custome_btn)
