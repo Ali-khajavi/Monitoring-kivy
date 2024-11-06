@@ -45,49 +45,21 @@ class ExcelHandler:
         wb.close()
         return customers
 
-    def save_customers(self, customers):
-        """Save customer data to Excel, appending new customers to existing data."""
-        if not os.path.exists(self.file_name):
-            # If the file doesn't exist, create it with the headers
-            wb = openpyxl.Workbook()
-            ws = wb.active
-            ws.title = "Customers"
-            ws.append(["First Name", "Last Name", "Email", "Phone", "City", "Description", "Address", "Sensors Code", "Sensors Type", "Sensor Description"])  # Header
-            wb.save(self.file_name)
-            wb.close()
+    def save_customers(self, customer):
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
         
-        # Load existing customers from the Excel file
-        existing_customers = self.load_customers()
-        
-        # Append new customers to the existing list
-        existing_customers.extend(customers)
+        # Append the new customer's data at the end of the worksheet
+        ws.append([
+            customer['first_name'], 
+            customer['last_name'], 
+            customer['email'], 
+            customer['phone'], 
+            customer['city'], 
+            customer['description'], 
+            customer['address']
+        ])
 
-        # Write back all customers to the Excel file
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = "Customers"
-        # Header
-        ws.append(["First Name", 
-                   "Last Name", 
-                   "Email", 
-                   "Phone", 
-                   "City", 
-                   "Description",         
-                   "Address", 
-                   "Sensors Code",
-                   "Sensors Type", 
-                   "Sensor Description"]) 
-
-        for customer in existing_customers:
-            ws.append([customer['first_name'], 
-                        customer['last_name'], 
-                        customer['email'], 
-                        customer['phone'], 
-                        customer['city'], 
-                        customer['description'], 
-                        customer['address'],
-                        ])
-            
         wb.save(self.file_name)
         wb.close()
 
