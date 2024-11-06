@@ -93,7 +93,7 @@
                                 on_release: root.check_quary(self.text)
                     
                     AnchorLayout:
-                        id: sensor_channel_1
+                        id: channel_1
                         anchor_x: 'right'
                         anchor_y: 'top'
                         canvas.before:
@@ -150,7 +150,7 @@
                                 on_release: root.check_quary(self.text)
                                
                     AnchorLayout:
-                        id: sensor_channel_2
+                        id: channel_2
                         canvas.before:
                             Color:
                                 rgba: 1, 1, 1, 1  # White background for the graph
@@ -202,7 +202,7 @@
                                 on_release: root.check_quary(self.text)
                     
                     AnchorLayout:
-                        id: sensor_channel_3
+                        id: channel_3
                         canvas.before:
                             Color:
                                 rgba: 1, 1, 1, 1  # White background for the graph
@@ -220,7 +220,6 @@
                             spacing: 5
                             orientation: 'vertical'
                             size_hint_y : 0.8
-
                             Label:          # Replace with Image Label (Select-Sensor)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
@@ -255,7 +254,7 @@
                     
                     AnchorLayout:
                         anchor_y: 'top'
-                        id: sensor_channel_4
+                        id: channel_4
                         canvas.before:
                             Color:
                                 rgba: 1, 1, 1, 1  # White background for the graph

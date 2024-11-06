@@ -10,6 +10,8 @@ from excel_handler import ExcelHandler  # Assuming excel_handler.py has a class 
 from secrets_server import INFLUXDB_TOKEN, ORGANIZATION, BUCKET, SERVER_ADDRESS
 import influxdb_client
 import pandas as pd
+from kivy.core.window import Window
+
 
 token = INFLUXDB_TOKEN  # replace with your token
 org = ORGANIZATION
@@ -17,7 +19,6 @@ url = SERVER_ADDRESS
 bucket = BUCKET
 write_client = influxdb_client.InfluxDBClient(url=url, token=token, org=org)
 write_api = write_client.write_api(write_options=influxdb_client.client.write_api.SYNCHRONOUS)
-
 
 class MonitoringScreen(Screen):
     customer_list = ObjectProperty(None)
@@ -55,21 +56,7 @@ class MonitoringScreen(Screen):
         #print(spinner.sensor) # it is posible to retun object id by this way!
         #print (spinner)
         # Take Spinner ID and Selected Sensor        
-        print('Hallo')
-        if self.selected_customer is not None:
-            print(self.selected_customer)
-            # Check if the Sensor is Correct
-            if spinner.text != 'Sensor!':
-                if spinner.sensor == 'sensor_channe_1':
-                    self.sensor_ch1 = spinner.text
-                elif spinner.sensor == 'sensor_channe_2':
-                    self.sensor_ch2 = spinner.text
-                elif spinner.sensor == 'sensor_channe_3':
-                    self.sensor_ch3 = spinner.text
-                elif spinner.sensor == 'sensor_channe_4':
-                    self.sensor_ch4 = spinner.text
-            else:
-                print('Please first select customer!')
+        pass
 
     def time_selected(self, spinner):
         if spinner.text != 'Time!':
@@ -140,6 +127,7 @@ class MonitoringScreen(Screen):
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
         print(self.selected_customer)
+        #Take sensors data from customer
         sensors_code = customer['sensors_code']
         sensors_type = customer['sensors_type']
 
@@ -149,9 +137,28 @@ class MonitoringScreen(Screen):
             sensors_type = sensors_type.split(';')
         sensors_name= list(zip(sensors_code, sensors_type))
 
-        spinner_list = []
+        self.ids.sensor_channel_1.values.clear()
+        self.ids.sensor_channel_2.values.clear()
+        self.ids.sensor_channel_3.values.clear()
+        self.ids.sensor_channel_4.values.clear()
+        #spinner_list = [self.sensor_channel_1, self.sensor_channel_2, self.sensor_channel_3, self.sensor_channel_4]
+        for name in sensors_name: 
+            self.ids.sensor_channel_1.values.append(f"{name[0]}-{name[1]}")
+            self.ids.sensor_channel_2.values.append(f"{name[0]}-{name[1]}")
+            self.ids.sensor_channel_3.values.append(f"{name[0]}-{name[1]}")
+            self.ids.sensor_channel_4.values.append(f"{name[0]}-{name[1]}")
+        self.update_font_size()
+        
 
-
+    def update_font_size(self, *args):
+        """Dynamically update the font size of each spinner based on window size."""
+        font_scale = min(Window.width / 1200, Window.height / 700)  # Adjust the base scaling factors as needed
+        new_font_size = 20 * font_scale  # Adjust '20' as needed for base font size
+        # Update font size for each spinner
+        self.ids.sensor_channel_1.font_size = new_font_size
+        self.ids.sensor_channel_2.font_size = new_font_size
+        self.ids.sensor_channel_3.font_size = new_font_size
+        self.ids.sensor_channel_4.font_size = new_font_size
 
 #---------------------------------------Monitoring Charts Operations----------------------#
     def create_empty_graphs(self):
