@@ -1,5 +1,9 @@
 <MonitoringScreen>:
     customer_list: customer_list
+    sensor_channel_1 : sensor_channel_1
+    sensor_channel_2 : sensor_channel_2
+    sensor_channel_3 : sensor_channel_3
+    sensor_channel_4 : sensor_channel_4
 
     FloatLayout:
         canvas.before:
@@ -58,11 +62,11 @@
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
                             Spinner:
-                                id: Sp_select_sensor_channe_1
+                                id: sensor_channel_1
                                 sensor: 'sensor_channel_1'
                                 text: 'Sensor!'
                                 values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(Sp_select_sensor_channe_1)
+                                on_text: root.sensor_selected(text)
                             
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
@@ -74,7 +78,7 @@
                                 range: 'range_channel_1'
                                 text: 'Range!'
                                 values: ['Time!','Time!']
-                                on_text: root.time_selected(Sp_select_range_channel_1)
+                                on_text: root.time_selected(text)
 
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
@@ -86,7 +90,7 @@
                                 id: btn_update_channel_1
                                 channel: 'ch_1'
                                 text:'Update'
-                                on_release: root.check_quary(btn_update_channel_1)
+                                on_release: root.check_quary(text)
                     
                     AnchorLayout:
                         id: sensor_channel_1
@@ -115,23 +119,23 @@
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
                             Spinner:
-                                id: Sp_select_sensor_channel_2
+                                id: sensor_channel_2
                                 sensor: 'sensor_channel_2'
                                 text: 'Sensor!'
                                 values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(Sp_select_sensor_channel_2)
+                                on_text: root.sensor_selected(text)
                             
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
                             Spinner:
-                                id: Sp_select_range_channel_2
+                                id: sp_select_range_channel_2
                                 time: 'range_channel_2'
                                 range: 'range_channel_2'
                                 text: 'Range!'
                                 values: ['Time!','Time!']
-                                on_text: root.time_selected(Sp_select_range_channel_2)
+                                on_text: root.time_selected(text)
 
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
@@ -143,7 +147,7 @@
                                 id: btn_update_channel_2
                                 channel: 'ch_2'
                                 text:'Update'
-                                on_release: root.check_quary(btn_update_channel_2)
+                                on_release: root.check_quary(text)
                                
                     AnchorLayout:
                         id: sensor_channel_2
@@ -170,23 +174,23 @@
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
                             Spinner:
-                                id: Sp_select_sensor_channel_3
+                                id: sensor_channel_3
                                 sensor: 'sensor_channel_3'
                                 text: 'Sensor!'
                                 values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(Sp_select_sensor_channel_3)
+                                on_text: root.sensor_selected(text)
                             
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
                             Spinner:
-                                id: Sp_select_range_channel_3
+                                id: sp_select_range_channel_3
                                 time: 'range_channel_3'
                                 range: 'range_channel_3'
                                 text: 'Range!'
                                 values: ['Time!','Time!']
-                                on_text: root.time_selected(Sp_select_range_channel_3)
+                                on_text: root.time_selected(text)
 
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
@@ -198,7 +202,7 @@
                                 id: btn_update_channel_3
                                 channel: 'ch_3'
                                 text:'Update'
-                                on_release: root.check_quary(btn_update_channel_3)
+                                on_release: root.check_quary(text)
                     
                     AnchorLayout:
                         id: sensor_channel_3
@@ -225,23 +229,23 @@
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Sensor'
                             Spinner:
-                                id: Sp_select_sensor_channe_4
+                                id: sensor_channel_4
                                 sensor: 'sensor_channel_4'
                                 text: 'Sensor!'
                                 values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(Sp_select_sensor_channel_4)
+                                on_text: root.sensor_selected(text)
                             
                             Label:          # Replace with Image Label (Select-time)
                                 color: 0,0,0
                                 font_size: (self.width/4 + self.height/3)/2
                                 text:'Select Time'
                             Spinner:
-                                id: Sp_select_range_channel_4
+                                id: sp_select_range_channel_4
                                 time: 'range_channel_4'
                                 range: 'range_channel_4'
                                 text: 'Range!'
                                 values: ['Time!','Time!']
-                                on_text: root.time_selected(Sp_select_range_channel_4)
+                                on_text: root.time_selected(text)
 
                         BoxLayout:      # Empty Gap
                             size_hint_y: 0.3
@@ -253,7 +257,7 @@
                                 id: btn_update_channel_4
                                 channel: 'ch_4'
                                 text:'Update'
-                                on_release: root.check_quary(btn_update_channel_4)
+                                on_release: root.check_quary(text)
                     
                     AnchorLayout:
                         anchor_y: 'top'

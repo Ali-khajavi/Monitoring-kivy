@@ -113,7 +113,7 @@ class CustomerSetupScreen(Screen):
                     group='customer_selection',
                     size_hint_y = self.height *0.001,  # Make the button height fill the BoxLayout and width adjustable
                     size_hint_x = self.width * 0.00007,  # Set the width relative to the screen width
-                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
+                    on_press = lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
                 # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
