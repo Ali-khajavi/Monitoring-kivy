@@ -90,9 +90,14 @@ class ExcelHandler:
         wb.close()
 
     def delete_customer(self, customer):
-        print(customer)
-        pass
-
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
+        customer_row = self.return_customers_row(customer)
+        ws.delete_rows(customer_row)
+        print(customer_row)
+        print(type(customer_row))
+        wb.save(self.file_name)
+        wb.close()
 
 #-----------------------------------Sensors Operations---------------------#
     def save_sensor(self, customer, sensor_code, type, description):
