@@ -188,22 +188,20 @@ class CustomerSetupScreen(Screen):
 
     def update_customer_sensors(self):
         self.sensor_chart.clear_widgets()
-
         if self.selected_customer is not None:
             customers_sensor_list = App.get_running_app().excel_handler.load_sensors_type(self.selected_customer)
         else:
             return
-
         if customers_sensor_list is not None:
             # Set dynamic button size hints
-            button_width_hint = 0.22  # Adjust to fit 4 buttons across the screen
-            button_height_hint = 0.15  # Adjust based on desired height ratio
-
+            button_width_hint = 0.22 
+            button_height_hint = 0.15  
             layout = GridLayout(
                 cols=4,
                 size_hint_y=None,
                 spacing=10,
-                row_default_height=Window.height * button_height_hint *.6 # Use screen height to set row height
+                row_default_height = Window.height * button_height_hint *.6, # Use screen height to set row height
+                col_default_width = Window.width * button_width_hint * .2
             )
             layout.bind(minimum_height=layout.setter('height'))
 
