@@ -9,7 +9,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
-#from kivy.properties import NumericProperty
+from PIL import Image as PILImage
+import tempfile
+import io
 
 class CustomerSetupScreen(Screen):
     #Registration Form Objects
@@ -147,45 +149,50 @@ class CustomerSetupScreen(Screen):
                 self.customer_list.add_widget(layout)
 
     def update_customer_sensors(self):
+        self.sensor_chart.clear_widgets()
+
         if self.selected_customer is not None:
             customers_sensor_list = App.get_running_app().excel_handler.load_sensors_type(self.selected_customer)
         else:
             return
+
         if customers_sensor_list is not None:
-            self.sensor_chart.clear_widgets()
+            # Set dynamic button size hints
+            button_width_hint = 0.22  # Adjust to fit 4 buttons across the screen
+            button_height_hint = 0.15  # Adjust based on desired height ratio
+
+            layout = GridLayout(
+                cols=4,
+                size_hint_y=None,
+                spacing=10,
+                row_default_height=Window.height * button_height_hint *.6 # Use screen height to set row height
+            )
+            layout.bind(minimum_height=layout.setter('height'))
+
+            buttons = []
             for sensor in customers_sensor_list:
-                    # Create a layout to hold the toggle button and label
-                    layout = GridLayout(
-                        size_hint_y=None,
-                        height=50,  # Fixed height for the row
-                        cols = 2
-                    )
-                    # Create a label for the customer's name
-                    button = Button(
-                        text=f"{sensor}",
-                        color=(0, 0, 0),
-                        size_hint_y=None,
-                        height=40,  # Fixed height for the label
-                        font_size=16,
-                        text_size=(self.width * 0.7, None)  # Dynamic text size based on screen width
-                    )
-                    
-                    # Add the toggle button and label to the layout
-                    layout.add_widget(button)
+                image_path = self.sensor_image_address(sensor)
+                button = Button(
+                    size_hint=(button_width_hint, button_height_hint),
+                    background_normal=image_path,
+                )
 
-                    # Dynamically update padding based on the label width
-                    def update_padding(instance, value):
-                        padding = instance.width * 0.4
-                        instance.text_size = (instance.width - padding, None)
+                buttons.append(button)
 
-                    # Bind the width change to the padding adjustment
-                    button.bind(size=update_padding)
-                    self.sensor_chart.add_widget(layout)
-        
+            for button in reversed(buttons):
+                layout.add_widget(button)
+
+            self.sensor_chart.add_widget(layout)
+            
+        # Bind to window resizing to dynamically adjust layout
+        Window.bind(on_resize=self.on_window_resize)
+
+    def on_window_resize(self, *args):
+        self.update_customer_sensors()  # Re-run the function to adjust button size
+
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
         self.update_customer_sensors()
-
 
     def on_customer_label_touch(self, instance, touch, customer):
         """Handle touch event on a customer label."""
@@ -216,3 +223,11 @@ class CustomerSetupScreen(Screen):
         )
         popup = Popup(title="Customer Information", content=Label(text=info), size_hint=(0.6, 0.6))
         popup.open()
+
+    def sensor_image_address(self, sensor):
+        add = {'voltmeter': 'assets/sensor1.png',
+               'flowmeter': 'assets/sensor2.png',
+               'temperature': 'assets/sensor3.png',
+               'ampermeter': 'assets/sensor4.png',
+               }
+        return add[sensor]

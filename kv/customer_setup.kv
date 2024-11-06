@@ -170,15 +170,18 @@
                     orientation: 'vertical'
                     size_hint_y: None
                     height: self.minimum_height
+            ScrollView:
+                size_hint: (1, 1)    
+                BoxLayout:
+                    id: sensor_chart
+                    orientation: 'vertical'
+                    padding: (60,0,90,0)
+                    size_hint_y: .99
+            Label:
+                size_hint_y: .1
+                text:'' # empty space
 
                 
-            BoxLayout:
-                id: sensor_chart 
-                padding: (0,10,0,0)    
-                size_hint_y : 0.9
-                
-
-
         #------------------------------------------------# Sensor Setup Form #----------------------------------------
         BoxLayout:
             # Wrapper for the Sensor Setup Form with background image
