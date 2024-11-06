@@ -9,9 +9,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
-from PIL import Image as PILImage
-import tempfile
-import io
+from kivy.uix.floatlayout import FloatLayout
 
 class CustomerSetupScreen(Screen):
     #Registration Form Objects
@@ -24,6 +22,7 @@ class CustomerSetupScreen(Screen):
     description_input = ObjectProperty(None)
     #Customer List Objects
     customer_list = ObjectProperty(None)
+    floatlayout = ObjectProperty(None)
     #Customer Sensors Menu
     sensor_chart = ObjectProperty(None)
     #Sensor side Objects
@@ -41,6 +40,30 @@ class CustomerSetupScreen(Screen):
     def on_enter(self):
         """Load customer data from Excel when the screen is opened."""
         self.load_customers()
+        self.create_back_delete_btn()
+
+    def create_back_delete_btn(self):
+        self.floatlayout.clear_widgets()
+        
+        self.back_button = Button(
+            text="Back to Main Menu",
+            background_normal='assets/PNG/Button_1/b2.png',
+            background_down='assets/PNG/Button_1/b4.png',
+            size_hint=(0.6, 0.25),  # Set button size as 60% of width and 25% of height
+            pos_hint={'top': 0.47},  # Position the button at the top
+            on_release= self.back_to_main_menu
+        )
+        self.back_button.bind(size=self.update_font_size)
+
+        self.floatlayout.add_widget(self.back_button)
+
+    def update_font_size(self, instance, value):
+        """Update the font size dynamically based on the width of the button"""
+        instance.font_size = instance.width / 12
+
+    def back_to_main_menu(self, instance):
+        """Function to handle screen transition"""
+        self.manager.current = 'first_menu'
 
 #----------------------------------------- Register or Delete a new Customer ------------------------#
     def register_customer(self):
@@ -70,7 +93,7 @@ class CustomerSetupScreen(Screen):
             self.clear_form()
             self.load_customers()
 
-    def delete_customer(self):
+    def delete_a_customer(self):
         if self.selected_customer is None:
             print("No Customer Selected for the Operation!")
             return
@@ -82,7 +105,6 @@ class CustomerSetupScreen(Screen):
         sensor_code = self.sensor_code_input.text
         sensor_description = self.sensor_description_input.text
         print(f"Selected Customer: {self.selected_customer}")
-        App.get_running_app().excel_handler.delete_customer(self.selected_customer)
         if len(sensor_code) >= 3 and self.selected_customer != None:
             self.clear_form()
             App.get_running_app().excel_handler.save_sensor(self.selected_customer, sensor_code, self.sensor_type, sensor_description)
@@ -122,7 +144,7 @@ class CustomerSetupScreen(Screen):
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
-                    text=f"{customer['last_name']}",
+                    text=f"{customer['last_name']} , {customer['first_name']}",
                     color=(0, 0, 0),
                     size_hint_y=None,
                     height=40,  # Fixed height for the label

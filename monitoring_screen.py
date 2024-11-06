@@ -38,7 +38,11 @@ class MonitoringScreen(Screen):
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
         self.load_customers()
 
-        self.create_empty_graphs()  # Create empty graphs
+        self.create_empty_graphs() # Create empty graphs
+
+    def on_enter(self):
+            """Load customer data from Excel when the screen is opened."""
+            self.load_customers()
 
     def sensor_selected(self, spinner):
         # add solution in stack overflow! to return kivy object id 
@@ -58,9 +62,6 @@ class MonitoringScreen(Screen):
                 self.sensor_ch4 = spinner.text
         else:
             print('Select sensor!')
-
-        
-
 
     def time_selected(self, spinner):
         if spinner.text != 'Time!':

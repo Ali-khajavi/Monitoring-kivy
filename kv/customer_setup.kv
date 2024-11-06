@@ -15,6 +15,7 @@
     temperature_sensor: temperature_sensor
     ampermeter_sensor: ampermeter_sensor
     sensor_chart: sensor_chart
+    floatlayout: floatlayout
 
     GridLayout:
         cols:3
@@ -123,6 +124,7 @@
                             pos_hint: {"x": 1}
                     
                     FloatLayout:
+                        id: floatlayout
                         size_hint_y: .35
                         anchor_x: "left"
                         anchor_y: "bottom"

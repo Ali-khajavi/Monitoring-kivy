@@ -41,6 +41,8 @@ class ExcelHandler:
                 "sensors_type": sensors_type,
                 "sensor_description": sensors_description
             })
+        wb.save(self.file_name)
+        wb.close()
         return customers
 
     def save_customers(self, customers):
