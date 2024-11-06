@@ -50,24 +50,32 @@ class MonitoringScreen(Screen):
             self.load_customers()
 
 #------------------------------------------Sensors Operations----------------------------#
-    def sensor_selected(self, spinner):
-        # add solution in stack overflow! to return kivy object id 
-        #print("Hello")
-        #print(spinner.sensor) # it is posible to retun object id by this way!
-        #print (spinner)
-        # Take Spinner ID and Selected Sensor        
-        pass
+    def sensor_selected(self, sensor, id):
+        sensor = sensor.split('.') # Take sensor code and name
+        self.sensor = sensor[0] # Take sensor code
+        print(self.sensor)
+        if id != 'Sensor!':
+            if id == 'sensor_channel_1':
+                self.sensor_ch1 = self.sensor
+            elif id == 'sensor_channel_2':
+                self.sensor_ch2 = self.sensor
+            elif id == 'sensor_channel_3':
+                self.sensor_ch3 = self.sensor
+            elif id == 'sensor_channel_4':
+                self.sensor_ch4 = self.sensor
 
-    def time_selected(self, spinner):
-        if spinner.text != 'Time!':
-            if spinner.time == 'range_channel_1':
-                self.range_ch1 = spinner.text
-            elif spinner.time == 'range_channel_2':
-                self.range_ch2 = spinner.text
-            elif spinner.time == 'range_channel_3':
-                self.range_ch3 = spinner.text
-            elif spinner.time == 'range_channel_4':
-                self.range_ch4 = spinner.text
+    def time_selected(self, time, id):
+        print(time)
+        self.time = time
+        if id != 'Time!':
+            if id == 'range_channel_1':
+                self.range_ch1 = self.time
+            elif id == 'range_channel_2':
+                self.range_ch2 = self.time
+            elif id == 'range_channel_3':
+                self.range_ch3 = self.time
+            elif id == 'range_channel_4':
+                self.range_ch4 = self.time
         else:
             print('Select time!')
 
@@ -143,12 +151,11 @@ class MonitoringScreen(Screen):
         self.ids.sensor_channel_4.values.clear()
         #spinner_list = [self.sensor_channel_1, self.sensor_channel_2, self.sensor_channel_3, self.sensor_channel_4]
         for name in sensors_name: 
-            self.ids.sensor_channel_1.values.append(f"{name[0]}-{name[1]}")
-            self.ids.sensor_channel_2.values.append(f"{name[0]}-{name[1]}")
-            self.ids.sensor_channel_3.values.append(f"{name[0]}-{name[1]}")
-            self.ids.sensor_channel_4.values.append(f"{name[0]}-{name[1]}")
+            self.ids.sensor_channel_1.values.append(f"{name[0]}.{name[1]}")
+            self.ids.sensor_channel_2.values.append(f"{name[0]}.{name[1]}")
+            self.ids.sensor_channel_3.values.append(f"{name[0]}.{name[1]}")
+            self.ids.sensor_channel_4.values.append(f"{name[0]}.{name[1]}")
         self.update_font_size()
-        
 
     def update_font_size(self, *args):
         """Dynamically update the font size of each spinner based on window size."""
