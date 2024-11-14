@@ -5,3 +5,4 @@ kivy_env/
 __pycache__/
 bower_components/
 venv/
+customers_data.xlsx
