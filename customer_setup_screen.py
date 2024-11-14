@@ -176,6 +176,10 @@ class CustomerSetupScreen(Screen):
         self.sensor_chart.clear_widgets()
         if self.selected_customer is not None:
             sensors_type, sensors_code, sensors_description  = App.get_running_app().excel_handler.load_sensors(self.selected_customer)
+            #sensors_type = sensors_type.split(';')
+            #sensors_code = sensors_code.split(';')
+            #sensors_description = sensors_description.spli(';')
+            print(f"print from update customer sensor : {sensors_description}")
         else:
             return
         if sensors_type is not None:
@@ -191,15 +195,27 @@ class CustomerSetupScreen(Screen):
             )
             layout.bind(minimum_height=layout.setter('height'))
 
+
             buttons = []
+            buttons.clear()
+
+            print(f"Sensors Code: {sensors_code}")
+            print(sensors_description)
+
             for i , sensor in enumerate(sensors_type):
+                print(i)
+                print(sensor)
                 image_path = self.sensor_image_address(str(sensor))
                 button = Button(
                     size_hint=(button_width_hint, button_height_hint),
                     background_normal=image_path,
                 )
-                button.bind(on_release=lambda btn, s=sensor: self.open_sensor_popup(str(sensor), str(sensors_code[i]), str(sensors_description[i]), self.selected_customer),)
+                # Store the current sensor type, code, and description in local variables
+                current_sensor_type = str(sensor)
+                current_sensor_code = str(sensors_code[i])
+                current_sensor_description = str(sensors_description[i])
 
+                button.bind(on_release=lambda btn, s_type=current_sensor_type, s_code=current_sensor_code, s_desc=current_sensor_description: self.open_sensor_popup_edite(s_type, s_code, s_desc, self.selected_customer))
                 buttons.append(button)
 
             for button in reversed(buttons):
@@ -218,7 +234,7 @@ class CustomerSetupScreen(Screen):
                }
         return add[sensor]
     
-    def open_sensor_popup(self, sensors_type, sensors_code, sensors_description, customer):
+    def open_sensor_popup_edite(self, sensors_type, sensors_code, sensors_description, customer):
         # Create a popup window layout
         popup_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
         print(customer)
@@ -259,7 +275,13 @@ class CustomerSetupScreen(Screen):
         # Add buttons for saving changes or removing the sensor
         button_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.2), spacing=10)
         save_button = Button(text="Save", size_hint=(0.5, 1))
-        save_button.bind(on_release=lambda x: self.save_sensor_changes(sensor, description_input.text))
+        save_button.bind(
+            on_release=lambda x: (
+                App.get_running_app().excel_handler.save_sensor_edit(customer, sensors_code, Code_input.text, description_input.text),
+                self.load_customers(),
+                self.update_customer_sensors()
+            )
+        )
 
         remove_button = Button(text="Remove", size_hint=(0.5, 1))
         remove_button.bind(on_release=lambda x: self.remove_sensor(sensor))

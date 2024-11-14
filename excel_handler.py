@@ -107,6 +107,51 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
+    def save_sensor_edit(self, customer, sensor_code, new_sensor_code, description):
+        if new_sensor_code == '' or None:
+            new_sensor_code = '*'
+        else:
+            new_sensor_code = str(new_sensor_code)
+
+        if description == '' or None:
+            description = '*'
+        else:
+            description = str(description)
+
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
+        customer_row = self.return_customers_row(customer)
+        current_sensor_codes = ws[f"H{customer_row}"].value 
+        current_sensor_descriptions = ws[f"J{customer_row}"].value
+
+        current_sensor_codes = str(current_sensor_codes)
+        current_sensor_descriptions = str(current_sensor_descriptions)
+
+
+        print(f"the new sensor code : {new_sensor_code}")
+        print(f"the new sensor description : {description}")
+        current_sensor_descriptions = current_sensor_descriptions.split(';')
+        current_sensor_codes = current_sensor_codes.split(';')
+
+        print(current_sensor_codes)
+        print(current_sensor_descriptions)
+
+        for i, code in enumerate(current_sensor_codes):
+            if code == str(sensor_code):
+                current_sensor_codes[i] = new_sensor_code        # Change sensor uniqe code
+                current_sensor_descriptions[i]  = description    # Change sensor description
+
+        current_sensor_codes = ";".join(current_sensor_codes)    # Create string of sensors code with new edited code
+        current_sensor_descriptions = ";".join(current_sensor_descriptions) # The same action for the descriptions
+
+        ws[f"H{customer_row}"] = current_sensor_codes            # Rewrite all the sensors code
+        ws[f"J{customer_row}"] = current_sensor_descriptions     # The same action for the descriptions!
+
+        wb.save(self.file_name)
+        wb.close()
+
+
+
     def load_sensors(self, customer):
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
@@ -116,6 +161,10 @@ class ExcelHandler:
         sensors_types = ws[f"I{customer_row}"].value
         sensors_code = ws[f"H{customer_row}"].value
         sensors_description = ws[f"J{customer_row}"].value
+
+        #sensors_types = str(sensors_types)
+        sensors_code = str(sensors_code)
+        sensors_description = str(sensors_description)
 
         # Decode the sensors to the list 
         if sensors_types is not None:
