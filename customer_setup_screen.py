@@ -195,16 +195,10 @@ class CustomerSetupScreen(Screen):
             )
             layout.bind(minimum_height=layout.setter('height'))
 
-
             buttons = []
             buttons.clear()
 
-            print(f"Sensors Code: {sensors_code}")
-            print(sensors_description)
-
             for i , sensor in enumerate(sensors_type):
-                print(i)
-                print(sensor)
                 image_path = self.sensor_image_address(str(sensor))
                 button = Button(
                     size_hint=(button_width_hint, button_height_hint),
@@ -223,7 +217,6 @@ class CustomerSetupScreen(Screen):
 
             self.sensor_chart.add_widget(layout)
 
-
         Window.bind(on_resize=self.on_window_resize)
 
     def sensor_image_address(self, sensor):
@@ -237,9 +230,7 @@ class CustomerSetupScreen(Screen):
     def open_sensor_popup_edite(self, sensors_type, sensors_code, sensors_description, customer):
         # Create a popup window layout
         popup_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        print(customer)
-        print(sensors_code)
-        # Add sensor image
+
         sensor_layout = BoxLayout(orientation='horizontal', padding=10)
 
         image_path = self.sensor_image_address(sensors_type)
@@ -271,8 +262,6 @@ class CustomerSetupScreen(Screen):
         sensor_layout.add_widget(labels_layout)
         sensor_layout.add_widget(inputs_layut)
 
-
-        # Add buttons for saving changes or removing the sensor
         button_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.2), spacing=10)
         save_button = Button(text="Save", size_hint=(0.5, 1))
         save_button.bind(
@@ -283,8 +272,14 @@ class CustomerSetupScreen(Screen):
             )
         )
 
-        remove_button = Button(text="Remove", size_hint=(0.5, 1))
-        remove_button.bind(on_release=lambda x: self.remove_sensor(sensor))
+        remove_button = Button(text="Remove", size_hint=(0.5, 1)) 
+        remove_button.bind(
+            on_release=lambda x: (
+                App.get_running_app().excel_handler.delete_sensor(customer, sensors_code),
+                self.load_customers(),
+                self.update_customer_sensors()
+            )
+        )
 
         button_layout.add_widget(save_button)
         button_layout.add_widget(remove_button)

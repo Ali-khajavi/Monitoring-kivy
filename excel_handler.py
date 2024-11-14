@@ -150,8 +150,6 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
-
-
     def load_sensors(self, customer):
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
@@ -175,6 +173,44 @@ class ExcelHandler:
             sensors_description = sensors_description.split(';')
 
         return sensors_types, sensors_code, sensors_description 
+
+    def delete_sensor(self, customer, sensor_code):
+        wb = openpyxl.load_workbook(self.file_name)
+        ws = wb['Customers']
+
+        # Take Customer Row from the Database
+        customer_row = self.return_customers_row(customer)
+
+        # Take Sensos string values
+        sensors_types = ws[f"I{customer_row}"].value
+        sensors_description = ws[f"J{customer_row}"].value
+        sensors_code = ws[f"H{customer_row}"].value
+
+        # Create a list of each sensors detail
+        sensors_types = sensors_types.split(';')
+        sensors_description = sensors_description.split(';')
+        sensors_code = sensors_code.split(';')
+        for i,code in enumerate(sensors_code):
+            _t = sensors_types[i]
+            _d = sensors_description[i]
+            if code == sensor_code:
+                print(_t, _d, code)
+                sensors_code.remove(code)
+                sensors_types.remove(_t)
+                sensors_description.remove(_d)     
+
+        # Create a String for each sensors values
+        sensors_code = ";".join(sensors_code)
+        sensors_types = ";".join(sensors_types)
+        sensors_description = ";".join(sensors_description)
+
+        # Rewrite the rest of sensors
+        ws[f"H{customer_row}"] = sensors_code
+        ws[f"I{customer_row}"] = sensors_types
+        ws[f"J{customer_row}"] = sensors_description
+
+        wb.save(self.file_name)
+        wb.close()
 
     def return_customers_row(self, customer):
         wb = openpyxl.load_workbook("customers_data.xlsx")
