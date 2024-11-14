@@ -3,13 +3,15 @@ from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.app import App
 from excel_handler import ExcelHandler
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.image import Image
+#from kivy.uix.floatlayout import FloatLayout
 
 class CustomerSetupScreen(Screen):
     #Registration Form Objects
@@ -170,10 +172,13 @@ class CustomerSetupScreen(Screen):
     def update_customer_sensors(self):
         self.sensor_chart.clear_widgets()
         if self.selected_customer is not None:
-            customers_sensor_list = App.get_running_app().excel_handler.load_sensors_type(self.selected_customer)
+            sensors_type, sensors_code, sensors_description  = App.get_running_app().excel_handler.load_sensors(self.selected_customer)
+            print(sensors_type)
+            print(sensors_code)
+            print(sensors_description)
         else:
             return
-        if customers_sensor_list is not None:
+        if sensors_type is not None:
             # Set dynamic button size hints
             button_width_hint = 0.22 
             button_height_hint = 0.15  
@@ -187,12 +192,13 @@ class CustomerSetupScreen(Screen):
             layout.bind(minimum_height=layout.setter('height'))
 
             buttons = []
-            for sensor in customers_sensor_list:
-                image_path = self.sensor_image_address(sensor)
+            for i , sensor in enumerate(sensors_type):
+                image_path = self.sensor_image_address(str(sensor))
                 button = Button(
                     size_hint=(button_width_hint, button_height_hint),
                     background_normal=image_path,
                 )
+                button.bind(on_release=lambda btn, s=sensor: self.open_sensor_popup(str(sensor), str(sensors_code[i]), str(sensors_description[i]), self.selected_customer),)
 
                 buttons.append(button)
 
@@ -200,8 +206,8 @@ class CustomerSetupScreen(Screen):
                 layout.add_widget(button)
 
             self.sensor_chart.add_widget(layout)
-            
-        # Bind to window resizing to dynamically adjust layout
+
+
         Window.bind(on_resize=self.on_window_resize)
 
     def sensor_image_address(self, sensor):
@@ -212,6 +218,41 @@ class CustomerSetupScreen(Screen):
                }
         return add[sensor]
     
+    def open_sensor_popup(self, sensors_type, sensors_code, sensors_description, customer):
+        # Create a popup window layout
+        popup_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        print(customer)
+        print(sensors_code)
+        # Add sensor image
+        image_path = self.sensor_image_address(sensors_type)
+        sensor_image = Image(source=image_path, size_hint=(1, 0.4))
+        popup_layout.add_widget(sensor_image)
+
+        # Add sensor description label and input for editing
+        description_label = Label(text="Description:", size_hint=(1, 0.1))
+        popup_layout.add_widget(description_label)
+        description_input = TextInput(text=sensors_description, multiline=False, size_hint=(1, 0.1))
+        popup_layout.add_widget(description_input)
+
+        # Add buttons for saving changes or removing the sensor
+        button_layout = BoxLayout(size_hint=(1, 0.2), spacing=10)
+        save_button = Button(text="Save", size_hint=(0.5, 1))
+        save_button.bind(on_release=lambda x: self.save_sensor_changes(sensor, description_input.text))
+
+        remove_button = Button(text="Remove", size_hint=(0.5, 1))
+        remove_button.bind(on_release=lambda x: self.remove_sensor(sensor))
+
+        button_layout.add_widget(save_button)
+        button_layout.add_widget(remove_button)
+        popup_layout.add_widget(button_layout)
+
+        # Create and open the popup
+        popup = Popup(title="Edit Sensor", content=popup_layout, size_hint=(0.6, 0.6))
+        popup.open()
+
+        # Add a reference to close the popup after actions
+        self.current_popup = popup
+
 #------------------------------------------Excel Operations---------------------------------#
     def save_customer_to_excel(self, new_customer):
         """Save customer data to Excel."""
@@ -268,6 +309,5 @@ class CustomerSetupScreen(Screen):
                 pos_hint = {'center_x': 0.8,'center_y': 0.85},
                 on_release= self.delete_a_customer
             )
-            print('Helllooooo')
             self.delete_custome_btn.bind(size=self.update_font_size)
             self.floatlayout.add_widget(self.delete_custome_btn)

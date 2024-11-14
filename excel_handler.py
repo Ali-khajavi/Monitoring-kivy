@@ -75,6 +75,13 @@ class ExcelHandler:
 
 #-----------------------------------Sensors Operations---------------------#
     def save_sensor(self, customer, sensor_code, type, description):
+        if description == '' or None:
+            description = '*'
+        if type == '' or None:
+            type = '*'
+        if sensor_code == '' or None:
+            sensor_code = '*'
+
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
         customer_row = self.return_customers_row(customer)
@@ -100,18 +107,25 @@ class ExcelHandler:
         wb.save(self.file_name)
         wb.close()
 
-    def load_sensors_type(self, customer):
+    def load_sensors(self, customer):
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
+
         # Take Customer Row from the Database
         customer_row = self.return_customers_row(customer)
-        current_sensor_types = ws[f"I{customer_row}"].value
-        # create list of customers sensors 
-        print(current_sensor_types)
-        if current_sensor_types is not None:
-            current_sensor_types = current_sensor_types.split(';')
-            print(current_sensor_types)
-        return current_sensor_types
+        sensors_types = ws[f"I{customer_row}"].value
+        sensors_code = ws[f"H{customer_row}"].value
+        sensors_description = ws[f"J{customer_row}"].value
+
+        # Decode the sensors to the list 
+        if sensors_types is not None:
+            sensors_types = sensors_types.split(';')
+        if sensors_code is not None:
+            sensors_code = sensors_code.split(';')
+        if sensors_description is not None:
+            sensors_description = sensors_description.split(';')
+
+        return sensors_types, sensors_code, sensors_description 
 
     def return_customers_row(self, customer):
         wb = openpyxl.load_workbook("customers_data.xlsx")
