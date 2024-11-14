@@ -109,14 +109,15 @@ class CustomerSetupScreen(Screen):
                     font_size=16,
                     text_size=(self.width * 0.7, None) # Dynamic text size based on screen width
                 )
-                customer_label.bind(on_touch_down=lambda instance, touch: self.on_customer_label_touch(instance, touch, customer))
+                
+                customer_label.bind(on_touch_down=lambda instance, touch, cust=customer: self.on_customer_label_touch(instance, touch, cust))
         
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
                     group='customer_selection',
-                    size_hint_y = self.height *0.001,  # Make the button height fill the BoxLayout and width adjustable
-                    size_hint_x = self.width * 0.00007,  # Set the width relative to the screen width
-                    on_press = lambda instance, cust=customer: self.on_customer_selected(cust)
+                    size_hint_y=self.height * 0.001,  # Make the button height fill the BoxLayout and width adjustable
+                    size_hint_x=self.width * 0.00007,  # Set the width relative to the screen width
+                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)  # Pass 'customer' explicitly
                 )
                 # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
@@ -268,7 +269,8 @@ class CustomerSetupScreen(Screen):
             on_release=lambda x: (
                 App.get_running_app().excel_handler.save_sensor_edit(customer, sensors_code, Code_input.text, description_input.text),
                 self.load_customers(),
-                self.update_customer_sensors()
+                self.update_customer_sensors(),
+                self.current_popup.dismiss()
             )
         )
 
@@ -277,7 +279,8 @@ class CustomerSetupScreen(Screen):
             on_release=lambda x: (
                 App.get_running_app().excel_handler.delete_sensor(customer, sensors_code),
                 self.load_customers(),
-                self.update_customer_sensors()
+                self.update_customer_sensors(),
+                self.current_popup.dismiss()
             )
         )
 
@@ -292,7 +295,6 @@ class CustomerSetupScreen(Screen):
 
         # Add a reference to close the popup after actions
         self.current_popup = popup
-
 
 
 #------------------------------------------Excel Operations---------------------------------#
