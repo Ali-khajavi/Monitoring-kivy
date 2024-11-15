@@ -119,6 +119,10 @@ class MonitoringScreen(Screen):
             sensors_type = sensors_type.split(';')
         sensors_name= list(zip(sensors_code, sensors_type))
         
+        self.ids.sensor_channel_1.values.append("None")
+        self.ids.sensor_channel_2.values.append("None")
+        self.ids.sensor_channel_3.values.append("None")
+        self.ids.sensor_channel_4.values.append("None")
 
         #spinner_list = [self.sensor_channel_1, self.sensor_channel_2, self.sensor_channel_3, self.sensor_channel_4]
         for name in sensors_name: 
@@ -126,6 +130,7 @@ class MonitoringScreen(Screen):
             self.ids.sensor_channel_2.values.append(f"{name[0]}.{name[1]}")
             self.ids.sensor_channel_3.values.append(f"{name[0]}.{name[1]}")
             self.ids.sensor_channel_4.values.append(f"{name[0]}.{name[1]}")
+        
         self.update_font_size()
 
     def update_font_size(self, *args):
@@ -205,8 +210,9 @@ class MonitoringScreen(Screen):
             sensor_channel.add_widget(sensor_canvas)
 
     def check_quary(self, channel):
-        # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor)
+        # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor) Act By Press Update Button!
         # Has Valued by The User Not Defult! Then Call the "Plot_data()" Function with Correct Channel Input! 
+        print(f"this is the channel in check_quary : {channel}")
         if channel == 1:
             channel_id = 'channel_1'
             print(self.range_ch1)
