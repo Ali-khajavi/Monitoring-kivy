@@ -326,10 +326,6 @@ class CustomerSetupScreen(Screen):
         self.sensor_code_input.text= ''
         self.sensor_description_input.text = ''
 
-    def back_to_main_menu(self, instance):
-        """Function to handle screen transition"""
-        self.manager.current = 'first_menu'
-
     def update_font_size(self, instance, value):
         """Update the font size dynamically based on the width of the button"""
         instance.font_size = instance.width / 12
@@ -357,3 +353,7 @@ class CustomerSetupScreen(Screen):
             )
             self.delete_custome_btn.bind(size=self.update_font_size)
             self.floatlayout.add_widget(self.delete_custome_btn)
+
+    def back_to_main_menu(self, instance):
+        """Function to handle screen transition"""
+        self.manager.current = 'first_menu'

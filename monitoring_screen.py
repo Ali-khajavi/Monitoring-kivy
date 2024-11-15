@@ -1,6 +1,8 @@
 from kivy.uix.screenmanager import Screen
 from kivy_garden.matplotlib import FigureCanvasKivyAgg
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.app import App
@@ -125,11 +127,11 @@ class MonitoringScreen(Screen):
         self.ids.sensor_channel_4.values.append("None")
 
         #spinner_list = [self.sensor_channel_1, self.sensor_channel_2, self.sensor_channel_3, self.sensor_channel_4]
-        for name in sensors_name: 
-            self.ids.sensor_channel_1.values.append(f"{name[0]}.{name[1]}")
-            self.ids.sensor_channel_2.values.append(f"{name[0]}.{name[1]}")
-            self.ids.sensor_channel_3.values.append(f"{name[0]}.{name[1]}")
-            self.ids.sensor_channel_4.values.append(f"{name[0]}.{name[1]}")
+        for i in range(len(sensors_code)): 
+            self.ids.sensor_channel_1.values.append(f"{sensors_code[i]}")
+            self.ids.sensor_channel_2.values.append(f"{sensors_code[i]}")
+            self.ids.sensor_channel_3.values.append(f"{sensors_code[i]}")
+            self.ids.sensor_channel_4.values.append(f"{sensors_code[i]}")
         
         self.update_font_size()
 
@@ -233,10 +235,10 @@ class MonitoringScreen(Screen):
                     self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
 
     def plot_data(self, sensor, time, channel_id):
-        # Code the sensor time sheet for the database quary using "time_coding" function
+        # Code the sensor time sheet for the database query using "time_coding" function
         time = self.time_coding(time)
-        print(f"we are here")
-        if sensor and time : 
+        print("we are here")
+        if sensor and time:
             # Query data from InfluxDB using the selected sensor and time
             data = self.query_data(sensor, time)
             if data.empty:
@@ -245,11 +247,11 @@ class MonitoringScreen(Screen):
 
         times = data["time"]
         values = data["value"]
-        print(data)
+        # print(data)
 
         sensor_channel = self.ids[channel_id]
         sensor_channel.clear_widgets()
-        
+
         # Create a new plot
         fig = Figure(figsize=(5, 4))
         ax = fig.add_subplot(111)
@@ -259,9 +261,50 @@ class MonitoringScreen(Screen):
         ax.set_title(f"{sensor} Sensor Data")
         ax.legend()
 
-        # Add the new plot to the specified channel
-        sensor_channel.add_widget(FigureCanvasKivyAgg(fig))
+        # Create a canvas for the plot
+        plot_canvas = FigureCanvasKivyAgg(fig)
 
+        # Bind the touch event to show the popup
+        def on_canvas_touch(instance, touch):
+            # Check if the touch is within the canvas bounds
+            if plot_canvas.collide_point(*touch.pos):
+                self.popup_plot(times, values, sensor)
+                return True  # Consume the event to stop further propagation
+            return False  # Let the event propagate if not in the canvas
+
+        plot_canvas.bind(on_touch_down=on_canvas_touch)
+
+        # Add the new plot to the specified channel
+        sensor_channel.add_widget(plot_canvas)
+
+    def popup_plot(self, times, values, sensor):
+        # Layout for the popup
+        popup_layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
+        close_button = Button(text="Close", size_hint=(1, 0.1))
+
+        # Larger figure for the popup
+        popup_fig = Figure(figsize=(8, 6))
+        popup_ax = popup_fig.add_subplot(111)
+        popup_ax.plot(times, values, label=f"{sensor} Data")
+        popup_ax.set_xlabel("Time")
+        popup_ax.set_ylabel("Value")
+        popup_ax.set_title(f"{sensor} Sensor Data")
+        popup_ax.legend()
+
+        popup_canvas = FigureCanvasKivyAgg(popup_fig)
+
+        popup_layout.add_widget(popup_canvas)
+        popup_layout.add_widget(close_button)
+
+        # Create and open the popup
+        popup = Popup(
+            title="Enlarged Plot",
+            content=popup_layout,
+            size_hint=(0.9, 0.9),
+        )
+        close_button.bind(on_release=popup.dismiss)
+        popup.open()
+    
     def query_data(self, sensor, time):
         """Queries data from InfluxDB for the specified sensor and time."""
         query_api = write_client.query_api()
