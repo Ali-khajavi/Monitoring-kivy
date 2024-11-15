@@ -13,15 +13,14 @@
     channel_3 : channel_3
     channel_4 : channel_4
 
-
     FloatLayout:
         canvas.before:
             Rectangle:
-                source: 'assets/BG1.jpg'  # Place the background image here
+                source: 'assets/BG1.jpg'  # Background image
                 size: self.size
                 pos: self.pos
 
-        # Public section with 2 columns and 2 rows
+        # Main GridLayout with two columns and two rows
         GridLayout:
             cols: 2
             rows: 2
@@ -29,17 +28,22 @@
             padding: 20
             size_hint: 1, 1
 
-            # Column 1, Row 1 - Scrollable customer list
+            # Column 1, Row 1 - Customer List
             BoxLayout:
                 orientation: 'vertical'
-                size_hint: 0.25, 1  # Adjusted height to 1 to take full space
-
-                Label:              # Replace with Image Label Customer List
+                size_hint: 0.25, 1
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 0.9  # Background Color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+                Label:
                     font_size: .09 * self.width
                     text: "Customer List"
                     size_hint_y: None
                     height: 40
-
                 ScrollView:
                     BoxLayout:
                         id: customer_list
@@ -48,215 +52,236 @@
                         height: self.minimum_height
                         spacing: 10
 
-            # Column 2, Row 1 - Parent of All Charts
+            # Column 2, Row 1 - Sensor Graphs Area with Channels 1 to 4
             GridLayout:
                 cols: 2
                 rows: 2
                 spacing: 10
                 padding: 10
                 size_hint: 1, 1
-                # Column 1, Row 1 Sensor Channel 1
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 0.9  # Background Color
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+                # Sensor Channel 1
                 BoxLayout:
+                    padding: 10
+                    canvas.before:
+                        Color:
+                            rgba: 75, 92, 148, 0.56  # Background Color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:      # Sensor Selection & Time Selection
+                        BoxLayout:  # Sensor Selection & Time Selection
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
-                            size_hint_y : 0.8
+                            size_hint_y: 0.8
 
-                            Label:          # Replace with Image Label (Select-Sensor)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Sensor'
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Sensor'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: sensor_channel_1
-                                name: 'sensor_channel_1'
                                 text: 'Sensor!'
-                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(self.text, self.name)
-                            
-                            Label:          # Replace with Image Label (Select-time)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Time'
-                            Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
-                                id: range_channel_1
-                                name: 'range_channel_1'
-                                text: 'Range!'
-                                values: ['Time!','Time!']
-                                on_text: root.time_selected(self.text, self.name)
+                                values: ['Sensor!', 'Sensor!']
+                                on_text: root.sensor_selected(self.text, 'sensor_channel_1')
 
-                        BoxLayout:      # Empty Gap
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Time'
+                            Spinner:
+                                font_size: (.14 * self.height + .14 * self.width)
+                                id: range_channel_1
+                                text: 'Range!'
+                                values: ['Time!', 'Time!']
+                                on_text: root.time_selected(self.text, 'range_channel_1')
+
+                        BoxLayout:  # Empty space below controls
                             size_hint_y: 0.6
-                            Label: 
-                                text:''
-                    
+
                     AnchorLayout:
                         id: channel_1
                         anchor_x: 'right'
                         anchor_y: 'top'
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1  # White background for the graph
+                                rgba: 1, 1, 1, 1
                             Rectangle:
                                 size: self.size
                                 pos: self.pos
-                        
-                # Column 2, Row 1 Sensor Channel 2
+
+                # Sensor Channel 2
                 BoxLayout:
+                    padding: 10
+                    canvas.before:
+                        Color:
+                            rgba: 75, 92, 148, 0.56  # Background Color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:      # Sensor Selection & Time Selection
+                        BoxLayout:
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
-                            size_hint_y : 0.8
+                            size_hint_y: 0.8
 
-                            Label:          # Replace with Image Label (Select-Sensor)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Sensor'
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Sensor'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: sensor_channel_2
-                                name: 'sensor_channel_2'
                                 text: 'Sensor!'
-                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(self.text, self.name)
-                            
-                            Label:          # Replace with Image Label (Select-time)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Time'
-                            Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
-                                id: range_channel_2
-                                name: 'range_channel_2'
-                                text: 'Range!'
-                                values: ['Time!','Time!']
-                                on_text: root.time_selected(self.text, self.name)
+                                values: ['Sensor!', 'Sensor!']
+                                on_text: root.sensor_selected(self.text, 'sensor_channel_2')
 
-                        BoxLayout:      # Empty Gap
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Time'
+                            Spinner:
+                                font_size: (.14 * self.height + .14 * self.width)
+                                id: range_channel_2
+                                text: 'Range!'
+                                values: ['Time!', 'Time!']
+                                on_text: root.time_selected(self.text, 'range_channel_2')
+
+                        BoxLayout:
                             size_hint_y: 0.6
-                            Label: 
-                                text:''
-                               
+
                     AnchorLayout:
                         id: channel_2
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1  # White background for the graph
+                                rgba: 1, 1, 1, 1
                             Rectangle:
                                 size: self.size
                                 pos: self.pos
 
-                # Column 1, Row 2 Sensor Channel 3
+                # Sensor Channel 3 (similar structure as channels 1 and 2)
                 BoxLayout:
+                    padding: 10
+                    canvas.before:
+                        Color:
+                            rgba: 75, 92, 148, 0.56  # Background Color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:      # Sensor Selection & Time Selection
+                        BoxLayout:
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
-                            size_hint_y : 0.8
-
-                            Label:          # Replace with Image Label (Select-Sensor)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Sensor'
+                            size_hint_y: 0.8
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Sensor'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: sensor_channel_3
-                                name: 'sensor_channel_3'
                                 text: 'Sensor!'
-                                values: ['Sensor!', 'Sensor!']  # Add some sensor options
-                                on_text: root.sensor_selected(self.text, self.name)
-                            
-                            Label:          # Replace with Image Label (Select-time)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Time'
+                                values: ['Sensor!', 'Sensor!']
+                                on_text: root.sensor_selected(self.text, 'sensor_channel_3')
+
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Time'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: range_channel_3
                                 text: 'Range!'
-                                name: 'range_channel_3'
-                                values: ['Time!','Time!']
-                                on_text: root.time_selected(self.text, self.name)
+                                values: ['Time!', 'Time!']
+                                on_text: root.time_selected(self.text, 'range_channel_3')
 
-                        BoxLayout:      # Empty Gap
+                        BoxLayout:
                             size_hint_y: 0.6
-                            Label: 
-                                text:''
-                    
+
                     AnchorLayout:
                         id: channel_3
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1  # White background for the graph
+                                rgba: 1, 1, 1, 1
                             Rectangle:
                                 size: self.size
                                 pos: self.pos
-
-                # Column 2, Row 2 Sensor Channel 4
+                # Sensor Channel 4 (similar structure as channels 1 and 2)
                 BoxLayout:
+                    padding: 10
+                    canvas.before:
+                        Color:
+                            rgba: 75, 92, 148, 0.56  # Background Color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
                     BoxLayout:
                         size_hint_x: 0.3
                         orientation: 'vertical'
-                        BoxLayout:      # Sensor Selection & Time Selection
+                        BoxLayout:
                             padding: 5
                             spacing: 5
                             orientation: 'vertical'
-                            size_hint_y : 0.8
-                            Label:          # Replace with Image Label (Select-Sensor)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Sensor'
+                            size_hint_y: 0.8
+
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Sensor'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: sensor_channel_4
-                                name: 'sensor_channel_4'
                                 text: 'Sensor!'
-                                values: ['Sensor.', 'Sensor..']  # Add some sensor options
-                                on_text: root.sensor_selected(self.text, self.name)
-                            
-                            Label:          # Replace with Image Label (Select-time)
-                                color: 0,0,0
-                                font_size: (self.width/4 + self.height/3)/2
-                                text:'Select Time'
+                                values: ['Sensor!', 'Sensor!']
+                                on_text: root.sensor_selected(self.text, 'sensor_channel_4')
+
+                            Label:
+                                color: 0, 0, 0
+                                font_size: (self.width / 4 + self.height / 3) / 2
+                                text: 'Select Time'
                             Spinner:
-                                font_size: ((.14 * self.height) + (.14 * self.width))
+                                font_size: (.14 * self.height + .14 * self.width)
                                 id: range_channel_4
                                 text: 'Range!'
-                                name: 'range_channel_4'
-                                values: ['Time!','Time!']
-                                on_text: root.time_selected(self.text, self.name)
+                                values: ['Time!', 'Time!']
+                                on_text: root.time_selected(self.text, 'range_channel_4')
 
-                        BoxLayout:      # Empty Gap
+                        BoxLayout:
                             size_hint_y: 0.6
-                            Label: 
-                                text:''
 
-                    
                     AnchorLayout:
-                        anchor_y: 'top'
                         id: channel_4
                         canvas.before:
                             Color:
-                                rgba: 1, 1, 1, 1  # White background for the graph
+                                rgba: 1, 1, 1, 1
                             Rectangle:
                                 size: self.size
                                 pos: self.pos
-            # Column 1, Row 2 - Back to main menu button
+
+            # Column 1, Row 2 - Back to Main Menu Button
             BoxLayout:
                 orientation: 'vertical'
-                size_hint: 0.25, 0.1  # Back to main menu button
+                size_hint: 0.25, 0.1
 
                 Button:
                     background_normal: 'assets/PNG/Button_1/b2.png'
@@ -266,9 +291,8 @@
                     size_hint_x: .77
                     size_hint_y: 0.35
                     pos_hint: {'top': 0.47}
-                    on_release: app.root.current = 'first_menu'  # Change this to your actual screen name
+                    on_release: app.root.current = 'first_menu'
 
-            # Column 2, Row 2 - Empty
+            # Column 2, Row 2 - Empty Space (for future widgets or layout adjustments)
             BoxLayout:
                 size_hint: 1, 0.1
-                # You can add any additional widgets here

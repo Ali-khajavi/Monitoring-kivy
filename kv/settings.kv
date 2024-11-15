@@ -2,8 +2,106 @@
     name: 'settings'
     BoxLayout:
         orientation: 'vertical'
-        Label:
-            text: 'Settings Page'
-        Button:
-            text: 'Back to Menu'
-            on_press: root.manager.current = 'first_menu'
+        padding: 20
+        spacing: 20
+        BoxLayout:  # Top section with customer list and charts
+            orientation: 'horizontal'
+            
+            # Customer List Section
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.2
+                padding: 10
+                spacing: 10
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 0.9  # Gray background
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [10]
+
+                Label:
+                    text: "Customer List"
+                    font_size: '18sp'
+                    bold: True
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+
+                    GridLayout:
+                        id: customer_list
+                        cols: 1
+                        size_hint_y: None
+                        height: self.minimum_height
+                        row_default_height: '40dp'
+                        spacing: 10
+
+                        # Add customer names here
+                        Button:
+                            text: "Ali Khajavi"
+                            background_color: 0.2, 0.6, 0.8, 1
+                        Button:
+                            text: "Vida Khajavi"
+                            background_color: 0.2, 0.6, 0.8, 1
+
+            # Chart and Controls Section
+            GridLayout:
+                cols: 2
+                spacing: 20
+                padding: 10
+
+                # Example chart + dropdown cell
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 10
+                    spacing: 10
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
+
+                    Label:
+                        text: "2024 Sensor Data of 30 Minutes"
+                        font_size: '16sp'
+                        size_hint_y: None
+                        height: '30dp'
+
+                    # Placeholders for the plot chart (use matplotlib later)
+                    Image:
+                        source: 'chart_placeholder.png'  # Replace with actual chart or Matplotlib canvas
+
+                    # Dropdowns and buttons
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        spacing: 10
+
+                        Spinner:
+                            text: 'Select Sensor'
+                            values: ['Sensor 1', 'Sensor 2']
+                            size_hint_x: 0.5
+                            font_size: '14sp'
+
+                        Spinner:
+                            text: 'Select Time'
+                            values: ['30m', '3h', '12h', '1d']
+                            size_hint_x: 0.5
+                            font_size: '14sp'
+
+        # Bottom Button Section
+        BoxLayout:
+            size_hint_y: 0.1
+            padding: 10
+
+            Button:
+                text: "Back to Main Menu"
+                size_hint_x: 0.2
+                font_size: '18sp'
+                background_normal: 'assets/PNG/Button_1/b2.png'
+                background_down: 'assets/PNG/Button_1/b4.png'
+                on_release: app.root.current = 'first_menu'
+

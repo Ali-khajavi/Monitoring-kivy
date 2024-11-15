@@ -63,7 +63,6 @@ class MonitoringScreen(Screen):
                 customer_label = Label(
                     font_size = 14,
                     text= f"{customer['first_name']} {customer['last_name']}",
-                    color= (0, 0, 0),
                     size_hint_y= None,
                     height= 40,
                     halign= "left",
