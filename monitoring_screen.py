@@ -61,12 +61,12 @@ class MonitoringScreen(Screen):
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
+                    font_size = 14,
                     text= f"{customer['first_name']} {customer['last_name']}",
                     color= (0, 0, 0),
                     size_hint_y= None,
                     height= 40,
                     halign= "left",
-                    font_size= 14.5,
                     pos_hint= {"x":.25}
                 ) 
                 # Create a ToggleButton for selection
@@ -82,7 +82,7 @@ class MonitoringScreen(Screen):
                 # Dynamically update padding based on the label width
                 def update_padding(instance, value):
                     padding = instance.width * 0.4  # Set padding to 5% of the label width
-                    instance.text_size = (instance.width - padding, None)
+                    instance.font_size = (instance.width * 0.1)
                 
                 # Bind the width change to the padding adjustment
                 customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
@@ -146,6 +146,7 @@ class MonitoringScreen(Screen):
         self.ids.sensor_channel_4.font_size = new_font_size
 
 
+
 #------------------------------------------Sensors Operations----------------------------#
     def sensor_selected(self, sensor, name):
         self.sensor_ch1 = 'Sensor!'
@@ -197,9 +198,9 @@ class MonitoringScreen(Screen):
             return None
 
 
+
 #---------------------------------------Monitoring Charts Operations----------------------#
     def create_empty_graphs(self):
-        """Creates empty Matplotlib graphs for sensor channels."""
         for i in range(1, 5):  # Loop through channels 1 to 4
             fig = Figure(figsize=(1, 1))  # Create a figure
             ax = fig.add_subplot(111)  # Add a subplot
@@ -211,6 +212,11 @@ class MonitoringScreen(Screen):
             sensor_canvas = FigureCanvasKivyAgg(fig)
             sensor_channel.add_widget(sensor_canvas)
 
+    def clear_chart(self, chart):
+        self.ids[chart].clear_widgets()
+
+        self.ids[f"sensor_{chart}"].text = 'None'
+
     def check_quary(self, channel):
         # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor) Act By Press Update Button!
         # Has Valued by The User Not Defult! Then Call the "Plot_data()" Function with Correct Channel Input! 
@@ -221,19 +227,30 @@ class MonitoringScreen(Screen):
             print(self.sensor_ch1)
             if self.sensor_ch1 != 'Sensor!' and self.range_ch1 != 'Time!':
                 self.plot_data(self.sensor_ch1, self.range_ch1, channel_id)
+            else:
+                self.clear_chart(channel_id)
+
         elif channel == 2:
             channel_id = 'channel_2'
             if (self.sensor_ch2 != 'Sensor!') and self.range_ch2 != 'Time!':
                 self.plot_data(self.sensor_ch2, self.range_ch2, channel_id)
+            else:
+                self.clear_chart(channel_id)
+
         elif channel == 3:
             channel_id = 'channel_3'
             if (self.sensor_ch3 != 'Sensor!') and self.range_ch3 != 'Time!':
                 self.plot_data(self.sensor_ch3, self.range_ch3, channel_id)
+            else:
+                self.clear_chart(channel_id)
+
         elif channel == 4:
             channel_id = 'channel_4'
             if (self.sensor_ch4 != 'Sensor!') and self.range_ch4 != 'Time!':
                     self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
-
+            else:
+                self.clear_chart(channel_id)
+            
     def plot_data(self, sensor, time, channel_id):
         # Code the sensor time sheet for the database query using "time_coding" function
         time = self.time_coding(time)
@@ -258,7 +275,7 @@ class MonitoringScreen(Screen):
         ax.plot(times, values, label=f"{sensor} Data")
         ax.set_xlabel("Time")
         ax.set_ylabel("Value")
-        ax.set_title(f"{sensor} Sensor Data")
+        ax.set_title(f"{sensor} Sensor Data of {self.time_decoding(time)}")
         ax.legend()
 
         # Create a canvas for the plot
@@ -268,7 +285,7 @@ class MonitoringScreen(Screen):
         def on_canvas_touch(instance, touch):
             # Check if the touch is within the canvas bounds
             if plot_canvas.collide_point(*touch.pos):
-                self.popup_plot(times, values, sensor)
+                self.popup_plot(times, values, sensor, time)
                 return True  # Consume the event to stop further propagation
             return False  # Let the event propagate if not in the canvas
 
@@ -277,7 +294,7 @@ class MonitoringScreen(Screen):
         # Add the new plot to the specified channel
         sensor_channel.add_widget(plot_canvas)
 
-    def popup_plot(self, times, values, sensor):
+    def popup_plot(self, times, values, sensor, time):
         # Layout for the popup
         popup_layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
         close_button = Button(text="Close", size_hint=(1, 0.1))
@@ -288,7 +305,7 @@ class MonitoringScreen(Screen):
         popup_ax.plot(times, values, label=f"{sensor} Data")
         popup_ax.set_xlabel("Time")
         popup_ax.set_ylabel("Value")
-        popup_ax.set_title(f"{sensor} Sensor Data")
+        popup_ax.set_title(f"{sensor} Sensor Data of {self.time_decoding(time)}")
         popup_ax.legend()
 
         popup_canvas = FigureCanvasKivyAgg(popup_fig)
@@ -370,3 +387,17 @@ class MonitoringScreen(Screen):
             '30 d': '-30d'
         }
         return code_time[time]
+
+    def time_decoding(self, time):
+        decode_time = {
+            '-30m': '30 Minute',
+            '-1h' : '1 Hour',
+            '-3h' : '3 Hours',
+            '-6h' : '6 Hours',
+            '-12h': '12 Hours',
+            '-1d' : '1 Day',
+            '-2d' : '2 Days',
+            '-7d' : '7 Days',
+            '-30d': '1 Month' 
+        }
+        return decode_time[time]
