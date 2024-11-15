@@ -199,7 +199,7 @@ class MonitoringScreen(Screen):
             ax.set_title(f"Channel {i}")  # Set title
 
             # Clear previous widgets and add the figure
-            sensor_channel = self.ids[f'sensor_channel_{i}']
+            sensor_channel = self.ids[f'channel_{i}']
             sensor_channel.clear_widgets()
             sensor_canvas = FigureCanvasKivyAgg(fig)
             sensor_channel.add_widget(sensor_canvas)
@@ -208,21 +208,21 @@ class MonitoringScreen(Screen):
         # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor)
         # Has Valued by The User Not Defult! Then Call the "Plot_data()" Function with Correct Channel Input! 
         if channel == 1:
-            channel_id = 'sensor_channel_1'
+            channel_id = 'channel_1'
             print(self.range_ch1)
             print(self.sensor_ch1)
             if self.sensor_ch1 != 'Sensor!' and self.range_ch1 != 'Time!':
                 self.plot_data(self.sensor_ch1, self.range_ch1, channel_id)
         elif channel == 2:
-            channel_id = 'sensor_channel_2'
+            channel_id = 'channel_2'
             if (self.sensor_ch2 != 'Sensor!') and self.range_ch2 != 'Time!':
                 self.plot_data(self.sensor_ch2, self.range_ch2, channel_id)
         elif channel == 3:
-            channel_id = 'sensor_channel_3'
+            channel_id = 'channel_3'
             if (self.sensor_ch3 != 'Sensor!') and self.range_ch3 != 'Time!':
                 self.plot_data(self.sensor_ch3, self.range_ch3, channel_id)
         elif channel == 4:
-            channel_id = 'sensor_channel_4'
+            channel_id = 'channel_4'
             if (self.sensor_ch4 != 'Sensor!') and self.range_ch4 != 'Time!':
                     self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
 
