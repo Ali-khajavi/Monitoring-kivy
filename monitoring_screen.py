@@ -8,14 +8,14 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.app import App
 from kivy.properties import ObjectProperty
 from matplotlib.figure import Figure
-from excel_handler import ExcelHandler  # Assuming excel_handler.py has a class named ExcelHandler for data access
+from excel_handler import ExcelHandler
 from secrets_server import INFLUXDB_TOKEN, ORGANIZATION, BUCKET, SERVER_ADDRESS
 import influxdb_client
 import pandas as pd
 from kivy.core.window import Window
 
 
-token = INFLUXDB_TOKEN  # replace with your token
+token = INFLUXDB_TOKEN
 org = ORGANIZATION
 url = SERVER_ADDRESS
 bucket = BUCKET
@@ -39,11 +39,11 @@ class MonitoringScreen(Screen):
     def on_enter(self):
             """Load customer data from Excel when the screen is opened."""
             self.load_customers()
-            self.reset_charts()
-            self.create_empty_graphs()
+            self.reset_charts_values()
+            #self.create_empty_graphs()
 
 
-#-----------------------------------------Customers Operations----------------------------#          
+#-----------------------------------------Customers Update, Selection Functions----------------------------#          
     def update_customer_list(self):
         """Refresh the customer list display."""
         self.customer_list.clear_widgets()  # Remove all children from the customer list
@@ -97,7 +97,7 @@ class MonitoringScreen(Screen):
         self.update_customer_list()
 
     def on_customer_selected(self, customer):
-        self.reset_charts()
+        self.reset_charts_values()
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
         print(self.selected_customer)
         #Take sensors data from customer
@@ -147,7 +147,7 @@ class MonitoringScreen(Screen):
 
 
 
-#------------------------------------------Sensors Operations----------------------------#
+#------------------------------------------Sensors and Time Selection Functions ----------------------------#
     def sensor_selected(self, sensor, name):
         self.sensor_ch1 = 'Sensor!'
         self.sensor_ch2 = 'Sensor!'
@@ -199,24 +199,7 @@ class MonitoringScreen(Screen):
 
 
 
-#---------------------------------------Monitoring Charts Operations----------------------#
-    def create_empty_graphs(self):
-        for i in range(1, 5):  # Loop through channels 1 to 4
-            fig = Figure(figsize=(1, 1))  # Create a figure
-            ax = fig.add_subplot(111)  # Add a subplot
-            ax.set_title(f"Channel {i}")  # Set title
-
-            # Clear previous widgets and add the figure
-            sensor_channel = self.ids[f'channel_{i}']
-            sensor_channel.clear_widgets()
-            sensor_canvas = FigureCanvasKivyAgg(fig)
-            sensor_channel.add_widget(sensor_canvas)
-
-    def clear_chart(self, chart):
-        self.ids[chart].clear_widgets()
-
-        self.ids[f"sensor_{chart}"].text = 'None'
-
+#---------------------------------------- Quary Functions and Ploting data -----------------------------------------------#
     def check_quary(self, channel):
         # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor) Act By Press Update Button!
         # Has Valued by The User Not Defult! Then Call the "Plot_data()" Function with Correct Channel Input! 
@@ -340,7 +323,27 @@ class MonitoringScreen(Screen):
             columns=["time", "value"]
         )
 
-    def reset_charts(self):
+
+
+#---------------------------------------Monitoring Charts Operations----------------------#
+    def create_empty_graphs(self):
+        for i in range(1, 5):  # Loop through channels 1 to 4
+            fig = Figure(figsize=(1, 1))  # Create a figure
+            ax = fig.add_subplot(111)  # Add a subplot
+            ax.set_title(f"Channel {i}")  # Set title
+
+            # Clear previous widgets and add the figure
+            sensor_channel = self.ids[f'channel_{i}']
+            sensor_channel.clear_widgets()
+            sensor_canvas = FigureCanvasKivyAgg(fig)
+            sensor_channel.add_widget(sensor_canvas)
+
+    def clear_chart(self, chart):
+        self.ids[chart].clear_widgets()
+
+        self.ids[f"sensor_{chart}"].text = 'None'
+
+    def reset_charts_values(self):
         self.sensor_ch1 = 'Sensor!'
         self.sensor_ch2 = 'Sensor!'
         self.sensor_ch3 = 'Sensor!'
