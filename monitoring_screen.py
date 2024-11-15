@@ -30,54 +30,16 @@ class MonitoringScreen(Screen):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        self.sensor_ch1 = 'None'
-        self.sensor_ch2 = 'None'
-        self.sensor_ch3 = 'None'
-        self.sensor_ch4 = 'None'
-        self.range_ch1 = 'None'
-        self.range_ch2 = 'None'
-        self.range_ch3 = 'None'
-        self.range_ch4 = 'None'
         
         self.customers = []
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
-        #self.load_customers()
-
-        #self.create_empty_graphs() # Create empty graphs
 
     def on_enter(self):
             """Load customer data from Excel when the screen is opened."""
             self.load_customers()
+            self.reset_charts()
+            self.create_empty_graphs()
 
-#------------------------------------------Sensors Operations----------------------------#
-    def sensor_selected(self, sensor, id):
-        sensor = sensor.split('.') # Take sensor code and name
-        self.sensor = sensor[0] # Take sensor code
-        print(self.sensor)
-        if id != 'Sensor!':
-            if id == 'sensor_channel_1':
-                self.sensor_ch1 = self.sensor
-            elif id == 'sensor_channel_2':
-                self.sensor_ch2 = self.sensor
-            elif id == 'sensor_channel_3':
-                self.sensor_ch3 = self.sensor
-            elif id == 'sensor_channel_4':
-                self.sensor_ch4 = self.sensor
-
-    def time_selected(self, time, id):
-        print(time)
-        self.time = time
-        if id != 'Time!':
-            if id == 'range_channel_1':
-                self.range_ch1 = self.time
-            elif id == 'range_channel_2':
-                self.range_ch2 = self.time
-            elif id == 'range_channel_3':
-                self.range_ch3 = self.time
-            elif id == 'range_channel_4':
-                self.range_ch4 = self.time
-        else:
-            print('Select time!')
 
 #-----------------------------------------Customers Operations----------------------------#          
     def update_customer_list(self):
@@ -133,22 +95,31 @@ class MonitoringScreen(Screen):
         self.update_customer_list()
 
     def on_customer_selected(self, customer):
+        self.reset_charts()
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
         print(self.selected_customer)
         #Take sensors data from customer
         sensors_code = customer['sensors_code']
         sensors_type = customer['sensors_type']
 
+        # Keep Program Alive Even if The Customer Has no Sensor Setuped yet :D
+        if sensors_code: pass
+        else:
+            return None
+        
+        for i in range(9):
+            self.ids.range_channel_1.values.append(self.time_decode(i))
+            self.ids.range_channel_2.values.append(self.time_decode(i))
+            self.ids.range_channel_3.values.append(self.time_decode(i))
+            self.ids.range_channel_4.values.append(self.time_decode(i))
+        
         if sensors_code is not None:
             sensors_code = sensors_code.split(';')
         if sensors_type is not None:
             sensors_type = sensors_type.split(';')
         sensors_name= list(zip(sensors_code, sensors_type))
+        
 
-        self.ids.sensor_channel_1.values.clear()
-        self.ids.sensor_channel_2.values.clear()
-        self.ids.sensor_channel_3.values.clear()
-        self.ids.sensor_channel_4.values.clear()
         #spinner_list = [self.sensor_channel_1, self.sensor_channel_2, self.sensor_channel_3, self.sensor_channel_4]
         for name in sensors_name: 
             self.ids.sensor_channel_1.values.append(f"{name[0]}.{name[1]}")
@@ -167,6 +138,58 @@ class MonitoringScreen(Screen):
         self.ids.sensor_channel_3.font_size = new_font_size
         self.ids.sensor_channel_4.font_size = new_font_size
 
+
+#------------------------------------------Sensors Operations----------------------------#
+    def sensor_selected(self, sensor, name):
+        self.sensor_ch1 = 'Sensor!'
+        self.sensor_ch2 = 'Sensor!'
+        self.sensor_ch3 = 'Sensor!'
+        self.sensor_ch4 = 'Sensor!'
+        if sensor != 'Sensor!': 
+            # Decodeing the sensor Code!
+            sensor = sensor.split('.') # Take sensor code and name
+            self.sensor = sensor[0] # Take sensor code
+            if name == 'sensor_channel_1':
+                self.sensor_ch1 = self.sensor
+                return self.check_quary(1)
+            elif name == 'sensor_channel_2':
+                self.sensor_ch2 = self.sensor
+                return self.check_quary(2)
+            elif name == 'sensor_channel_3':
+                self.sensor_ch3 = self.sensor
+                return self.check_quary(3)
+            elif name == 'sensor_channel_4':
+                self.sensor_ch4 = self.sensor
+                return self.check_quary(4)
+        else:
+            print("Please Select Sensor!")
+            return None
+
+    def time_selected(self, time, name):
+        self.range_ch1 = 'Time!'
+        self.range_ch2 = 'Time!'
+        self.range_ch3 = 'Time!'
+        self.range_ch4 = 'Time!'
+        if time != 'Time!':
+            print(time)
+            self.time = time
+            if name == 'range_channel_1':
+                self.range_ch1 = self.time
+                return self.check_quary(1)
+            elif name == 'range_channel_2':
+                self.range_ch2 = self.time
+                return self.check_quary(2)
+            elif name == 'range_channel_3':
+                self.range_ch3 = self.time
+                return self.check_quary(3)
+            elif name == 'range_channel_4':
+                self.range_ch4 = self.time
+                return self.check_quary(4)
+        else:
+            print('Select time!')
+            return None
+
+
 #---------------------------------------Monitoring Charts Operations----------------------#
     def create_empty_graphs(self):
         """Creates empty Matplotlib graphs for sensor channels."""
@@ -181,51 +204,32 @@ class MonitoringScreen(Screen):
             sensor_canvas = FigureCanvasKivyAgg(fig)
             sensor_channel.add_widget(sensor_canvas)
 
-    def check_quary(self, chart):
-        print('Hoooooo!')
-        print(chart.channel)
-        print(self.sensor_ch1)
-        print(self.range_ch1)
-        #channel_id = "sensor_channel_1"  # or the channel ID based on the button or selection
-
-        if chart.channel == 'ch_1':
+    def check_quary(self, channel):
+        # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor)
+        # Has Valued by The User Not Defult! Then Call the "Plot_data()" Function with Correct Channel Input! 
+        if channel == 1:
             channel_id = 'sensor_channel_1'
-            if self.sensor_ch1 != 'None' and self.range_ch1 != 'None':
+            print(self.range_ch1)
+            print(self.sensor_ch1)
+            if self.sensor_ch1 != 'Sensor!' and self.range_ch1 != 'Time!':
                 self.plot_data(self.sensor_ch1, self.range_ch1, channel_id)
-        elif chart.channel == 'ch_2':
+        elif channel == 2:
             channel_id = 'sensor_channel_2'
-            if self.sensor_ch2 != 'None' and self.range_ch2 != 'None':
+            if (self.sensor_ch2 != 'Sensor!') and self.range_ch2 != 'Time!':
                 self.plot_data(self.sensor_ch2, self.range_ch2, channel_id)
-
-        elif chart.channel == 'ch_3':
+        elif channel == 3:
             channel_id = 'sensor_channel_3'
-            if self.sensor_ch3 != 'None' and self.range_ch3 != 'None':
+            if (self.sensor_ch3 != 'Sensor!') and self.range_ch3 != 'Time!':
                 self.plot_data(self.sensor_ch3, self.range_ch3, channel_id)
-        elif chart.channel == 'ch_4':
+        elif channel == 4:
             channel_id = 'sensor_channel_4'
-            if self.sensor_ch4 != 'None' and self.range_ch4 != 'None':
-                self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
-
-    def query_data(self, sensor, time):
-        """Queries data from InfluxDB for the specified sensor and time."""
-        query_api = write_client.query_api()
-        print(f"Querying data for sensor: {sensor}, time range: {time}")
-        query = f"""
-        from(bucket: "{bucket}")
-        |> range(start: {time})
-        |> filter(fn: (r) => r.DEVICE == "{sensor}")
-        """
-        
-        tables = query_api.query(query, org=org)
-        
-        # Convert results to a DataFrame
-        return pd.DataFrame(
-            [(record.get_time(), record.get_value()) for table in tables for record in table.records],
-            columns=["time", "value"]
-        )
+            if (self.sensor_ch4 != 'Sensor!') and self.range_ch4 != 'Time!':
+                    self.plot_data(self.sensor_ch4, self.range_ch4, channel_id)
 
     def plot_data(self, sensor, time, channel_id):
-        """Fetches data from InfluxDB for the selected sensor and time, then plots it."""
+        # Code the sensor time sheet for the database quary using "time_coding" function
+        time = self.time_coding(time)
+        print(f"we are here")
         if sensor and time : 
             # Query data from InfluxDB using the selected sensor and time
             data = self.query_data(sensor, time)
@@ -251,3 +255,69 @@ class MonitoringScreen(Screen):
 
         # Add the new plot to the specified channel
         sensor_channel.add_widget(FigureCanvasKivyAgg(fig))
+
+    def query_data(self, sensor, time):
+        """Queries data from InfluxDB for the specified sensor and time."""
+        query_api = write_client.query_api()
+        print(f"Querying data for sensor: {sensor}, time range: {time}")
+        query = f"""
+        from(bucket: "{bucket}")
+        |> range(start: {time})
+        |> filter(fn: (r) => r.DEVICE == "{sensor}")
+        """
+        
+        tables = query_api.query(query, org=org)
+        
+        # Convert results to a DataFrame
+        return pd.DataFrame(
+            [(record.get_time(), record.get_value()) for table in tables for record in table.records],
+            columns=["time", "value"]
+        )
+
+    def reset_charts(self):
+        self.sensor_ch1 = 'Sensor!'
+        self.sensor_ch2 = 'Sensor!'
+        self.sensor_ch3 = 'Sensor!'
+        self.sensor_ch4 = 'Sensor!'
+        self.range_ch1 =  'Time!'
+        self.range_ch2 =  'Time!'
+        self.range_ch3 =  'Time!'
+        self.range_ch4 =  'Time!'
+
+        self.ids.range_channel_1.values.clear()
+        self.ids.range_channel_2.values.clear()
+        self.ids.range_channel_3.values.clear()
+        self.ids.range_channel_4.values.clear()
+
+        self.ids.sensor_channel_1.values.clear()
+        self.ids.sensor_channel_2.values.clear()
+        self.ids.sensor_channel_3.values.clear()
+        self.ids.sensor_channel_4.values.clear()
+
+    def time_decode(self, i):
+        time = {
+            0 : '30 m',
+            1 : '1 h',
+            2 : '3 h',
+            3 : '6 h',
+            4 : '12 h',
+            5 : '1 d',
+            6 : '2 d',
+            7 : '7 d',
+            8 : '30 d'
+        }
+        return time[i]
+
+    def time_coding(self, time):
+        code_time = {
+            '30 m': '-30m',
+            '1 h' : '-1h',
+            '3 h' : '-3h',
+            '6 h' : '-6h',
+            '12 h': '-12h',
+            '1 d' : '-1d',
+            '2 d' : '-2d',
+            '7 d' : '-7d',
+            '30 d': '-30d'
+        }
+        return code_time[time]
