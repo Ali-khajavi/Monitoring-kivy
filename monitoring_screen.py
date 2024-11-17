@@ -37,7 +37,6 @@ class MonitoringScreen(Screen):
         self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
 
     def on_enter(self):
-            """Load customer data from Excel when the screen is opened."""
             self.load_customers()
             self.reset_charts_values()
             #self.create_empty_graphs()
@@ -297,7 +296,7 @@ class MonitoringScreen(Screen):
 
         # Create and open the popup
         popup = Popup(
-            title="Enlarged Plot",
+            title="Sensor",
             content=popup_layout,
             size_hint=(0.9, 0.9),
         )
@@ -305,7 +304,6 @@ class MonitoringScreen(Screen):
         popup.open()
     
     def query_data(self, sensor, time):
-        """Queries data from InfluxDB for the specified sensor and time."""
         query_api = write_client.query_api()
         print(f"Querying data for sensor: {sensor}, time range: {time}")
         query = f"""
@@ -313,14 +311,22 @@ class MonitoringScreen(Screen):
         |> range(start: {time})
         |> filter(fn: (r) => r.DEVICE == "{sensor}")
         """
-        
-        tables = query_api.query(query, org=org)
-        
-        # Convert results to a DataFrame
-        return pd.DataFrame(
-            [(record.get_time(), record.get_value()) for table in tables for record in table.records],
-            columns=["time", "value"]
-        )
+
+        try:
+            tables = query_api.query(query, org=org)
+
+            # Convert results to a DataFrame
+            return pd.DataFrame(
+                [(record.get_time(), record.get_value()) for table in tables for record in table.records],
+                columns=["time", "value"]
+            )
+        except Exception as e:
+            # Log the error (optional)
+            print(f"Error occurred during query: {e}")
+
+            # Show the error popup
+            self.show_error_popup(f"Query failed: {e}")
+            return pd.DataFrame(columns=["time", "value"])  # Return an empty DataFrame
 
 
 
@@ -403,3 +409,26 @@ class MonitoringScreen(Screen):
             '-30d': '1 Month' 
         }
         return decode_time[time]
+    
+    def show_error_popup(self, message):
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        
+        # Create a label with wrapped text
+        label = Label(
+            text=message, 
+            halign="center", 
+            valign="middle",
+            size_hint=(1, 1),
+            text_size=(400, None)  # Adjust width for text wrapping
+        )
+        label.bind(size=lambda *args: label.setter('text_size')(label, (label.width, None)))
+
+        # Add a close button
+        close_button = Button(text="Close", size_hint=(0.5, None), height=40)
+        layout.add_widget(label)
+        layout.add_widget(close_button)
+        
+        # Create the popup
+        popup = Popup(title="Error", content=layout, size_hint=(0.4, 0.3))
+        close_button.bind(on_release=popup.dismiss)
+        popup.open()

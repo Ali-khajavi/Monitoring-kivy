@@ -1,4 +1,4 @@
-INFLUXDB_TOKEN = "xLQGcV7iVyNGkvtRq-2tlP5-1piy-rxBRQcavJPdgxDpW40Qc1SyPUArvKc67LaLyByab2Q7-OKlW7Es6vDdoQ=="
-ORGANIZATION = "Pillipp_1" 
-BUCKET = "Sensors"
-SERVER_ADDRESS = "http://172.105.78.144:8086"
+INFLUXDB_TOKEN = "your token"
+ORGANIZATION = " your organization" 
+BUCKET = "bucket target"
+SERVER_ADDRESS = "your server influxdb address"
