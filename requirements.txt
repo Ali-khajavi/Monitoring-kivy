@@ -1,0 +1,6 @@
+kivy
+openpyxl
+matplotlib
+kivy_garden.matplotlib
+pandas
+influxdb_client
