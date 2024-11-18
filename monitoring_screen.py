@@ -44,47 +44,47 @@ class MonitoringScreen(Screen):
 
 #-----------------------------------------Customers Update, Selection Functions----------------------------#          
     def update_customer_list(self):
-        """Refresh the customer list display."""
-        self.customer_list.clear_widgets()  # Remove all children from the customer list
+        # Remove all children from the customer list
+        self.customer_list.clear_widgets()
         self.selected_customer = None
-       
-        if self.customers != None:  # Sort customers list in case the list is not empty!
+
+        # Sort customers list in case the list is not empty!
+        if self.customers is not None:  
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
             for customer in sorted_customers:
                 # Create a layout to hold the toggle button and label
                 layout = BoxLayout(
                     orientation='horizontal',
                     size_hint_y=None,
-                    height=40,
+                    height=30,
                     padding=(0, 0, 10, 0)  # Add padding (left, top, right, bottom)
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
-                    font_size = 14,
-                    text= f"{customer['first_name']} {customer['last_name']}",
-                    size_hint_y= None,
-                    height= 40,
-                    halign= "left",
-                    pos_hint= {"x":.25}
-                ) 
+                    text=f"{customer['first_name']} {customer['last_name']}",
+                    size_hint_y=None,
+                    height=30,
+                    padding= (10,0,0,0),
+                    halign="left",
+                    valign="middle",
+                    font_size= 14,
+                    text_size=(self.width * 0.7, None)
+                )
+
+                customer_label.bind(
+                size=lambda instance, value: setattr(instance, 'text_size', (instance.width, None)),
+                width=lambda instance, value: setattr(instance, 'font_size', value * 0.08)  # Adjust font size dynamically
+                )
+
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
-                    group='customer_selection',  # Group name to ensure only one can be selected
+                    group='customer_selection', 
                     size_hint_x=None,
-                    width=40,  # Width of the toggle button
-                    on_press = lambda instance, cust=customer: self.on_customer_selected(cust)
+                    width=30,  
+                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
-                # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
                 layout.add_widget(toggle_button)
-                # Dynamically update padding based on the label width
-                def update_padding(instance, value):
-                    padding = instance.width * 0.4  # Set padding to 5% of the label width
-                    instance.font_size = (instance.width * 0.1)
-                
-                # Bind the width change to the padding adjustment
-                customer_label.bind(size=update_padding)  # Use 'size' instead of 'width' for binding
-
                 self.customer_list.add_widget(layout)
 
     def load_customers(self):
