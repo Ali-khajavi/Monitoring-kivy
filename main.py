@@ -9,13 +9,25 @@ from customer_setup_screen import CustomerSetupScreen
 from first_menu_screen import FirstMenuScreen
 from monitoring_screen import MonitoringScreen 
 from settings_screen import SettingsScreen
-#from kivy.core.window import Window
+
+import os, sys
+from kivy.resources import resource_add_path
+
+def resource_path(relative_path):
+        """Get absolute path to resource, works for dev and PyInstaller"""
+        try:
+            # PyInstaller temporary folder
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # Development environment
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
 # Load the kv files
-Builder.load_file('kv/first_menu.kv')
-Builder.load_file('kv/settings.kv')
-Builder.load_file('kv/monitoring.kv')
-Builder.load_file('kv/customer_setup.kv')
+Builder.load_file(resource_path('kv/first_menu.kv'))
+Builder.load_file(resource_path('kv/settings.kv'))
+Builder.load_file(resource_path('kv/monitoring.kv'))
+Builder.load_file(resource_path('kv/customer_setup.kv'))
 
 
 class MyScreenManager(ScreenManager):
@@ -25,7 +37,8 @@ class MyApp(App):
     def build(self):
         # Initialize ExcelHandler with error handling
         try:
-            self.excel_handler = ExcelHandler('customers_data.xlsx')
+            excel_file_path = self.resource_path('customers_data.xlsx')
+            self.excel_handler = ExcelHandler(excel_file_path)
         except Exception as e:
             print(f"Error initializing ExcelHandler: {e}")
             return None
@@ -50,5 +63,21 @@ class MyApp(App):
 
         return sm
 
+    @staticmethod
+    def resource_path(relative_path):
+        """Get absolute path to resource, works for dev and PyInstaller"""
+        try:
+            # PyInstaller temporary folder
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # Development environment
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
+
 if __name__ == '__main__':
+    # Add MEIPASS path for packaged resources
+    if hasattr(sys, '_MEIPASS'):
+        resource_add_path(os.path.join(sys._MEIPASS))
+
     MyApp().run()
