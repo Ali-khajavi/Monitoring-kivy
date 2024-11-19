@@ -22,7 +22,7 @@
         canvas.before:
             # Load and scale the background image to fit the screen
             Rectangle:
-                source: 'assets/BackPage.jpg'
+                source: root.bg_image
                 pos: self.pos
                 size: self.size
         
@@ -36,12 +36,12 @@
                 Rectangle:
                     size: (self.width * 1, self.height * 0.72)  
                     pos: (self.x - self.width * 0.01, self.y + self.height * 0.3) 
-                    source: 'assets/F1.png'  # Frame image
+                    source: root.frame_image
             FloatLayout:
                 # Background Label for the top image
                 canvas.before:
                     Rectangle:
-                        source: 'assets/Labels/Form-Label.png'
+                        source: root.label_image
                         size: (self.width * 0.6, self.height * 0.1)
                         pos: (self.center_x - (self.width * 0.15), self.top - (self.height * 0.1))
 
@@ -55,7 +55,7 @@
                         size_hint_y: .5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B1-Name.png'
+                            source: root.l_name
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -63,7 +63,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B2-Last-Name.png'
+                            source: root.l_lastname
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -71,7 +71,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B3-Email.png'
+                            source: root.l_email
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -79,7 +79,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B4-Phone.png'
+                            source: root.l_phone
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -87,7 +87,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B5-City.png'
+                            source: root.l_city
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -95,7 +95,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B6-Address.png'
+                            source: root.l_address
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -103,7 +103,7 @@
                             font_size: self.height * 0.5
                         Image:
                             size_hint_x: .7
-                            source: 'assets/Labels/B7-Description.png'
+                            source: root.l_describe
                         TextInput:
                             write_tab: False
                             size_hint_x: 1.7
@@ -118,8 +118,8 @@
                             size_hint_y: 3
                             text: 'Register Customer'
                             font_size: self.width / 12
-                            background_normal: 'assets/PNG/Button_1/b2.png'
-                            background_down: 'assets/PNG/Button_1/b4.png'
+                            background_normal: root.b_n
+                            background_down: root.b_d
                             on_release: root.register_customer()
                             pos_hint: {"x": 1}
                     
@@ -130,8 +130,8 @@
                         anchor_y: "bottom"
                         Button:
                             font_size: self.width / 12
-                            background_normal: 'assets/PNG/Button_1/b2.png'
-                            background_down: 'assets/PNG/Button_1/b4.png'
+                            background_normal: root.b_n
+                            background_down: root.b_d
                             on_release: root.manager.current = 'first_menu'
                             text: "Back to Main Menu"
                             size_hint_x: .6
@@ -139,14 +139,9 @@
                             pos_hint: {'top': 0.47}
         #---------------------------------------------- # Customer List # ----------------------------------------
         BoxLayout:
-            #canvas.before:
-                #Rectangle:
-                    #size: (self.width * .9, self.height * 0.65) 
-                    #pos: (self.x + self.width * 0.03, self.y + self.height * 0.37)  
-                    #source: 'assets/Customer-List2-open.png'  # Frame image
             canvas.before:
                 Rectangle:
-                    source: 'assets/pngwing.com (2).png'
+                    source: root.pngwing_image
                     size: (self.width * 1, self.height * 1.1) 
                     pos: (self.x - self.width * 0.02, self.y - self.height * 0.05) 
 
@@ -194,7 +189,7 @@
                 Rectangle:
                     size: (self.width * 1.038, self.height * 0.75)
                     pos: (self.x - self.width * 0.06, self.y + self.height * 0.258)  
-                    source: 'assets/F1.png'  # Frame image
+                    source: root.frame_image   # Frame image
 
             BoxLayout:     
                 orientation: 'vertical'
@@ -202,17 +197,17 @@
                 spacing: 1
 
                 Image:
-                    source: 'assets/Labels/Label-sensor.png'
+                    source: root.label_sensor
                     pos_hint: {"x": -0.25}
 
                 Image:
                     size_hint_y: 3.5
-                    source: 'assets/Labels/Label-sensor-lisens.png'
+                    source: root.label_sensor_list
                     pos_hint: {"x": -0.28}
 
                 Image:
                     size_hint_y: 0.7
-                    source: 'assets/Labels/Sensor-Code.png'
+                    source: root.label_sensor_code
                     pos_hint: {"x": -0.38}
 
                 TextInput:
@@ -224,7 +219,7 @@
 
                 Image:
                     size_hint_y: 0.7
-                    source: 'assets/Labels/B7-Description.png'
+                    source: root.label_description
                     pos_hint: {"x": -0.38}
 
                 TextInput:
@@ -236,7 +231,7 @@
 
                 Image:
                     size_hint_y: 0.7
-                    source: 'assets/Labels/Sensor-type.png'
+                    source: root.label_sensor_type
                     pos_hint: {"x": -0.38}
 
                 BoxLayout: 
@@ -248,7 +243,7 @@
                     BoxLayout:
                         orientation: 'vertical'
                         Image:
-                            source: 'assets/sensor1.png'
+                            source: root.sensor1_image
                         CheckBox:
                             on_active: root.sensors_type(self,  self.active, "voltmeter")
                             id: voltage_sensor
@@ -257,7 +252,7 @@
                     BoxLayout:
                         orientation: 'vertical'
                         Image:
-                            source: 'assets/sensor2.png'
+                            source: root.sensor2_image
                         CheckBox:
                             on_active: root.sensors_type(self,  self.active, "flowmeter")
                             id: flowmeter_sensor
@@ -266,7 +261,7 @@
                     BoxLayout:
                         orientation: 'vertical'
                         Image:
-                            source: 'assets/sensor3.png'
+                            source: root.sensor3_image
                         CheckBox:
                             on_active: root.sensors_type(self,  self.active, "temperature")
                             id: temperature_sensor
@@ -275,7 +270,7 @@
                     BoxLayout:
                         orientation: 'vertical'
                         Image:
-                            source: 'assets/sensor4.png'
+                            source: root.sensor4_image
                         CheckBox:
                             on_active: root.sensors_type(self,  self.active, "ampermeter")
                             id: ampermeter_sensor
@@ -288,8 +283,6 @@
                         size_hint_x: 0.2
                         text: "Save Sensor"
                         font_size: self.width / 14
-                        background_normal: 'assets/PNG/Button_1/b2.png'
-                        background_down: 'assets/PNG/Button_1/b4.png'
+                        background_normal: root.button_bg_normal
+                        background_down: root.button_bg_down
                         on_release: root.save_sensor()
-
-
