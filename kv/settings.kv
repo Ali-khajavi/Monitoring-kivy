@@ -1,110 +1,316 @@
 <SettingsScreen>:
-    name: 'settings'
-    BoxLayout:
-        orientation: 'vertical'
-        padding: 20
-        spacing: 20
-        BoxLayout:  # Top section with customer list and charts
-            orientation: 'horizontal'
-            
-            # Customer List Section
+    name: "settings"
+    GridLayout:
+        cols: 2
+        rows: 1
+        BoxLayout:
+            size_hint_x: .6
+            orientation: "vertical"
+            padding: dp(20)
+            spacing: dp(10)
+
+            # Title Section
             BoxLayout:
-                orientation: 'vertical'
-                size_hint_x: 0.2
-                padding: 10
-                spacing: 10
-                canvas.before:
-                    Color:
-                        rgba: 0.15, 0.15, 0.15, 0.9  # Gray background
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10]
+                size_hint_y: None
+                height: dp(60)
+                spacing: dp(10)
 
+                Button:
+                    text: "Back To Main Menu"
+                    on_release: app.root.current = 'first_menu'
+                    size_hint: None, None  # Disable size_hint for width and height control
+                    width: max(dp(150), root.width * 0.2)  # 20% of window width or at least 150dp
+                    height: max(dp(50), root.height * 0.05)  # 5% of window height or at least 50dp
+
+
+                # Settings label
                 Label:
-                    text: "Customer List"
-                    font_size: '18sp'
+                    size_hint_x: .5
+                    text: "Settings"
                     bold: True
+                    halign: "center"
+                    valign: "middle"
+                    font_size: min(root.width * 0.05, 50)
+                Label:
+                    size_hint_x:.17
+                    text:""
 
-                ScrollView:
-                    do_scroll_x: False
-                    do_scroll_y: True
+            # Scrollable Content
+            ScrollView:
+                do_scroll_x: False
 
-                    GridLayout:
-                        id: customer_list
-                        cols: 1
+                GridLayout:
+                    cols: 1
+                    size_hint_y: None
+                    height: self.minimum_height
+                    spacing: dp(20)
+                    padding: dp(10)
+
+                    # Change Server Settings Section
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: dp(10)
+                        padding: dp(10)
                         size_hint_y: None
                         height: self.minimum_height
-                        row_default_height: '40dp'
-                        spacing: 10
+                        canvas.before:
+                            Color:
+                                rgba: 0.95, 0.95, 0.95, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [10,]
 
-                        # Add customer names here
+                        Label:
+                            color: (0,0,0)
+                            text: "Change Server Settings"
+                            font_size: "18sp"
+                            bold: True
+
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+
+                            Label:
+                                color: (0,0,0)
+                                text: "Address Server:"
+                                size_hint_x: None
+                                width: dp(150)
+                            TextInput:
+                                id: address_server
+
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+
+                            Label:
+                                color: (0,0,0)
+                                text: "InfluxDB Token:"
+                                size_hint_x: None
+                                width: dp(150)
+                            TextInput:
+                                id: influxdb_token
+
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+
+                            Label:
+                                color: (0,0,0)
+                                text: "Organization:"
+                                size_hint_x: None
+                                width: dp(150)
+                            TextInput:
+                                id: organization
+
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+
+                            Label:
+                                color: (0,0,0)
+                                text: "Bucket Name:"
+                                size_hint_x: None
+                                width: dp(150)
+                            TextInput:
+                                id: bucket_name
+                        Label:
+                            text: ""
+                            size_hint_x: .3
+
                         Button:
-                            text: "Ali Khajavi"
-                            background_color: 0.2, 0.6, 0.8, 1
-                        Button:
-                            text: "Vida Khajavi"
-                            background_color: 0.2, 0.6, 0.8, 1
+                            size_hint_x: .4
+                            text: "Save"
+                            size_hint_y: None
+                            height: dp(50)
+                            on_release: app.save_server_settings()
 
-            # Chart and Controls Section
-            GridLayout:
-                cols: 2
-                spacing: 20
-                padding: 10
+                        Label:
+                            text: ""
+                            size_hint_x: .3
 
-                # Example chart + dropdown cell
-                BoxLayout:
-                    orientation: 'vertical'
-                    padding: 10
-                    spacing: 10
-                    canvas.before:
-                        Color:
-                            rgba: 1, 1, 1, 1
-                        RoundedRectangle:
-                            pos: self.pos
-                            size: self.size
-                            radius: [10]
-
-                    Label:
-                        text: "2024 Sensor Data of 30 Minutes"
-                        font_size: '16sp'
-                        size_hint_y: None
-                        height: '30dp'
-
-                    # Placeholders for the plot chart (use matplotlib later)
-                    Image:
-                        source: 'chart_placeholder.png'  # Replace with actual chart or Matplotlib canvas
-
-                    # Dropdowns and buttons
+                    # Reset Software Section
                     BoxLayout:
-                        orientation: 'horizontal'
-                        spacing: 10
+                        orientation: "vertical"
+                        spacing: dp(10)
+                        padding: dp(10)
+                        size_hint_y: None
+                        height: dp(150)
+                        canvas.before:
+                            Color:
+                                rgba: 0.95, 0.95, 0.95, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [10,]
 
-                        Spinner:
-                            text: 'Select Sensor'
-                            values: ['Sensor 1', 'Sensor 2']
-                            size_hint_x: 0.5
-                            font_size: '14sp'
+                        Label:
+                            color: (0,0,0)
+                            text: "Reset Software to Default"
+                            font_size: "18sp"
+                            bold: True
 
-                        Spinner:
-                            text: 'Select Time'
-                            values: ['30m', '3h', '12h', '1d']
-                            size_hint_x: 0.5
-                            font_size: '14sp'
+                        BoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(40)
+                            spacing: dp(10)
 
-        # Bottom Button Section
+                            CheckBox:
+                                color: (0, 0, 0)
+                                id: reset_checkbox
+                                size_hint_x: None
+                                width: dp(30)
+                                on_active: reset_button.disabled = not self.active
+
+                            Label:
+                                text: "I accept all saved data will be deleted from the software."
+                                color: (0, 0, 0)
+                                halign: "left"
+                                valign: "middle"
+                                text_size: self.size
+
+                        Button:
+                            id: reset_button
+                            text: "Reset"
+                            size_hint_y: None
+                            height: dp(50)
+                            disabled: True
+                            on_release: app.reset_software()
+
+                    # Register for Updates Section
+                    BoxLayout:
+                        orientation: "vertical"
+                        spacing: dp(10)
+                        padding: dp(10)
+                        size_hint_y: None  # Allows the height to be manually controlled
+                        height: self.minimum_height  # Ensures the height adapts to the content
+                        canvas.before:
+                            Color:
+                                rgba: 0.95, 0.95, 0.95, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [10,]
+
+                        Label:
+                            color: (0, 0, 0)
+                            text: "Register for Updates"
+                            font_size: "18sp"
+                            bold: True
+                            size_hint_y: None
+                            height: dp(40)
+
+                        # Name Input
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+                            Label:
+                                size_hint_x: .5
+                                color: (0, 0, 0)
+                                text: "*Name, *Last Name:"
+                            TextInput:
+                                size_hint_x: .4
+                                id: name
+                            Label:
+                                size_hint_x: .1
+                                text:""
+
+                        # Last Name Input
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+                            Label:
+                                size_hint_x: .5
+                                color: (0, 0, 0)
+                                text: "*Email:"
+                            TextInput:
+                                size_hint_x: .4
+                                id: info
+                            Label:
+                                size_hint_x: .1
+                                text:""
+                            
+                        # Company Name Input
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+                            Label:
+                                size_hint_x: .5
+                                color: (0, 0, 0)
+                                text: "Company Name (Optional)"
+                            TextInput:
+                                size_hint_x: .4
+                                id: company_name
+                            Label:
+                                size_hint_x: .1
+                                text:""
+
+                        # City Input
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            height: dp(40)
+                            Label:
+                                size_hint_x: .5
+                                color: (0, 0, 0)
+                                text: "Address(Optional)"
+                            TextInput:
+                                size_hint_x: .4
+                                id: address
+                            Label:
+                                size_hint_x: .1
+                                text:""
+
+                        # Request Section
+                        BoxLayout:
+                            spacing: dp(10)
+                            size_hint_y: None
+                            Label:
+                                size_hint_x: .5
+                                color: (0, 0, 0)
+                                text: "Request:"
+                            TextInput:
+                                size_hint_x: .4
+                                id: request
+                                multiline: True
+                                size_hint_y: None
+                                height: dp(100)
+                            Label:
+                                size_hint_x: .1
+                                text:""
+
+                        # Button section
+                        BoxLayout:
+                            spacing: dp(100)
+                            size_hint_y: None  
+                            height: dp(40)
+                            
+                        Label:
+                            text: ""
+                            size_hint_x: .3
+                        
+                        Button:
+                            radius: [10,]
+                            size_hint_x: .4
+                            text: "Submit Request"
+                            size_hint_y: None
+                            height: dp(50)
+                            on_release: app.submit_request()
+                        
+                        Label:
+                            text: ""
+                            size_hint_x: .3
         BoxLayout:
-            size_hint_y: 0.1
-            padding: 10
-
-            Button:
-                text: "Back to Main Menu"
-                size_hint_x: 0.2
-                font_size: '18sp'
-                background_normal: 'assets/PNG/Button_1/b2.png'
-                background_down: 'assets/PNG/Button_1/b4.png'
-                on_release: app.root.current = 'first_menu'
-
-
+            size_hint_x: .4
+            Label:
+                text:""
 
 
