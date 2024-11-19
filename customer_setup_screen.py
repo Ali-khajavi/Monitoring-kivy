@@ -11,6 +11,20 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.uix.image import Image
+from kivy.properties import StringProperty
+
+import os, sys
+
+def resource_path(relative_path):
+        """Get absolute path to resource, works for dev and PyInstaller"""
+        try:
+            # PyInstaller temporary folder
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # Development environment
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+
 
 class CustomerSetupScreen(Screen):
     #Registration Form Objects
@@ -31,15 +45,40 @@ class CustomerSetupScreen(Screen):
     sensor_description_input = ObjectProperty(None)
     sensor_type=''
 
+    bg_image = StringProperty(resource_path('assets/BG1.jpg'))
+    frame_image = StringProperty(resource_path('assets/F1.png'))
+    label_image = StringProperty(resource_path('assets/Labels/Form-Label.png'))
+    l_name = StringProperty(resource_path('assets/Labels/B1-Name.png'))
+    l_lastname = StringProperty(resource_path('assets/Labels/B3-Email.png'))
+    l_email = StringProperty(resource_path('assets/Labels/B3-Email.png'))
+    l_phone = StringProperty(resource_path('assets/Labels/B4-Phone.png'))
+    l_city = StringProperty(resource_path('assets/Labels/B5-City.png'))
+    l_address = StringProperty(resource_path('assets/Labels/B6-Address.png'))
+    l_describe = StringProperty(resource_path('assets/Labels/B7-Description.png'))
+    b_n = StringProperty(resource_path('assets/PNG/Button_1/b2.png'))
+    b_d = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
+    label_sensor = StringProperty(resource_path('assets/Labels/Label-sensor.png'))
+    label_sensor_list = StringProperty(resource_path('assets/Labels/Label-sensor-lisens.png'))
+    label_sensor_code = StringProperty(resource_path('assets/Labels/Sensor-Code.png'))
+    label_description = StringProperty(resource_path('assets/Labels/B7-Description.png'))
+    label_sensor_type = StringProperty(resource_path('assets/Labels/Sensor-type.png'))
+    sensor1_image = StringProperty(resource_path('assets/sensor1.png'))
+    sensor2_image = StringProperty(resource_path('assets/sensor2.png'))
+    sensor3_image = StringProperty(resource_path('assets/sensor3.png'))
+    sensor4_image = StringProperty(resource_path('assets/sensor4.png'))
+    button_bg_normal = StringProperty(resource_path('assets/PNG/Button_1/b2.png'))
+    button_bg_down = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
+    pngwing_image = StringProperty(resource_path('assets/pngwing.com (2).png'))
+
 #----------------------------------------Screen Entery Functions --------------------------#
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.customers = []  # Will hold customer data
-        self.excel_handler = ExcelHandler("customers_data.xlsx")  # Initialize ExcelHandler
+        from main import MyApp
+        self.excel_handler = ExcelHandler(resource_path("customers_data.xlsx"))  # Initialize ExcelHandler
         self.load_customers()
 
     def on_enter(self):
-        """Load customer data from Excel when the screen is opened."""
         self.load_customers()
         self.create_back_delete_btn()
 
@@ -47,7 +86,6 @@ class CustomerSetupScreen(Screen):
 
 #------------------------------------------Customer Operations-----------------------------#
     def register_customer(self):
-        """Register a new customer."""
         first_name = self.first_name_input.text
         last_name = self.last_name_input.text
         email = self.email_input.text
@@ -85,7 +123,6 @@ class CustomerSetupScreen(Screen):
             self.load_customers()
 
     def update_customer_list(self):
-        """Refresh the customer list display."""
         self.customer_list.clear_widgets()
         self.selected_customer = None
         # Sort customers by last name
@@ -138,12 +175,10 @@ class CustomerSetupScreen(Screen):
         self.update_customer_sensors()
 
     def on_customer_label_touch(self, instance, touch, customer):
-        """Handle touch event on a customer label."""
         if instance.collide_point(*touch.pos):
             self.show_customer_info(customer)
 
     def show_customer_info(self, customer):
-        """Show customer information in a popup."""
         info = (
             f"Name: {customer['first_name']} {customer['last_name']}\n"
             f"Email: {customer['email']}\n"
@@ -177,9 +212,6 @@ class CustomerSetupScreen(Screen):
         self.sensor_chart.clear_widgets()
         if self.selected_customer is not None:
             sensors_type, sensors_code, sensors_description  = App.get_running_app().excel_handler.load_sensors(self.selected_customer)
-            #sensors_type = sensors_type.split(';')
-            #sensors_code = sensors_code.split(';')
-            #sensors_description = sensors_description.spli(';')
             print(f"print from update customer sensor : {sensors_description}")
         else:
             return
@@ -221,10 +253,10 @@ class CustomerSetupScreen(Screen):
         Window.bind(on_resize=self.on_window_resize)
 
     def sensor_image_address(self, sensor):
-        add = {'voltmeter': 'assets/sensor1.png',
-               'flowmeter': 'assets/sensor2.png',
-               'temperature': 'assets/sensor3.png',
-               'ampermeter': 'assets/sensor4.png',
+        add = {'voltmeter': resource_path('assets/sensor1.png'),
+               'flowmeter': resource_path('assets/sensor2.png'),
+               'temperature': resource_path('assets/sensor3.png'),
+               'ampermeter': resource_path('assets/sensor4.png'),
                }
         return add[sensor]
     
@@ -299,11 +331,9 @@ class CustomerSetupScreen(Screen):
 
 #------------------------------------------Excel Operations---------------------------------#
     def save_customer_to_excel(self, new_customer):
-        """Save customer data to Excel."""
         App.get_running_app().excel_handler.save_customers(new_customer)
 
     def load_customers(self):
-        """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
         #print("Loaded customers:", self.customers)
         self.update_customer_list()
@@ -315,7 +345,6 @@ class CustomerSetupScreen(Screen):
         self.update_customer_sensors()  # Re-run the function to adjust button size
 
     def clear_form(self):
-        """Clear the registration form."""
         self.first_name_input.text = ""
         self.last_name_input.text = ""
         self.email_input.text = ""
@@ -327,15 +356,14 @@ class CustomerSetupScreen(Screen):
         self.sensor_description_input.text = ''
 
     def update_font_size(self, instance, value):
-        """Update the font size dynamically based on the width of the button"""
         instance.font_size = instance.width / 12
 
     def create_back_delete_btn(self):
         self.floatlayout.clear_widgets()
         self.back_button = Button(
             text="Back to Main Menu",
-            background_normal='assets/PNG/Button_1/b2.png',
-            background_down='assets/PNG/Button_1/b4.png',
+            background_normal= resource_path('assets/PNG/Button_1/b2.png'),
+            background_down= resource_path('assets/PNG/Button_1/b4.png'),
             size_hint=(0.6, 0.25),
             pos_hint={'top': 0.47},  
             on_release= self.back_to_main_menu
@@ -345,8 +373,8 @@ class CustomerSetupScreen(Screen):
         if self.selected_customer is not None:
             self.delete_custome_btn = Button(
                 text = "Delete Customer",
-                background_normal='assets/PNG/Button_1/b1.png',
-                background_down='assets/PNG/Button_1/b4.png',
+                background_normal= resource_path('assets/PNG/Button_1/b1.png'),
+                background_down= resource_path('assets/PNG/Button_1/b4.png'),
                 size_hint=(0.6, 0.25),
                 pos_hint = {'center_x': 0.8,'center_y': 0.85},
                 on_release= self.delete_a_customer
@@ -355,5 +383,4 @@ class CustomerSetupScreen(Screen):
             self.floatlayout.add_widget(self.delete_custome_btn)
 
     def back_to_main_menu(self, instance):
-        """Function to handle screen transition"""
         self.manager.current = 'first_menu'
