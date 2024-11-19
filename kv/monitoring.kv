@@ -16,7 +16,7 @@
     FloatLayout:
         canvas.before:
             Rectangle:
-                source: 'assets/BackPage.jpg.jpg'  # Background image
+                source: root.background_image  # Use the property for the background image
                 size: self.size
                 pos: self.pos
 
@@ -284,8 +284,8 @@
                 size_hint: 0.25, 0.1
 
                 Button:
-                    background_normal: 'assets/PNG/Button_1/b2.png'
-                    background_down: 'assets/PNG/Button_1/b4.png'
+                    background_normal: root.background_normal  # Use the dynamic property
+                    background_down: root.background_down  # Use the dynamic property
                     text: "Back to Main Menu"
                     font_size: .09 * self.width
                     size_hint_x: .77
