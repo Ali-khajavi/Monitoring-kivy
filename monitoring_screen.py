@@ -13,6 +13,19 @@ from secrets_server import INFLUXDB_TOKEN, ORGANIZATION, BUCKET, SERVER_ADDRESS
 import influxdb_client
 import pandas as pd
 from kivy.core.window import Window
+from kivy.properties import StringProperty
+
+import os, sys
+
+def resource_path(relative_path):
+        """Get absolute path to resource, works for dev and PyInstaller"""
+        try:
+            # PyInstaller temporary folder
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # Development environment
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
 
 token = INFLUXDB_TOKEN
@@ -28,13 +41,17 @@ class MonitoringScreen(Screen):
     sensor_channel_2 = ObjectProperty(None)
     sensor_channel_3 = ObjectProperty(None)
     sensor_channel_4 = ObjectProperty(None)
+    background_image = StringProperty(resource_path('assets/BG1.jpg'))
+    background_normal = StringProperty(resource_path('assets/PNG/Button_1/b2.png'))
+    background_down = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
 
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         
         self.customers = []
-        self.excel_handler = ExcelHandler('customers_data.xlsx')  # Initialize Excel handler
+
+        self.excel_handler = ExcelHandler(resource_path('customers_data.xlsx'))  # Initialize Excel handler
 
     def on_enter(self):
             self.load_customers()
@@ -86,9 +103,8 @@ class MonitoringScreen(Screen):
                 layout.add_widget(customer_label)
                 layout.add_widget(toggle_button)
                 self.customer_list.add_widget(layout)
-
+                
     def load_customers(self):
-        """Load customer data from Excel and update the customer list."""
         self.customers = App.get_running_app().excel_handler.load_customers()
 
         #print("Loaded customers:", self.customers)
@@ -134,7 +150,6 @@ class MonitoringScreen(Screen):
         self.update_font_size()
 
     def update_font_size(self, *args):
-        """Dynamically update the font size of each spinner based on window size."""
         font_scale = min(Window.width / 1200, Window.height / 700)  # Adjust the base scaling factors as needed
         new_font_size = 20 * font_scale  # Adjust '20' as needed for base font size
         # Update font size for each spinner
@@ -196,7 +211,6 @@ class MonitoringScreen(Screen):
             return None
 
 
-
 #---------------------------------------- Quary Functions and Ploting data -----------------------------------------------#
     def check_quary(self, channel):
         # This Function Will Check If Both of The Range Spinner(Timer) and Sensor Spinner(Sensor) Act By Press Update Button!
@@ -240,12 +254,12 @@ class MonitoringScreen(Screen):
             # Query data from InfluxDB using the selected sensor and time
             data = self.query_data(sensor, time)
             if data.empty:
-                print("No data found for the selected sensor and time.")
+                self.show_error_popup("No data found for the selected sensor!")
                 return
 
         times = data["time"]
         values = data["value"]
-        # print(data)
+        #print(data)
 
         sensor_channel = self.ids[channel_id]
         sensor_channel.clear_widgets()
@@ -275,6 +289,31 @@ class MonitoringScreen(Screen):
         # Add the new plot to the specified channel
         sensor_channel.add_widget(plot_canvas)
 
+    def query_data(self, sensor, time):
+        query_api = write_client.query_api()
+        print(f"Querying data for sensor: {sensor}, time range: {time}")
+        query = f"""
+        from(bucket: "{bucket}")
+        |> range(start: {time})
+        |> filter(fn: (r) => r.DEVICE == "{sensor}")
+        """
+
+        try:
+            tables = query_api.query(query, org=org)
+
+            # Convert results to a DataFrame
+            return pd.DataFrame(
+                [(record.get_time(), record.get_value()) for table in tables for record in table.records],
+                columns=["time", "value"]
+            )
+        except Exception as e:
+            # Log the error (optional)
+            print(f"Error occurred during query: {e}")
+
+            # Show the error popup
+            self.show_error_popup(f"Query failed: {e}")
+            return pd.DataFrame(columns=["time", "value"])  # Return an empty DataFrame
+
     def popup_plot(self, times, values, sensor, time):
         # Layout for the popup
         popup_layout = BoxLayout(orientation="vertical", padding=10, spacing=10)
@@ -302,31 +341,6 @@ class MonitoringScreen(Screen):
         )
         close_button.bind(on_release=popup.dismiss)
         popup.open()
-    
-    def query_data(self, sensor, time):
-        query_api = write_client.query_api()
-        print(f"Querying data for sensor: {sensor}, time range: {time}")
-        query = f"""
-        from(bucket: "{bucket}")
-        |> range(start: {time})
-        |> filter(fn: (r) => r.DEVICE == "{sensor}")
-        """
-
-        try:
-            tables = query_api.query(query, org=org)
-
-            # Convert results to a DataFrame
-            return pd.DataFrame(
-                [(record.get_time(), record.get_value()) for table in tables for record in table.records],
-                columns=["time", "value"]
-            )
-        except Exception as e:
-            # Log the error (optional)
-            print(f"Error occurred during query: {e}")
-
-            # Show the error popup
-            self.show_error_popup(f"Query failed: {e}")
-            return pd.DataFrame(columns=["time", "value"])  # Return an empty DataFrame
 
 
 
