@@ -21,7 +21,6 @@ class ExcelHandler:
 
 #----------------------------------Customers Operations---------------------#
     def load_customers(self):
-        """Load customer data from Excel."""
         wb = openpyxl.load_workbook(self.file_name)
         ws = wb['Customers']
         customers = []
@@ -213,7 +212,8 @@ class ExcelHandler:
         wb.close()
 
     def return_customers_row(self, customer):
-        wb = openpyxl.load_workbook("customers_data.xlsx")
+        from main import MyApp
+        wb = openpyxl.load_workbook(MyApp.resource_path("customers_data.xlsx"))
         ws = wb["Customers"]
 
         last_name, first_name = customer.split(";")
