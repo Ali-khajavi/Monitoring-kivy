@@ -5,63 +5,63 @@
         canvas.before:
             # Load and scale the background image to fit the screen
             Rectangle:
-                source: 'assets/BackPage.jpg'  # Update this to your image path
+                source: root.background_image
                 pos: self.pos
                 size: self.size
 
         # Top-right positioned menu container
         BoxLayout:
             orientation: 'vertical'
-            size_hint: (0.3, 0.5)  # Adjusted size of the menu box
-            pos_hint: {'x': .05, 'top': 0.95}  # Position at the top-left corner
+            size_hint: (0.3, 0.5)
+            pos_hint: {'x': .05, 'top': 0.95}
             padding: 10
             spacing: 10
             canvas.before:
                 Color:
-                    rgba: 1, 1, 1, 0.9  # Slight transparency for a professional look
+                    rgba: 1, 1, 1, 0.9
                 RoundedRectangle:
                     pos: self.pos
                     size: self.size
-                    radius: [15]  # Rounded corners for a modern look
+                    radius: [15]
 
             # Menu Buttons with custom backgrounds
             Button:
                 text: 'Monitoring'
-                font_size: self.width/12
-                background_normal: 'assets/PNG/Button_1/b3.png'
-                background_down: 'assets/PNG/Button_1/b4.png'
-                on_release: app.root.current = 'monitoring'  # Navigate to Monitoring
+                font_size: self.width / 12
+                background_normal: root.button_b3
+                background_down: root.button_b4
+                on_release: app.root.current = 'monitoring'
 
             Button:
                 text: 'Add/Edit a Customer'
-                font_size: self.width/12
-                background_normal: 'assets/PNG/Button_1/b1.png'
-                background_down: 'assets/PNG/Button_1/b4.png'
-                on_release: app.root.current = 'customer_setup'  # Navigate to Customer Setup
+                font_size: self.width / 12
+                background_normal: root.button_b1
+                background_down: root.button_b4
+                on_release: app.root.current = 'customer_setup'
 
             Button:
                 text: 'Settings'
-                font_size: self.width/12
-                background_normal: 'assets/PNG/Button_1/b2.png'
-                background_down: 'assets/PNG/Button_1/b4.png'
-                on_release: app.root.current = 'settings'  # Navigate to Settings
+                font_size: self.width / 12
+                background_normal: root.button_b2
+                background_down: root.button_b4
+                on_release: app.root.current = 'settings'
 
             Button:
                 text: 'Exit'
-                font_size: self.width/12
-                background_normal: 'assets/PNG/Button_1/b2.png'
-                background_down: 'assets/PNG/Button_1/b4.png'
-                on_release: app.root.current = 'settings'  # Navigate to Settings
-            
+                font_size: self.width / 12
+                background_normal: root.button_b2
+                background_down: root.button_b4
+                on_release: app.root.current = 'settings'
+
             Label:
-                text:''
+                text: ''
                 size_hint_y: .1
 
         # Link to Registration page
         Label:
             text: '[ref=register]Register a New Account[/ref]'
             markup: True
-            font_size: self.width/85
-            color: 0, 0, 1, 1  # Blue color to resemble a hyperlink
+            font_size: self.width / 85
+            color: 0, 0, 1, 1
             pos_hint: {'center_x': 0.12, 'center_y': 0.473}
-            on_ref_press: app.root.current = 'register_screen'  # Navigate to registration screen
+            on_ref_press: app.root.current = 'register_screen'
