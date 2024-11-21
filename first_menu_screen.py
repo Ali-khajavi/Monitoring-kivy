@@ -13,7 +13,7 @@ def resource_path(relative_path):
         return os.path.join(base_path, relative_path)
 
 class FirstMenuScreen(Screen):
-    background_image = StringProperty(resource_path('assets/Backgroundimage.png'))
+    background_image = StringProperty(resource_path('assets/back0.jpg'))
     button_b3 = StringProperty(resource_path('assets/PNG/Button_1/b3.png'))
     button_b4 = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
     button_b1 = StringProperty(resource_path('assets/PNG/Button_1/b1.png'))

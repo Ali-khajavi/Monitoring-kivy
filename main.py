@@ -58,13 +58,19 @@ class MyScreenManager(ScreenManager):
 
 
         # Add a close button
-        close_button = Button(text="Close", size_hint=(0.5, None), height=40)
+        close_button = Button(text="Close", halign='center', size_hint=(0.5, None), height=40)
         layout.add_widget(label)
-        layout.add_widget(label2)
+        if message2:
+            layout.add_widget(label2)
+            popup = Popup(title=title, content=layout, size_hint=(0.8, 0.5))
+        else:
+            popup = Popup(title=title, content=layout, size_hint=(0.5, 0.3))
+
+              
         layout.add_widget(close_button)
         
         # Create the popup
-        popup = Popup(title=title, content=layout, size_hint=(0.8, 0.5))
+        
         close_button.bind(on_release=popup.dismiss)
         popup.open()
  

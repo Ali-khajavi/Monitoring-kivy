@@ -1,319 +1,341 @@
 <SettingsScreen>:
     name: "settings"
-    GridLayout:
-        cols: 2
-        rows: 1
-        # Right Side Screen
-        BoxLayout:
-            size_hint_x: .6
-            orientation: "vertical"
-            padding: dp(20)
-            spacing: dp(10)
 
-            # Title Section
+    FloatLayout:
+        canvas.before:
+            # Load and scale the background image to fit the screen
+            Rectangle:
+                source: root.background_image
+                pos: self.pos
+                size: self.size
+        GridLayout:
+            cols: 2
+            rows: 1
+            # Right Side Screen
             BoxLayout:
-                size_hint_y: None
-                height: dp(60)
+                size_hint_x: .6
+                orientation: "vertical"
+                padding: dp(10)
                 spacing: dp(10)
 
-                Button:
-                    text: "Back To Main Menu"
-                    on_release: app.root.current = 'first_menu'
-                    size_hint: None, None  # Disable size_hint for width and height control
-                    width: max(dp(150), root.width * 0.2)  # 20% of window width or at least 150dp
-                    height: max(dp(50), root.height * 0.05)  # 5% of window height or at least 50dp
-
-                # Settings label
-                Label:
-                    size_hint_x: .5
-                    text: "Settings"
-                    bold: True
-                    halign: "center"
-                    valign: "middle"
-                    font_size: min(root.width * 0.05, 50)
-                Label:
-                    size_hint_x:.17
-                    text:""
-
-            # Scrollable Content
-            ScrollView:
-                do_scroll_x: False
-
-                GridLayout:
-                    cols: 1
+                # Title Section
+                BoxLayout:
+                    padding: dp(20)
                     size_hint_y: None
-                    height: self.minimum_height
-                    spacing: dp(20)
-                    padding: dp(10)
+                    height: dp(80)
+                    spacing: dp(10)
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 0, 0.37
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [15,]
+                    Button:
+                        padding: ('10dp', '0dp', '0dp', '0dp')
+                        text: "Back To Main Menu"
+                        on_release: app.root.current = 'first_menu'
+                        size_hint: None, None  # Disable size_hint for width and height control
+                        width: max(dp(150), root.width * 0.2)  # 20% of window width or at least 150dp
+                        height: max(dp(50), root.height * 0.05)  # 5% of window height or at least 50dp
 
-                    # Change Server Settings Section
-                    BoxLayout:
-                        orientation: "vertical"
-                        spacing: dp(10)
-                        padding: dp(10)
-                        size_hint_y: None  # Allows the height to be manually controlled
+                    # Settings label
+                    Label:
+                        size_hint_x: .5
+                        text: "Settings"
+                        bold: True
+                        halign: "center"
+                        valign: "middle"
+                        font_size: min(root.width * 0.05, 50)
+                    Label:
+                        size_hint_x:.17
+                        text:""
+
+                # Scrollable Content
+                ScrollView:
+                    do_scroll_x: False
+
+                    GridLayout:
+                        cols: 1
+                        size_hint_y: None
                         height: self.minimum_height
-                        canvas.before:
-                            Color:
-                                rgba: 0.95, 0.95, 0.95, 1
-                            RoundedRectangle:
-                                pos: self.pos
-                                size: self.size
-                                radius: [15,]
-                        Label:
-                            color: (0, 0, 0)
-                            text: "Apply your own account"
-                            font_size: "18sp"
-                            bold: True
-                            size_hint_y: None
-                            height: dp(40)
-
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-
-                            Label:
-                                color: (0,0,0)
-                                text: "Account IP:"
-                                size_hint_x: None
-                                width: dp(150)
-                            TextInput:
-                                id: address_server
-
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-
-                            Label:
-                                color: (0,0,0)
-                                text: "API Token:"
-                                size_hint_x: None
-                                width: dp(150)
-                            TextInput:
-                                id: influxdb_token
-
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-
-                            Label:
-                                color: (0,0,0)
-                                text: "Account Email:"
-                                size_hint_x: None
-                                width: dp(150)
-                            TextInput:
-                                id: organization
-
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-
-                            Label:
-                                color: (0,0,0)
-                                text: "Account Username:"
-                                size_hint_x: None
-                                width: dp(150)
-                            TextInput:
-                                id: bucket_name
-                        Label:
-                            text: ""
-                            size_hint_x: .3
-
-                        Button:
-                            size_hint_x: .4
-                            text: "Save"
-                            size_hint_y: None
-                            height: dp(50)
-                            on_release: root.change_server_settings(address_server.text, influxdb_token.text, organization.text, bucket_name.text)
-
-                        Label:
-                            text: ""
-                            size_hint_x: .3
-
-                    # Reset Software Section
-                    BoxLayout:
-                        orientation: "vertical"
-                        spacing: dp(10)
+                        spacing: dp(20)
                         padding: dp(10)
-                        size_hint_y: None  # Allows the height to be manually controlled
-                        height: self.minimum_height
-                        canvas.before:
-                            Color:
-                                rgba: 0.95, 0.95, 0.95, 1
-                            RoundedRectangle:
-                                pos: self.pos
-                                size: self.size
-                                radius: [10,]
 
-                        Label:
-                            color: (0, 0, 0)
-                            text: "Reset the software to Demo settings"
-                            font_size: "18sp"
-                            bold: True
-                            size_hint_y: None
-                            height: dp(40)
-
+                        # Account Informaion!
                         BoxLayout:
-                            orientation: "horizontal"
-                            size_hint_y: None
-                            height: dp(40)
+                            orientation: "vertical"
                             spacing: dp(10)
-
-                            CheckBox:
+                            padding: dp(10)
+                            size_hint_y: None  # Allows the height to be manually controlled
+                            height: self.minimum_height
+                            canvas.before:
+                                Color:
+                                    rgba: 0.95, 0.95, 0.95, 1
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [15,]
+                            Label:
                                 color: (0, 0, 0)
-                                id: reset_checkbox
-                                size_hint_x: None
-                                width: dp(30)
-                                on_active: reset_button.disabled = not self.active
-
-                            Label:
-                                text: "I accept all saved data will be deleted from the software."
-                                color: (0, 0, 0)
-                                halign: "left"
-                                valign: "middle"
-                                text_size: self.size
-
-                        Button:
-                            id: reset_button
-                            text: "Reset"
-                            size_hint_y: None
-                            height: dp(50)
-                            disabled: True
-                            on_release: root.reset_settings()
-
-                    # Register for Updates Section
-                    BoxLayout:
-                        orientation: "vertical"
-                        spacing: dp(10)
-                        padding: dp(10)
-                        size_hint_y: None  # Allows the height to be manually controlled
-                        height: self.minimum_height
-                        canvas.before:
-                            Color:
-                                rgba: 0.95, 0.95, 0.95, 1
-                            RoundedRectangle:
-                                pos: self.pos
-                                size: self.size
-                                radius: [10,]
-
-                        Label:
-                            color: (0, 0, 0)
-                            text: "Contact with us"
-                            font_size: "18sp"
-                            bold: True
-                            size_hint_y: None
-                            height: dp(40)
-
-                        # Name Input
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-                            Label:
-                                size_hint_x: .5
-                                color: (0, 0, 0)
-                                text: "*Name, *Last Name:"
-                            TextInput:
-                                size_hint_x: .4
-                                id: name
-                            Label:
-                                size_hint_x: .1
-                                text:""
-
-                        # Last Name Input
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-                            Label:
-                                size_hint_x: .5
-                                color: (0, 0, 0)
-                                text: "*Email:"
-                            TextInput:
-                                size_hint_x: .4
-                                id: info
-                            Label:
-                                size_hint_x: .1
-                                text:""
-                            
-                        # Company Name Input
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-                            Label:
-                                size_hint_x: .5
-                                color: (0, 0, 0)
-                                text: "Company Name (Optional)"
-                            TextInput:
-                                size_hint_x: .4
-                                id: company_name
-                            Label:
-                                size_hint_x: .1
-                                text:""
-
-                        # City Input
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            height: dp(40)
-                            Label:
-                                size_hint_x: .5
-                                color: (0, 0, 0)
-                                text: "Address(Optional)"
-                            TextInput:
-                                size_hint_x: .4
-                                id: address
-                            Label:
-                                size_hint_x: .1
-                                text:""
-
-                        # Request Section
-                        BoxLayout:
-                            spacing: dp(10)
-                            size_hint_y: None
-                            Label:
-                                size_hint_x: .5
-                                color: (0, 0, 0)
-                                text: "Request:"
-                            TextInput:
-                                size_hint_x: .4
-                                id: request
-                                multiline: True
+                                text: "Apply your own account"
+                                font_size: "18sp"
+                                bold: True
                                 size_hint_y: None
-                                height: dp(100)
-                            Label:
-                                size_hint_x: .1
-                                text:""
+                                height: dp(40)
 
-                        # Button section
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+
+                                Label:
+                                    color: (0,0,0)
+                                    text: "Account IP:"
+                                    size_hint_x: None
+                                    width: dp(150)
+                                TextInput:
+                                    id: address_server
+
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+
+                                Label:
+                                    color: (0,0,0)
+                                    text: "API Token:"
+                                    size_hint_x: None
+                                    width: dp(150)
+                                TextInput:
+                                    id: influxdb_token
+
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+
+                                Label:
+                                    color: (0,0,0)
+                                    text: "Account Email:"
+                                    size_hint_x: None
+                                    width: dp(150)
+                                TextInput:
+                                    id: organization
+
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+
+                                Label:
+                                    color: (0,0,0)
+                                    text: "Account Username:"
+                                    size_hint_x: None
+                                    width: dp(150)
+                                TextInput:
+                                    id: bucket_name
+                            Label:
+                                text: ""
+                                size_hint_x: .3
+
+                            Button:
+                                size_hint_x: .4
+                                text: "Save"
+                                size_hint_y: None
+                                height: dp(50)
+                                on_release: root.change_server_settings(address_server.text, influxdb_token.text, organization.text, bucket_name.text)
+
+                            Label:
+                                text: ""
+                                size_hint_x: .3
+
+                        # Reset Software to Demo
                         BoxLayout:
-                            spacing: dp(100)
-                            size_hint_y: None  
-                            height: dp(40)
+                            orientation: "vertical"
+                            spacing: dp(10)
+                            padding: dp(10)
+                            size_hint_y: None  # Allows the height to be manually controlled
+                            height: self.minimum_height
+                            canvas.before:
+                                Color:
+                                    rgba: 0.95, 0.95, 0.95, 1
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [10,]
+
+                            Label:
+                                color: (0, 0, 0)
+                                text: "Reset the software to Demo settings"
+                                font_size: "18sp"
+                                bold: True
+                                size_hint_y: None
+                                height: dp(40)
+
+                            BoxLayout:
+                                orientation: "horizontal"
+                                size_hint_y: None
+                                height: dp(40)
+                                spacing: dp(10)
+
+                                CheckBox:
+                                    color: (0, 0, 0)
+                                    id: reset_checkbox
+                                    size_hint_x: None
+                                    width: dp(30)
+                                    on_active: reset_button.disabled = not self.active
+
+                                Label:
+                                    text: "***I accept all account informations will be lost.***"
+                                    color: (0, 0, 0)
+                                    halign: "left"
+                                    valign: "middle"
+                                    text_size: self.size
+                            Label:
+                                text: ""
+                                size_hint_x: .3
+                            Button:
+                                size_hint_x: .4
+                                id: reset_button
+                                text: "Turn to Demo"
+                                size_hint_y: None
+                                height: dp(50)
+                                disabled: True
+                                on_release: root.reset_settings()
+                            Label:
+                                text: ""
+                                size_hint_x: .3
+
+                        # Contact with us
+                        BoxLayout:
+                            orientation: "vertical"
+                            spacing: dp(10)
+                            padding: dp(10)
+                            size_hint_y: None  # Allows the height to be manually controlled
+                            height: self.minimum_height
+                            canvas.before:
+                                Color:
+                                    rgba: 0.95, 0.95, 0.95, 1
+                                RoundedRectangle:
+                                    pos: self.pos
+                                    size: self.size
+                                    radius: [10,]
+
+                            Label:
+                                color: (0, 0, 0)
+                                text: "Contact with us"
+                                font_size: "18sp"
+                                bold: True
+                                size_hint_y: None
+                                height: dp(40)
+
+                            # Name Input
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+                                Label:
+                                    size_hint_x: .5
+                                    color: (0, 0, 0)
+                                    text: "*Name, *Last Name:"
+                                TextInput:
+                                    size_hint_x: .4
+                                    id: name
+                                Label:
+                                    size_hint_x: .1
+                                    text:""
+
+                            # Last Name Input
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+                                Label:
+                                    size_hint_x: .5
+                                    color: (0, 0, 0)
+                                    text: "*Email:"
+                                TextInput:
+                                    size_hint_x: .4
+                                    id: info
+                                Label:
+                                    size_hint_x: .1
+                                    text:""
+                                
+                            # Company Name Input
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+                                Label:
+                                    size_hint_x: .5
+                                    color: (0, 0, 0)
+                                    text: "Company Name (Optional)"
+                                TextInput:
+                                    size_hint_x: .4
+                                    id: company_name
+                                Label:
+                                    size_hint_x: .1
+                                    text:""
+
+                            # City Input
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                height: dp(40)
+                                Label:
+                                    size_hint_x: .5
+                                    color: (0, 0, 0)
+                                    text: "Address(Optional)"
+                                TextInput:
+                                    size_hint_x: .4
+                                    id: address
+                                Label:
+                                    size_hint_x: .1
+                                    text:""
+
+                            # Request Section
+                            BoxLayout:
+                                spacing: dp(10)
+                                size_hint_y: None
+                                Label:
+                                    size_hint_x: .5
+                                    color: (0, 0, 0)
+                                    text: "Request:"
+                                TextInput:
+                                    size_hint_x: .4
+                                    id: request
+                                    multiline: True
+                                    size_hint_y: None
+                                    height: dp(100)
+                                Label:
+                                    size_hint_x: .1
+                                    text:""
+
+                            # Button section
+                            BoxLayout:
+                                spacing: dp(100)
+                                size_hint_y: None  
+                                height: dp(40)
+                                
+                            Label:
+                                text: ""
+                                size_hint_x: .3
                             
-                        Label:
-                            text: ""
-                            size_hint_x: .3
-                        
-                        Button:
-                            radius: [10,]
-                            size_hint_x: .4
-                            text: "Submit Request"
-                            size_hint_y: None
-                            height: dp(50)
-                            on_release: app.submit_request()
-                        
-                        Label:
-                            text: ""
-                            size_hint_x: .3
-        
-        # Left Side Screen
-        BoxLayout:
-            size_hint_x: .4
-            Label:
-                text:""
+                            Button:
+                                radius: [10,]
+                                size_hint_x: .4
+                                text: "Submit Request"
+                                size_hint_y: None
+                                height: dp(50)
+                                on_release: app.submit_request()
+                            
+                            Label:
+                                text: ""
+                                size_hint_x: .3
+            
+            # Left Side Screen
+            BoxLayout:
+                size_hint_x: .4
+                Label:
+                    text:""

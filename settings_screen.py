@@ -4,8 +4,22 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
 import secrets_server
+from kivy.properties import StringProperty
+import os, sys
+
+def resource_path(relative_path):
+        """Get absolute path to resource, works for dev and PyInstaller"""
+        try:
+            # PyInstaller temporary folder
+            base_path = sys._MEIPASS
+        except AttributeError:
+            # Development environment
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
 class SettingsScreen(Screen):
+    background_image = StringProperty(resource_path('assets/back0.jpg'))
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -39,6 +53,6 @@ class SettingsScreen(Screen):
         secrets_server.reset_to_defaults()
         MyScreenManager.show_popup(
             title='Settings', 
-            message=f"Server setting turned to base test softwar."
+            message1=f"Server setting turned to base test softwar."
                     f"\n please restart the Monitoring software!"
         )

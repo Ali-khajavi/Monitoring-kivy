@@ -45,7 +45,7 @@ class CustomerSetupScreen(Screen):
     sensor_description_input = ObjectProperty(None)
     sensor_type=''
 
-    bg_image = StringProperty(resource_path('assets/BG1.jpg'))
+    bg_image = StringProperty(resource_path('assets/back0.jpg'))
     frame_image = StringProperty(resource_path('assets/F1.png'))
     label_image = StringProperty(resource_path('assets/Labels/Form-Label.png'))
     l_name = StringProperty(resource_path('assets/Labels/B1-Name.png'))

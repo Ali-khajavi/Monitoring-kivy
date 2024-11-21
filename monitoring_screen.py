@@ -48,7 +48,7 @@ class MonitoringScreen(Screen):
     sensor_channel_2 = ObjectProperty(None)
     sensor_channel_3 = ObjectProperty(None)
     sensor_channel_4 = ObjectProperty(None)
-    background_image = StringProperty(resource_path('assets/BG1.jpg'))
+    background_image = StringProperty(resource_path('assets/back0.jpg'))
     background_normal = StringProperty(resource_path('assets/PNG/Button_1/b2.png'))
     background_down = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
 
