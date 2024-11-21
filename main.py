@@ -64,7 +64,7 @@ class MyScreenManager(ScreenManager):
         layout.add_widget(close_button)
         
         # Create the popup
-        popup = Popup(title="Error", content=layout, size_hint=(0.8, 0.5))
+        popup = Popup(title=title, content=layout, size_hint=(0.8, 0.5))
         close_button.bind(on_release=popup.dismiss)
         popup.open()
  

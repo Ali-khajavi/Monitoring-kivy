@@ -30,7 +30,7 @@ class SettingsScreen(Screen):
                     f"API Token: {token}\n"
                     f"Account Username: {bucket}\n"
                     f"Please restart the Software!",
-                    message2="Pleaaaaaasssssssssssssssss"
+                    message2="If still has no account now it is possible to register from the link below:"
         )
 
     def reset_settings(self):
