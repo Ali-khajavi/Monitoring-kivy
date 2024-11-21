@@ -3,6 +3,7 @@
     GridLayout:
         cols: 2
         rows: 1
+        # Right Side Screen
         BoxLayout:
             size_hint_x: .6
             orientation: "vertical"
@@ -21,7 +22,6 @@
                     size_hint: None, None  # Disable size_hint for width and height control
                     width: max(dp(150), root.width * 0.2)  # 20% of window width or at least 150dp
                     height: max(dp(50), root.height * 0.05)  # 5% of window height or at least 50dp
-
 
                 # Settings label
                 Label:
@@ -51,7 +51,7 @@
                         orientation: "vertical"
                         spacing: dp(10)
                         padding: dp(10)
-                        size_hint_y: None
+                        size_hint_y: None  # Allows the height to be manually controlled
                         height: self.minimum_height
                         canvas.before:
                             Color:
@@ -59,13 +59,14 @@
                             RoundedRectangle:
                                 pos: self.pos
                                 size: self.size
-                                radius: [10,]
-
+                                radius: [15,]
                         Label:
-                            color: (0,0,0)
-                            text: "Change Server Settings"
+                            color: (0, 0, 0)
+                            text: "Apply your own account"
                             font_size: "18sp"
                             bold: True
+                            size_hint_y: None
+                            height: dp(40)
 
                         BoxLayout:
                             spacing: dp(10)
@@ -74,7 +75,7 @@
 
                             Label:
                                 color: (0,0,0)
-                                text: "Address Server:"
+                                text: "Account IP:"
                                 size_hint_x: None
                                 width: dp(150)
                             TextInput:
@@ -87,7 +88,7 @@
 
                             Label:
                                 color: (0,0,0)
-                                text: "InfluxDB Token:"
+                                text: "API Token:"
                                 size_hint_x: None
                                 width: dp(150)
                             TextInput:
@@ -100,7 +101,7 @@
 
                             Label:
                                 color: (0,0,0)
-                                text: "Organization:"
+                                text: "Account Email:"
                                 size_hint_x: None
                                 width: dp(150)
                             TextInput:
@@ -113,7 +114,7 @@
 
                             Label:
                                 color: (0,0,0)
-                                text: "Bucket Name:"
+                                text: "Account Username:"
                                 size_hint_x: None
                                 width: dp(150)
                             TextInput:
@@ -127,7 +128,7 @@
                             text: "Save"
                             size_hint_y: None
                             height: dp(50)
-                            on_release: app.save_server_settings()
+                            on_release: root.change_server_settings(address_server.text, influxdb_token.text, organization.text, bucket_name.text)
 
                         Label:
                             text: ""
@@ -138,8 +139,8 @@
                         orientation: "vertical"
                         spacing: dp(10)
                         padding: dp(10)
-                        size_hint_y: None
-                        height: dp(150)
+                        size_hint_y: None  # Allows the height to be manually controlled
+                        height: self.minimum_height
                         canvas.before:
                             Color:
                                 rgba: 0.95, 0.95, 0.95, 1
@@ -149,10 +150,12 @@
                                 radius: [10,]
 
                         Label:
-                            color: (0,0,0)
-                            text: "Reset Software to Default"
+                            color: (0, 0, 0)
+                            text: "Reset the software to Demo settings"
                             font_size: "18sp"
                             bold: True
+                            size_hint_y: None
+                            height: dp(40)
 
                         BoxLayout:
                             orientation: "horizontal"
@@ -180,7 +183,7 @@
                             size_hint_y: None
                             height: dp(50)
                             disabled: True
-                            on_release: app.reset_software()
+                            on_release: root.reset_settings()
 
                     # Register for Updates Section
                     BoxLayout:
@@ -188,7 +191,7 @@
                         spacing: dp(10)
                         padding: dp(10)
                         size_hint_y: None  # Allows the height to be manually controlled
-                        height: self.minimum_height  # Ensures the height adapts to the content
+                        height: self.minimum_height
                         canvas.before:
                             Color:
                                 rgba: 0.95, 0.95, 0.95, 1
@@ -199,7 +202,7 @@
 
                         Label:
                             color: (0, 0, 0)
-                            text: "Register for Updates"
+                            text: "Contact with us"
                             font_size: "18sp"
                             bold: True
                             size_hint_y: None
@@ -308,9 +311,9 @@
                         Label:
                             text: ""
                             size_hint_x: .3
+        
+        # Left Side Screen
         BoxLayout:
             size_hint_x: .4
             Label:
                 text:""
-
-
