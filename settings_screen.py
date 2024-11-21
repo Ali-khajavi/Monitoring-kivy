@@ -24,7 +24,7 @@ class SettingsScreen(Screen):
 
         MyScreenManager.show_popup(
             title='Server Setting',
-            message=f"Server Settings Successfully changed to...\n"
+            message1=f"Server Settings Successfully changed to...\n"
                     f"Account IP: {server_address}\n"
                     f"Account Email: {organization}\n"
                     f"API Token: {token}\n"

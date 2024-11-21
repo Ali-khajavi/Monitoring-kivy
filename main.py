@@ -6,7 +6,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivy.resources import resource_add_path
@@ -33,64 +33,42 @@ Builder.load_file(resource_path('kv/monitoring.kv'))
 Builder.load_file(resource_path('kv/customer_setup.kv'))
 
 class MyScreenManager(ScreenManager):
-    from kivy.uix.widget import Widget  # Make sure Widget is imported
-    from kivy.uix.label import Label
-    from kivy.uix.button import Button
-    from kivy.uix.boxlayout import BoxLayout
-    from kivy.uix.popup import Popup
-
-    def show_popup(title, message, message2='None'):
-        # Create the content of the popup
-        layout = BoxLayout(orientation='vertical', spacing=10, padding=[10, 50, 10, 10])  # Adjust padding
-        font_size = 16  # You can adjust this value or calculate it dynamically
-
-        # Create the first message label with wrapping enabled
-        message_label = Label(
-            text=message,
-            halign="left",
-            size_hint_y=None,
-            font_size=font_size,
-            width=200,  # Set a fixed width for the label to allow wrapping
-            text_size=(200, None),  # Allow text to wrap based on the width
-            height=30  # Set a minimum height for the label
+    def show_popup(title, message1, message2=None, button_text=None, image_text=None):
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+        
+        # Create a label with wrapped text
+        label = Label(
+            text=message1, 
+            halign="left", 
+            valign="top",
+            size_hint=(1, 1),
+            #text_size=(400, None)  # Adjust width for text wrapping
         )
-        message_label.bind(size=message_label.setter('text_size'))  # Adjust text wrapping
-        message_label.height = message_label.texture_size[1]  # Adjust the height of the label based on the content
+        label.bind(size=lambda *args: label.setter('text_size')(label, (label.width, None)))
 
-        # Optionally create the second message label
-        message_label2 = None
-        if message2 != 'None':
-            message_label2 = Label(
-                text=message2,
-                halign="left",
-                size_hint_y=None,
-                font_size=font_size,
-                height=30  # Set a minimum height for the second label
+        if message2:
+            label2 = Label(
+                text=message2, 
+                halign="left", 
+                valign="bottom",
+                size_hint=(1, 1),
+                #text_size=(400, None)  # Adjust width for text wrapping
             )
-            message_label2.bind(size=message_label2.setter('text_size'))
-            message_label2.height = message_label2.texture_size[1]  # Adjust the height of message2
+            label2.bind(size=lambda *args: label2.setter('text_size')(label2, (label2.width, None)))
 
-        # Create a close button
-        close_button = Button(text="Close", size_hint_y=None, height=40)
 
+        # Add a close button
+        close_button = Button(text="Close", size_hint=(0.5, None), height=40)
+        layout.add_widget(label)
+        layout.add_widget(label2)
+        layout.add_widget(close_button)
+        
         # Create the popup
-        popup = Popup(
-            title=title,
-            content=layout,
-            size_hint=(0.6, 0.4),  # Adjust popup size
-            auto_dismiss=False
-        )
-
-        # Add widgets to the layout in the correct order
-        layout.add_widget(message_label)  # Add the first message
-        if message_label2:
-            layout.add_widget(message_label2)  # Add the second message if it exists
-        layout.add_widget(close_button)  # Add the close button
-
-        # Close the popup when the button is pressed
+        popup = Popup(title="Error", content=layout, size_hint=(0.8, 0.5))
         close_button.bind(on_release=popup.dismiss)
         popup.open()
-
+ 
+      
     def close_app(self, instance):
         from kivy.app import App
         App.get_running_app().stop()  # Properly stops the app

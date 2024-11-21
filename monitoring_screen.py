@@ -435,7 +435,7 @@ class MonitoringScreen(Screen):
             halign="center", 
             valign="middle",
             size_hint=(1, 1),
-            text_size=(400, None)  # Adjust width for text wrapping
+            #text_size=(400, None)  # Adjust width for text wrapping
         )
         label.bind(size=lambda *args: label.setter('text_size')(label, (label.width, None)))
 
