@@ -9,11 +9,18 @@ from kivy.app import App
 from kivy.properties import ObjectProperty
 from matplotlib.figure import Figure
 from excel_handler import ExcelHandler
-from secrets_server import INFLUXDB_TOKEN, ORGANIZATION, BUCKET, SERVER_ADDRESS
 import influxdb_client
 import pandas as pd
 from kivy.core.window import Window
 from kivy.properties import StringProperty
+
+from secrets_server import get_influxdb_token, get_organization, get_bucket, get_server_address
+
+# Access values via the functions
+INFLUXDB_TOKEN = get_influxdb_token()
+ORGANIZATION = get_organization()
+BUCKET = get_bucket()
+SERVER_ADDRESS = get_server_address()
 
 import os, sys
 
@@ -106,8 +113,6 @@ class MonitoringScreen(Screen):
                 
     def load_customers(self):
         self.customers = App.get_running_app().excel_handler.load_customers()
-
-        #print("Loaded customers:", self.customers)
         self.update_customer_list()
 
     def on_customer_selected(self, customer):
@@ -172,16 +177,12 @@ class MonitoringScreen(Screen):
             self.sensor = sensor[0] # Take sensor code
             if name == 'sensor_channel_1':
                 self.sensor_ch1 = self.sensor
-                return self.check_quary(1)
             elif name == 'sensor_channel_2':
                 self.sensor_ch2 = self.sensor
-                return self.check_quary(2)
             elif name == 'sensor_channel_3':
                 self.sensor_ch3 = self.sensor
-                return self.check_quary(3)
             elif name == 'sensor_channel_4':
                 self.sensor_ch4 = self.sensor
-                return self.check_quary(4)
         else:
             print("Please Select Sensor!")
             return None
@@ -193,6 +194,7 @@ class MonitoringScreen(Screen):
         self.range_ch4 = 'Time!'
         if time != 'Time!':
             print(time)
+            print("Halllllllo")
             self.time = time
             if name == 'range_channel_1':
                 self.range_ch1 = self.time
@@ -360,7 +362,7 @@ class MonitoringScreen(Screen):
     def clear_chart(self, chart):
         self.ids[chart].clear_widgets()
 
-        self.ids[f"sensor_{chart}"].text = 'None'
+        self.ids[f"sensor_{chart}"].text = 'Sensor!'
 
     def reset_charts_values(self):
         self.sensor_ch1 = 'Sensor!'

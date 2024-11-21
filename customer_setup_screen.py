@@ -49,7 +49,7 @@ class CustomerSetupScreen(Screen):
     frame_image = StringProperty(resource_path('assets/F1.png'))
     label_image = StringProperty(resource_path('assets/Labels/Form-Label.png'))
     l_name = StringProperty(resource_path('assets/Labels/B1-Name.png'))
-    l_lastname = StringProperty(resource_path('assets/Labels/B3-Email.png'))
+    l_lastname = StringProperty(resource_path('assets/Labels/B2-Last-Name.png'))
     l_email = StringProperty(resource_path('assets/Labels/B3-Email.png'))
     l_phone = StringProperty(resource_path('assets/Labels/B4-Phone.png'))
     l_city = StringProperty(resource_path('assets/Labels/B5-City.png'))
@@ -117,10 +117,13 @@ class CustomerSetupScreen(Screen):
     def delete_a_customer(self, instance):
         if self.selected_customer is None:
             print("No Customer Selected for the Operation!")
+            self.delete_customer_btn.clear_widgets()
+            self.delete_customer_btn.remove_widget(self.delete_customer_btn)
             return
         else:
             App.get_running_app().excel_handler.delete_customer(self.selected_customer)
             self.load_customers()
+            self.update_customer_sensors()
 
     def update_customer_list(self):
         self.customer_list.clear_widgets()
@@ -371,7 +374,7 @@ class CustomerSetupScreen(Screen):
         self.back_button.bind(size=self.update_font_size)
         self.floatlayout.add_widget(self.back_button)
         if self.selected_customer is not None:
-            self.delete_custome_btn = Button(
+            self.delete_customer_btn = Button(
                 text = "Delete Customer",
                 background_normal= resource_path('assets/PNG/Button_1/b1.png'),
                 background_down= resource_path('assets/PNG/Button_1/b4.png'),
@@ -379,8 +382,8 @@ class CustomerSetupScreen(Screen):
                 pos_hint = {'center_x': 0.8,'center_y': 0.85},
                 on_release= self.delete_a_customer
             )
-            self.delete_custome_btn.bind(size=self.update_font_size)
-            self.floatlayout.add_widget(self.delete_custome_btn)
+            self.delete_customer_btn.bind(size=self.update_font_size)
+            self.floatlayout.add_widget(self.delete_customer_btn)
 
     def back_to_main_menu(self, instance):
         self.manager.current = 'first_menu'

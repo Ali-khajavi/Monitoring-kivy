@@ -18,5 +18,8 @@ class FirstMenuScreen(Screen):
     button_b4 = StringProperty(resource_path('assets/PNG/Button_1/b4.png'))
     button_b1 = StringProperty(resource_path('assets/PNG/Button_1/b1.png'))
     button_b2 = StringProperty(resource_path('assets/PNG/Button_1/b2.png'))
-
-    pass
+    
+    # Close app unction call the main programs close_app function!
+    def close_app(self, instance):
+        from main import MyScreenManager
+        MyScreenManager.close_app(self, instance) 
