@@ -128,6 +128,9 @@ class CustomerSetupScreen(Screen):
     def update_customer_list(self):
         self.customer_list.clear_widgets()
         self.selected_customer = None
+        # Store all customer labels for easy font size adjustment
+        self.customer_labels = []
+
         # Sort customers by last name
         if self.customers is not None:
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
@@ -137,40 +140,39 @@ class CustomerSetupScreen(Screen):
                     orientation='horizontal',
                     size_hint_y=None,
                     height=40,  # Fixed height for the row
-                    padding=(10, 0, 9 + self.width * .07 , 0)
+                    padding=(10, 0, 9 + self.width * 0.07, 0)
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
                     text=f"{customer['last_name']} , {customer['first_name']}",
                     color=(0, 0, 0),
                     size_hint_y=None,
-                    height=40,  # Fixed height for the label
+                    height=40,
                     halign="left",
-                    font_size=16,
-                    text_size=(self.width * 0.7, None) # Dynamic text size based on screen width
+                    font_size=Window.width * 0.01
                 )
-                
-                customer_label.bind(on_touch_down=lambda instance, touch, cust=customer: self.on_customer_label_touch(instance, touch, cust))
-        
+                # Store the label for dynamic resizing
+                self.customer_labels.append(customer_label)
+                # Handle touch interactions on the label
+                customer_label.bind(
+                    on_touch_down=lambda instance, touch, cust=customer: self.on_customer_label_touch(instance, touch, cust)
+                )
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
                     group='customer_selection',
-                    size_hint_y=self.height * 0.001,  # Make the button height fill the BoxLayout and width adjustable
-                    size_hint_x=self.width * 0.00007,  # Set the width relative to the screen width
+                    size_hint_y=None,
+                    height=40,  # Same height as label
+                    size_hint_x=None,
+                    width=40,  # Fixed width for toggle button
                     on_press=lambda instance, cust=customer: self.on_customer_selected(cust)  # Pass 'customer' explicitly
                 )
                 # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
                 layout.add_widget(toggle_button)
-
-                # Dynamically update padding based on the label width
-                def update_padding(instance, value):
-                    padding = instance.width * 0.4
-                    instance.text_size = (instance.width - padding, None)
-
-                # Bind the width change to the padding adjustment
-                customer_label.bind(size=update_padding)
+                # Add the layout to the customer list
                 self.customer_list.add_widget(layout)
+        # Bind window resize to update all label font sizes
+        Window.bind(on_resize=self.update_all_label_font_sizes)
 
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
@@ -358,8 +360,12 @@ class CustomerSetupScreen(Screen):
         self.sensor_code_input.text= ''
         self.sensor_description_input.text = ''
 
-    def update_font_size(self, instance, value):
+    def update_fonts_size(self, instance, value=12):
         instance.font_size = instance.width / 12
+
+    def update_all_label_font_sizes(self, *args):
+        for label in self.customer_labels:
+            label.font_size = Window.width * 0.01
 
     def create_back_delete_btn(self):
         self.floatlayout.clear_widgets()
@@ -371,7 +377,7 @@ class CustomerSetupScreen(Screen):
             pos_hint={'top': 0.47},  
             on_release= self.back_to_main_menu
         )
-        self.back_button.bind(size=self.update_font_size)
+        self.back_button.bind(size=self.update_fonts_size)
         self.floatlayout.add_widget(self.back_button)
         if self.selected_customer is not None:
             self.delete_customer_btn = Button(
@@ -382,7 +388,7 @@ class CustomerSetupScreen(Screen):
                 pos_hint = {'center_x': 0.8,'center_y': 0.85},
                 on_release= self.delete_a_customer
             )
-            self.delete_customer_btn.bind(size=self.update_font_size)
+            self.delete_customer_btn.bind(size=self.update_fonts_size)
             self.floatlayout.add_widget(self.delete_customer_btn)
 
     def back_to_main_menu(self, instance):
