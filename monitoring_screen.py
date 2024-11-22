@@ -71,7 +71,6 @@ class MonitoringScreen(Screen):
         # Remove all children from the customer list
         self.customer_list.clear_widgets()
         self.selected_customer = None
-
         # Sort customers list in case the list is not empty!
         if self.customers is not None:  
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
@@ -80,14 +79,14 @@ class MonitoringScreen(Screen):
                 layout = BoxLayout(
                     orientation='horizontal',
                     size_hint_y=None,
-                    height=30,
+                    height= 45,
                     padding=(0, 0, 10, 0)  # Add padding (left, top, right, bottom)
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
                     text=f"{customer['first_name']} {customer['last_name']}",
                     size_hint_y=None,
-                    height=30,
+                    height=45,
                     padding= (10,0,0,0),
                     halign="left",
                     valign="middle",
@@ -104,7 +103,7 @@ class MonitoringScreen(Screen):
                 toggle_button = ToggleButton(
                     group='customer_selection', 
                     size_hint_x=None,
-                    width=30,  
+                    width=40,  
                     on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
                 layout.add_widget(customer_label)
@@ -163,6 +162,56 @@ class MonitoringScreen(Screen):
         self.ids.sensor_channel_3.font_size = new_font_size
         self.ids.sensor_channel_4.font_size = new_font_size
 
+    def filter_customer_list(self, search_text):
+        # Clear the current customer list
+        if search_text == '' or None:
+            self.update_customer_list()
+            return
+        self.customer_list.clear_widgets()
+        self.selected_customer = None
+        
+        if self.customers is not None:
+            # Filter customers based on the search text (case insensitive)
+            filtered_customers = [
+                customer for customer in self.customers
+                if search_text.lower() in (customer['first_name'] + " " + customer['last_name']).lower()
+            ]
+            # Sort the filtered list
+            sorted_customers = sorted(filtered_customers, key=lambda customer: customer['last_name'].lower())
+            
+            for customer in sorted_customers:
+                layout = BoxLayout(
+                    orientation='horizontal',
+                    size_hint_y=None,
+                    height=45,
+                    padding=(0, 0, 10, 0)
+                )
+                
+                customer_label = Label(
+                    text=f"{customer['first_name']} {customer['last_name']}",
+                    size_hint_y=None,
+                    height=45,
+                    padding=(10, 0, 0, 0),
+                    halign="left",
+                    valign="middle",
+                    font_size=14,
+                    text_size=(self.width * 0.7, None)
+                )
+                customer_label.bind(
+                    size=lambda instance, value: setattr(instance, 'text_size', (instance.width, None)),
+                    width=lambda instance, value: setattr(instance, 'font_size', value * 0.08)
+                )
+                
+                toggle_button = ToggleButton(
+                    group='customer_selection',
+                    size_hint_x=None,
+                    width=40,
+                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
+                )
+                
+                layout.add_widget(customer_label)
+                layout.add_widget(toggle_button)
+                self.customer_list.add_widget(layout)
 
 
 #------------------------------------------Sensors and Time Selection Functions ----------------------------#

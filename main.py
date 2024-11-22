@@ -35,7 +35,6 @@ Builder.load_file(resource_path('kv/customer_setup.kv'))
 class MyScreenManager(ScreenManager):
     def show_popup(title, message1, message2=None, button_text=None, image_text=None):
         layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
-        
         # Create a label with wrapped text
         label = Label(
             text=message1, 
@@ -56,7 +55,6 @@ class MyScreenManager(ScreenManager):
             )
             label2.bind(size=lambda *args: label2.setter('text_size')(label2, (label2.width, None)))
 
-
         # Add a close button
         close_button = Button(text="Close", halign='center', size_hint=(0.5, None), height=40)
         layout.add_widget(label)
@@ -66,11 +64,9 @@ class MyScreenManager(ScreenManager):
         else:
             popup = Popup(title=title, content=layout, size_hint=(0.5, 0.3))
 
-              
         layout.add_widget(close_button)
         
         # Create the popup
-        
         close_button.bind(on_release=popup.dismiss)
         popup.open()
  

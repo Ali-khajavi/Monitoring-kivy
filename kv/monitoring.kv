@@ -12,6 +12,7 @@
     channel_2 : channel_2
     channel_3 : channel_3
     channel_4 : channel_4
+    filter : filter
 
     FloatLayout:
         canvas.before:
@@ -27,30 +28,58 @@
             spacing: 10
             padding: 20
             size_hint: 1, 1
-
-            # Column 1, Row 1 - Customer List
+            # Customers list Boxlayout
             BoxLayout:
-                orientation: 'vertical'
+                padding: 10
+                spacing: 20
                 size_hint: 0.25, 1
-                canvas.before:
-                    Color:
-                        rgba: 0.15, 0.15, 0.15, 0.9  # Background Color
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10]
-                Label:
-                    font_size: .09 * self.width
-                    text: "Customer List"
-                    size_hint_y: None
-                    height: 40
-                ScrollView:
-                    BoxLayout:
-                        id: customer_list
-                        orientation: 'vertical'
+                orientation:'vertical'
+                # Search filtering Boxlayout
+                BoxLayout:
+                    size_hint_y: 0.2
+                    orientation:'vertical'
+                    Label:
                         size_hint_y: None
-                        height: self.minimum_height
-                        spacing: 10
+                        halign: 'left'
+                        valign: 'middle'
+                        size_hint_y: 0.4
+                        text:'Search by custoemrs Name'
+                        font_size: .09 * self.width
+                    TextInput:
+                        size_hint_y: 0.4
+                        id: filter
+                        text: ''
+                        hint_text: 'Customer Name'
+                        font_size: .08 * self.width
+                        on_text: root.filter_customer_list(self.text)
+                    Label:
+                        size_hint_y: 0.2
+                        text:''
+                # List of customers
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y : 0.8
+                    canvas.before:
+                        Color:
+                            rgba: 0.15, 0.15, 0.15, 0.9  # Background Color
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                            radius: [10]
+                    Label:
+                        spacing: '10dp'
+                        font_size: .09 * self.width
+                        text: "Customers List"
+                        size_hint_y: None
+                        height: 60
+                    ScrollView:
+                        BoxLayout:
+                            id: customer_list
+                            orientation: 'vertical'
+                            size_hint_y: None
+                            height: self.minimum_height
+                            spacing: 20
+                            padding: 10
 
             # Column 2, Row 1 - Sensor Graphs Area with Channels 1 to 4
             GridLayout:

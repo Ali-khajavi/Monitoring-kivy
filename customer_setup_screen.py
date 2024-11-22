@@ -130,7 +130,6 @@ class CustomerSetupScreen(Screen):
         self.selected_customer = None
         # Store all customer labels for easy font size adjustment
         self.customer_labels = []
-
         # Sort customers by last name
         if self.customers is not None:
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
