@@ -15,9 +15,9 @@
     temperature_sensor: temperature_sensor
     ampermeter_sensor: ampermeter_sensor
     sensor_chart: sensor_chart
-    floatlayout: floatlayout
 
     GridLayout:
+        padding: 10
         cols:3
         canvas.before:
             # Load and scale the background image to fit the screen
@@ -28,115 +28,208 @@
         
         # Foreground content over the background image
         BoxLayout:
-            orientation: 'horizontal'
+            orientation: 'vertical'
             size_hint_x: 0.7  # Occupy 1/3 of the screen width
             pos_hint: {'x': 0}
-            padding: 10
+            padding: 5
             canvas.before:
-                Rectangle:
-                    size: (self.width * 1, self.height * 0.72)  
-                    pos: (self.x - self.width * 0.01, self.y + self.height * 0.3) 
-                    source: root.frame_image
-            FloatLayout:
-                # Background Label for the top image
-                canvas.before:
-                    Rectangle:
-                        source: root.label_image
-                        size: (self.width * 0.6, self.height * 0.1)
-                        pos: (self.center_x - (self.width * 0.15), self.top - (self.height * 0.1))
+                Color:
+                    rgba: 0, 0, 0, 0.37
+                RoundedRectangle:
+                    pos: self.pos
+                    size: self.size
+                    radius: [15,]
+            # Title
+            BoxLayout:
+                size_hint_y: 0.1
+                Label:
+                    size_hint_x: .5
+                    text: "New Customer"
+                    bold: True
+                    halign: "center"
+                    valign: "middle"
+                    font_size: min(root.width * 0.05, 20)
 
-                # Customer Registration Form
+            # Customer Registration Form
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.9
+                pos_hint: {'center_x': 0.5, 'top': .9}
+
+                # Name & Last Name
                 BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_x: 0.9
-                    pos_hint: {'center_x': 0.5, 'top': .9}
-                    GridLayout:
-                        cols: 2
-                        size_hint_y: .5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_name
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: first_name_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_lastname
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: last_name_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_email
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: email_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_phone
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: phone_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_city
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: city_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_address
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            id: address_input
-                            font_size: self.height * 0.5
-                        Image:
-                            size_hint_x: .7
-                            source: root.l_describe
-                        TextInput:
-                            write_tab: False
-                            size_hint_x: 1.7
-                            size_hint_y: 4
-                            id: description_input
-                            font_size: self.height * 0.12
-                        Label:
-                            size_hint_x: .7
-                            text: ""
-                        Button:
-                            size_hint_x: .6
-                            size_hint_y: 3
-                            text: 'Register Customer'
-                            font_size: self.width / 12
-                            background_normal: root.b_n
-                            background_down: root.b_d
-                            on_release: root.register_customer()
-                            pos_hint: {"x": 1}
-                    
-                    FloatLayout:
-                        id: floatlayout
-                        size_hint_y: .35
-                        anchor_x: "left"
-                        anchor_y: "bottom"
-                        Button:
-                            font_size: self.width / 12
-                            background_normal: root.b_n
-                            background_down: root.b_d
-                            on_release: root.manager.current = 'first_menu'
-                            text: "Back to Main Menu"
-                            size_hint_x: .6
-                            size_hint_y: 0.25
-                            pos_hint: {'top': 0.47}
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .07
+                    Label:
+                        size_hint_x: .1
+                        text: "*Name"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 2.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .3
+                        id: first_name_input
+                        font_size: self.height * 0.45
+                    Label:
+                        size_hint_x: .2
+                        text: "*Last Name"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .4
+                        id: last_name_input
+                        font_size: self.height * 0.45
+                # Email
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .07
+                    Label:
+                        size_hint_x: .2
+                        text: "*Email"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .7
+                        id: email_input
+                        font_size: self.height * 0.45
+                # Phone        
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .07
+                    Label:
+                        size_hint_x: .2
+                        text: "Phone"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .7
+                        id: phone_input
+                        font_size: self.height * 0.45
+
+                # City
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .07
+                    Label:
+                        size_hint_x: .2
+                        text: "City"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .7
+                        id: city_input
+                        font_size: self.height * 0.45
+
+                # Address
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .07
+                    Label:
+                        size_hint_x: .2
+                        text: "Address"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .7
+                        id: address_input
+                        font_size: self.height * 0.45
+                # Note
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .15 
+                    Label:
+                        size_hint_x: .2
+                        text: "Note"
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: self.width / 4.2
+                    TextInput:
+                        write_tab: False
+                        size_hint_x: .7
+                        size_hint_y: 1
+                        id: description_input
+                        font_size: self.height * 0.15
+                # Register Button
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .1  
+                    Label:
+                        size_hint_x: .4
+                        text: ""
+                        bold: False
+                        halign: "left"
+                        valign: "middle"
+                        font_size: min(root.width * 0.05, 18)
+                    Button:
+                        size_hint_x: .5
+                        size_hint_y: 1
+                        text: 'Register Customer'
+                        font_size: self.width / 12
+                        on_release: root.register_customer()
+                        pos_hint: {"x": 1}
+                # Back to Main Menu
+                BoxLayout:
+                    id: btn_delete_customer
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .1
+                    Label:
+                        size_hint_x: .5
+                        text: ""
+                    Button:
+                        font_size: self.width / 12
+                        on_release: root.delete_a_customer()
+                        text: "Delete Customer"
+                        size_hint_x: .5
+
+                BoxLayout:
+                    padding: 5
+                    spacing: 10
+                    orientation: 'horizontal'
+                    size_hint_y: .3
+                    Button:
+                        font_size: self.width / 12
+                        on_release: root.manager.current = 'first_menu'
+                        text: "Back to Main Menu"
+                        size_hint_x: .5
+                        size_hint_y: 0.28
+                    Label:
+                        size_hint_x: .5
+                        text: ""
+
         #---------------------------------------------- # Customer List # ----------------------------------------
         BoxLayout:
             canvas.before:
