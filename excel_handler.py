@@ -222,7 +222,7 @@ class ExcelHandler:
         for index, row in enumerate(ws.iter_rows(min_row=2, values_only=True), start=2):  # Start index from 2
             if row[0] == first_name and row[1] == last_name:  # Check columns 1 and 2
                 customer_row = index  # Get the row number
-                print(f"Customer {first_name} {last_name} found in row {customer_row}.")
+                #print(f"Customer {first_name} {last_name} found in row {customer_row}.")
                 break
         if customer_row is None:
             print(f"Customer with the name {first_name} {last_name} is not registered in the list!")    

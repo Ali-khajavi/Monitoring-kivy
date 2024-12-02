@@ -79,14 +79,14 @@ class MonitoringScreen(Screen):
                 layout = BoxLayout(
                     orientation='horizontal',
                     size_hint_y=None,
-                    height= 45,
+                    height= 35,
                     padding=(0, 0, 10, 0)  # Add padding (left, top, right, bottom)
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
                     text=f"{customer['first_name']} {customer['last_name']}",
                     size_hint_y=None,
-                    height=45,
+                    height=30,
                     padding= (10,0,0,0),
                     halign="left",
                     valign="middle",
@@ -96,14 +96,14 @@ class MonitoringScreen(Screen):
 
                 customer_label.bind(
                 size=lambda instance, value: setattr(instance, 'text_size', (instance.width, None)),
-                width=lambda instance, value: setattr(instance, 'font_size', value * 0.08)  # Adjust font size dynamically
+                width=lambda instance, value: setattr(instance, 'font_size', value * 0.1)  # Adjust font size dynamically
                 )
 
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
                     group='customer_selection', 
                     size_hint_x=None,
-                    width=40,  
+                    width=35,  
                     on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
                 layout.add_widget(customer_label)

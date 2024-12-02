@@ -132,52 +132,105 @@ class CustomerSetupScreen(Screen):
             self.update_customer_sensors()
 
     def update_customer_list(self):
+        # Remove all children from the customer list
         self.customer_list.clear_widgets()
         self.selected_customer = None
-        # Store all customer labels for easy font size adjustment
-        self.customer_labels = []
-        # Sort customers by last name
-        if self.customers is not None:
+        # Sort customers list in case the list is not empty!
+        if self.customers is not None:  
             sorted_customers = sorted(self.customers, key=lambda customer: customer['last_name'].lower())
             for customer in sorted_customers:
                 # Create a layout to hold the toggle button and label
                 layout = BoxLayout(
                     orientation='horizontal',
                     size_hint_y=None,
-                    height=40,  # Fixed height for the row
-                    padding=(10, 0, 9 + self.width * 0.07, 0)
+                    height= 45,
+                    padding=(10, 0, 10, 0)  # Add padding (left, top, right, bottom)
                 )
                 # Create a label for the customer's name
                 customer_label = Label(
-                    text=f"{customer['last_name']} , {customer['first_name']}",
-                    color=(0, 0, 0),
+                    text=f"{customer['first_name']} {customer['last_name']}",
                     size_hint_y=None,
-                    height=40,
+                    height=45,
+                    padding= (0,0,0,0),
                     halign="left",
-                    font_size=Window.width * 0.01
+                    valign="middle",
+                    font_size= 14,
+                    text_size=(self.width * 0.7, None)
                 )
-                # Store the label for dynamic resizing
-                self.customer_labels.append(customer_label)
+                customer_label.color = (0, 0, 0, 0.8)
+
                 # Handle touch interactions on the label
                 customer_label.bind(
                     on_touch_down=lambda instance, touch, cust=customer: self.on_customer_label_touch(instance, touch, cust)
                 )
+
+                customer_label.bind(
+                size=lambda instance, value: setattr(instance, 'text_size', (instance.width, None)),
+                width=lambda instance, value: setattr(instance, 'font_size', value * 0.08)  # Adjust font size dynamically
+                )
+
                 # Create a ToggleButton for selection
                 toggle_button = ToggleButton(
-                    group='customer_selection',
-                    size_hint_y=None,
-                    height=40,  # Same height as label
+                    group='customer_selection', 
                     size_hint_x=None,
-                    width=40,  # Fixed width for toggle button
-                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)  # Pass 'customer' explicitly
+                    width=40,  
+                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
                 )
-                # Add the toggle button and label to the layout
                 layout.add_widget(customer_label)
                 layout.add_widget(toggle_button)
-                # Add the layout to the customer list
                 self.customer_list.add_widget(layout)
-        # Bind window resize to update all label font sizes
-        Window.bind(on_resize=self.update_all_label_font_sizes)
+
+    def filter_customer_list(self, search_text):
+        # Clear the current customer list
+        if search_text == '' or None:
+            self.update_customer_list()
+            return
+        self.customer_list.clear_widgets()
+        self.selected_customer = None
+        
+        if self.customers is not None:
+            # Filter customers based on the search text (case insensitive)
+            filtered_customers = [
+                customer for customer in self.customers
+                if search_text.lower() in (customer['first_name'] + " " + customer['last_name']).lower()
+            ]
+            # Sort the filtered list
+            sorted_customers = sorted(filtered_customers, key=lambda customer: customer['last_name'].lower())
+            
+            for customer in sorted_customers:
+                layout = BoxLayout(
+                    orientation='horizontal',
+                    size_hint_y=None,
+                    height=45,
+                    padding=(0, 0, 10, 0)
+                )
+                
+                customer_label = Label(
+                    text=f"{customer['first_name']} {customer['last_name']}",
+                    size_hint_y=None,
+                    height=45,
+                    padding=(10, 0, 0, 0),
+                    halign="left",
+                    valign="middle",
+                    font_size=14,
+                    text_size=(self.width * 0.7, None)
+                )
+                customer_label.color = (0, 0, 0, 0.8)
+                customer_label.bind(
+                    size=lambda instance, value: setattr(instance, 'text_size', (instance.width, None)),
+                    width=lambda instance, value: setattr(instance, 'font_size', value * 0.08)
+                )
+                
+                toggle_button = ToggleButton(
+                    group='customer_selection',
+                    size_hint_x=None,
+                    width=40,
+                    on_press=lambda instance, cust=customer: self.on_customer_selected(cust)
+                )
+                
+                layout.add_widget(customer_label)
+                layout.add_widget(toggle_button)
+                self.customer_list.add_widget(layout)
 
     def on_customer_selected(self, customer):
         self.selected_customer = f"{customer['last_name']};{customer['first_name']}"
@@ -197,7 +250,7 @@ class CustomerSetupScreen(Screen):
             f"Address: {customer['address']}\n"
             f"Description: {customer['description']}"
         )
-        popup = Popup(title="Customer Information",title_size=28, content=Label(text=info), size_hint=(0.6, 0.6))
+        popup = Popup(title="Customer Information",title_size=22, content=Label(text=info), size_hint=(0.4, 0.4))
 
         popup.open()
 
