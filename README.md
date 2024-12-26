@@ -40,13 +40,13 @@ In this tutorial, I am using VSCode:
   ```bash
   python -m venv venv
   
-  * On Windows:
-    ```bash
-    venv\Scripts\activate
+* On Windows:
+  ```bash
+  venv\Scripts\activate
   
-  * On macOS/Linux:
-    ```bash
-    source venv/bin/activate
+* On macOS/Linux:
+  ```bash
+  source venv/bin/activate
 
 * then install the requirements.txt file using the command:
   ```bash
