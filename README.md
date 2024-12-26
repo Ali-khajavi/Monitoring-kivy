@@ -34,22 +34,22 @@ In this tutorial, I am using VSCode:
 * Clone the repository using the following command:
   ```bash
   git clone https://github.com/Ali-khajavi/Monitoring-kivy.git
-* Select the project folder in VsCode
-* Ensure that you already installed python 3.10 or latest version
-* then create python vertual invirment using the command:  (Recommended)
+* Select the project folder in VSCode.
+* Ensure that you have Python 3.10 or the latest version installed.
+* Create a Python virtual environment (recommended):
   ```bash
   python -m venv venv
+*Activate the virtual environment:
+  * On Windows:
+    ```bash
+    source venv\Scripts\activate
+    
+  * On macOS/Linux:
+    ```bash
+    source venv/bin/activate
   
-* On Windows:
-  ```bash
-  source venv\Scripts\activate
-  
-* On macOS/Linux:
-  ```bash
-  source venv/bin/activate
-
-* then install the requirements.txt file using the command:
-  ```bash
+  * Install the required dependencies by running:
+    ```bash
   pip install -r requirements.txt
 
   
