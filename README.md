@@ -1,4 +1,4 @@
-# Monitoring Software Configuration Tool
+# Monitoring Software
 
 This project is designed for monitoring IoT or IIoT systems. The software is built using Python with the Kivy platform for the GUI. Below are the key features of the software:
 
