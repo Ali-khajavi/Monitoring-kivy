@@ -39,6 +39,3 @@ In this tutorial, I am using VSCode:
 * then create python vertual invirment using the command:  (Recommended)
 * then install the requirements.txt file using the command:
   
-
-```bash
-pip install -r requirements.txt
