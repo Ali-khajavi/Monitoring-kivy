@@ -28,8 +28,12 @@ This project is designed for monitoring IoT or IIoT systems. The software is bui
 ## Installation
 
 ### Step 1: Install Dependencies
-In this tutorial I am using VsCode:
-* Clone the repasitory using the command:
+
+In this tutorial, I am using VSCode:
+
+- Clone the repository using the following command:
+  ```bash
+  git clone https://github.com/Ali-khajavi/Monitoring-kivy.git
 * Select the project folder in VsCode
 * Ensure that you already installed python 3.10 or latest version
 * then create python vertual invirment using the command:  (Recommended)
