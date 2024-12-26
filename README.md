@@ -1,4 +1,4 @@
-# Monitoring Software Configuration Tool
+## Monitoring Software Configuration Tool
 
 This project is a graphical user interface (GUI) application built with Kivy. It allows users to manage server settings, change configurations, and reset settings for a monitoring software system.
 
