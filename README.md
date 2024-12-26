@@ -52,4 +52,19 @@ In this tutorial, I am using VSCode:
     ```bash
     pip install -r requirements.txt
 
+### Step 2: Install the software using the pyinstaller
+
+* first of all install the pyinstaller using the command below:
+  ```bash
+  :.....
+
+* then start to create the spect file using the command below:
+  ```bash
+  :.....
+
+* then eddite the expect file with define the structure of the software tree:
+```bash
+  :.....
+
+
   
