@@ -1,6 +1,14 @@
-#### Monitoring Software Configuration Tool
+# Monitoring Software Configuration Tool
 
-This project is a graphical user interface (GUI) application built with Kivy. It allows users to manage server settings, change configurations, and reset settings for a monitoring software system.
+This project Created for Monitoring Using IoT or IIoT system. In total the software created using python with kivy platform for GUI, some feature listed below
+--
+* create a list of customers and the customers device which need to be monitor by the software.
+* create list of device for each customer speratly with the uniq code for each device
+* find the customer using filter by name
+* monitor especific customer sensors or devices with 4 sperated window
+* the monitor windows has feater to show the changes in last 15 min or 30 min.... also as well last day or las two days until one month.
+* by click on the monitor windows could resize the window to muximum and analise the Chart more clean.
+* you could setup your infuxDB server and use the software.
 
 ---
 
