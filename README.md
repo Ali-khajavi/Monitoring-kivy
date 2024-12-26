@@ -31,11 +31,23 @@ This project is designed for monitoring IoT or IIoT systems. The software is bui
 
 In this tutorial, I am using VSCode:
 
-- Clone the repository using the following command:
+* Clone the repository using the following command:
   ```bash
   git clone https://github.com/Ali-khajavi/Monitoring-kivy.git
 * Select the project folder in VsCode
 * Ensure that you already installed python 3.10 or latest version
 * then create python vertual invirment using the command:  (Recommended)
+  ```bash
+  python -m venv venv
+  * On Windows:
+    ```bash
+    venv\Scripts\activate
+  * On macOS/Linux:
+    ```bash
+    source venv/bin/activate
+
 * then install the requirements.txt file using the command:
+  ```bash
+  pip install -r requirements.txt
+
   
