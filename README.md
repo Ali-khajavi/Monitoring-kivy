@@ -39,9 +39,11 @@ In this tutorial, I am using VSCode:
 * then create python vertual invirment using the command:  (Recommended)
   ```bash
   python -m venv venv
+  
   * On Windows:
     ```bash
     venv\Scripts\activate
+  
   * On macOS/Linux:
     ```bash
     source venv/bin/activate
