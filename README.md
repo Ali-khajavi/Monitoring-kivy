@@ -50,6 +50,6 @@ In this tutorial, I am using VSCode:
   
   * Install the required dependencies by running:
     ```bash
-  pip install -r requirements.txt
+    pip install -r requirements.txt
 
   
